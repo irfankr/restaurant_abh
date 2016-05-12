@@ -1,0 +1,102 @@
+body, html {
+  background-color:#F9F9F9; width:100%; height:100%; font-family:'Source Sans Pro'; color:'#131d24';
+}
+.container {
+  width:1000px;
+}
+
+div {
+  position:relative;
+}
+
+/* Sticky footer */
+/* IE9+ and the other good browsers */
+body .ember-view:first-of-type {
+    position:relative; height: 100%;
+}
+#wrap{
+  position:relative; min-height:100%; padding-bottom:150px; z-index:1;
+}
+/* End of sticky footer */
+
+a:link, a:visited {
+  color:#fd6f60; font-weight:600;
+}
+.col-center-block {
+    float: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Navigation */
+.navigation_black {
+  height:85px; line-height:85px; background-color:#FFF; margin-bottom:85px;
+}
+  .navigation_black a:link, .navigation_black a:visited {
+    color:#131d24; font-size:16px;
+  }
+  .navigation_black a:hover {
+
+  }
+  .navigation_black .app_name {
+    font-size:20px !important;
+  }
+  .navigation_black ul {
+    list-style:none;
+  }
+    .navigation_black ul li {
+      float:left; padding-left:40px;
+     }
+
+/* Login and Register */
+.login_register_container .title {
+  font-size: 24px; margin-bottom: 20px;
+}
+  .login_register_container .title .register {
+    font-size: 18px; float: right;
+  }
+.login_register_container .button {
+  background-color:#FD6F60; color:#FFF; width:100%; margin-top:30px; height:53px; line-height:53px; font-size:18px; font-weight: 600; padding:0px;
+}
+.login_register_container .input_fields {
+  height:40px; line-height:40px; font-family:'Source Sans Pro'; font-weight: 600; font-size:16px;
+}
+
+/* Footer */
+footer {
+  margin-top:-150px; height:150px; overflow:hidden; z-index:99; background-color:#131d24;
+}
+  footer nav.additional {
+    margin-top:50px; display:block; height:30px;
+  }
+    footer nav.additional ul {
+      padding:0px; margin:0px;
+    }
+    footer nav.additional li {
+      list-style:none; float:left; height:30px; line-height:30px;
+    }
+      footer nav.additional li a:link, footer nav.additional li a:visited {
+        font-size:16px;
+      }
+      footer nav.additional li a:hover {
+
+      }
+
+footer .copyright {
+  font-size:14px; color:#ffffff;
+}
+
+footer nav.main {
+  list-style:none;
+}
+  footer nav.main li {
+
+  }
+    footer nav.main li a:link, footer nav.main li a:visited {
+
+    }
+    footer nav.main li a:hover {
+
+    }
+

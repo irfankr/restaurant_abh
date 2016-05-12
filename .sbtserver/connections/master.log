@@ -1,0 +1,19 @@
+New log file opened at Mon May 09 01:08:37 CEST 2016 by 14798@irfank-Latitude-E5520
+Taking next connection to: 42468
+New client attempting to connect on port: 40804-42468
+  Address = /127.0.1.1:42468
+This client on port 40804 has uuid b8e8cd30-110c-4487-8652-9591daed3d4c configName activator humanReadableName Activator protocolVersion 3 featureTags Vector()
+Connected Clients: activator-b8e8cd30-110c-4487-8652-9591daed3d4c
+Taking next connection to: 42468
+Checking to see if clients are empty...
+We have 1 non-daemon clients, continuing serving connections.
+Taking next connection to: 42468
+Checking to see if clients are empty...
+We have 1 non-daemon clients, continuing serving connections.
+Taking next connection to: 42468
+Checking to see if clients are empty...
+No non-daemon clients connected after 3 min. Shutting down.
+Server socket thread exiting.
+0 clients open, will close them...
+All client sockets have been closed.
+Closing the 14798@irfank-Latitude-E5520 logs at Mon May 09 01:17:37 CEST 2016, goodbye.

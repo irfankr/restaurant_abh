@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 col-center-block login_register_container">
+      <h1 class="title">Login <a href="#" class="register">Create account</a></h1>
+
+      <form>
+        <div class="form-group">
+          {{input type="email" class="form-control input_fields" value=email placeholder="Email"}}
+        </div>
+
+        <div class="form-group">
+          {{input type="password" class="form-control input_fields" value=password placeholder="Password"}}
+        </div>
+
+        <button {{action 'login'}} class="btn button">Login</button>
+      </form>
+     </div>
+  </div>
+</div>

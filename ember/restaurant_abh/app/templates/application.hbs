@@ -1,0 +1,43 @@
+<div id="wrap">
+  <div id="main">
+    <header class="container-fluid navigation_black">
+      <div class="container">
+        <nav>
+          <a class="app_name" href="#">Restaurant ABH</a>
+          <ul class="navbar-right">
+            <li class="active"><a href="">Home</a></li>
+            <li><a href="">Restaurants</a></li>
+            <li>{{#link-to 'login'}}Login{{/link-to}}</li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    {{outlet}}
+
+
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <nav class="additional">
+      <ul>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of use</a></li>
+        <li><a href="#">Sitemap</a></li>
+        <li><a href="#">Mobile Site</a></li>
+      </ul>
+    </nav>
+
+    <div class="copyright">Copyright © 2016 All rights reserved.</div>
+
+    <nav>
+      <ul class="navbar-right main">
+        <li class="active"><a href="">Home</a></li>
+        <li><a href="">Restaurants</a></li>
+        <li>{{#link-to 'login'}}Login{{/link-to}}</li>
+      </ul>
+    </nav>
+  </div>
+</footer>
