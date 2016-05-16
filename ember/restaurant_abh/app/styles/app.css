@@ -50,6 +50,9 @@ a:link, a:visited {
      }
 
 /* Login and Register */
+.login_register_container {
+  margin-bottom:300px;
+}
 .login_register_container .title {
   font-size: 24px; margin-bottom: 20px;
 }
@@ -62,13 +65,18 @@ a:link, a:visited {
 .login_register_container .input_fields {
   height:40px; line-height:40px; font-family:'Source Sans Pro'; font-weight: 600; font-size:16px;
 }
-
+.login_register_container .select_fields {
+  height:54px; line-height:54px; font-family:'Source Sans Pro'; font-weight: 600; font-size:16px;
+}
+.register_select_list_country_container {
+  float:left; width:50%;
+}
 /* Footer */
 footer {
   margin-top:-150px; height:150px; overflow:hidden; z-index:99; background-color:#131d24;
 }
   footer nav.additional {
-    margin-top:50px; display:block; height:30px;
+    margin-top:50px; display:inline-block; height:30px;
   }
     footer nav.additional ul {
       padding:0px; margin:0px;
@@ -77,24 +85,24 @@ footer {
       list-style:none; float:left; height:30px; line-height:30px;
     }
       footer nav.additional li a:link, footer nav.additional li a:visited {
-        font-size:16px;
+        font-size:16px; color:#FFF; opacity: 0.4; margin-right:15px;
       }
       footer nav.additional li a:hover {
 
       }
 
 footer .copyright {
-  font-size:14px; color:#ffffff;
+  font-size:14px; color:#ffffff; opacity: 0.4; display:block; clear:left;
 }
 
 footer nav.main {
-  list-style:none;
+  list-style:none; display:inline-block; height:30px; margin-top:50px;
 }
   footer nav.main li {
-
+    list-style:none; float:left; height:30px; line-height:30px;
   }
     footer nav.main li a:link, footer nav.main li a:visited {
-
+      font-size:16px; color:#FFF; margin-left:20px;
     }
     footer nav.main li a:hover {
 

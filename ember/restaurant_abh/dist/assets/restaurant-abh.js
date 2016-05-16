@@ -39,17 +39,33 @@ define('restaurant-abh/controllers/login', ['exports', 'ember', 'ember-data/mode
     currentuserservice: _ember['default'].inject.service(),
     actions: {
       login: function login() {
+        var self = this;
+
         //Get values from form
         var email = this.get('email');
         var password = this.get('password');
 
-        //Call login service (NE ZNAM MOZE LI RESPONSE OVAKO)
-        this.get("loginservice").checkUser(email, password, function (response) {
-          console.log("Odgovor" + response);
+        //Call login service
+        this.get("loginservice").checkUser(email, password).done(function (user) {
+          console.log(user);
         });
 
         console.log("Email form input:" + email);
         console.log("Password form input:" + password);
+      }
+    }
+  });
+});
+define('restaurant-abh/controllers/register', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Controller.extend({
+    actions: {
+      register: function register() {
+        //Get values from form
+        var email = this.get('email');
+        var password = this.get('password');
+
+        //Call login service
+        this.get("loginservice").checkUser(email, password);
       }
     }
   });
@@ -217,14 +233,10 @@ define("restaurant-abh/instance-initializers/ember-data", ["exports", "ember-dat
     initialize: _emberDataPrivateInstanceInitializersInitializeStoreService["default"]
   };
 });
-define('restaurant-abh/models/user', ['exports', 'ember-data/model', 'ember-data/attr'], function (exports, _emberDataModel, _emberDataAttr) {
-  exports['default'] = _emberDataModel['default'].extend({
-    id: (0, _emberDataAttr['default'])(),
-    email: (0, _emberDataAttr['default'])(),
-    password: (0, _emberDataAttr['default'])(),
-    firstName: (0, _emberDataAttr['default'])(),
-    lastName: (0, _emberDataAttr['default'])(),
-    role: (0, _emberDataAttr['default'])()
+define('restaurant-abh/models/user', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Object.extend({
+    firstName: null
+
   });
 });
 define('restaurant-abh/resolver', ['exports', 'ember-resolver'], function (exports, _emberResolver) {
@@ -239,11 +251,15 @@ define('restaurant-abh/router', ['exports', 'ember', 'restaurant-abh/config/envi
   Router.map(function () {
     this.route('login');
     this.route('restaurants');
+    this.route('register');
   });
 
   exports['default'] = Router;
 });
 define('restaurant-abh/routes/login', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Route.extend({});
+});
+define('restaurant-abh/routes/register', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Route.extend({});
 });
 define('restaurant-abh/routes/restaurants', ['exports', 'ember'], function (exports, _ember) {
@@ -260,25 +276,19 @@ define('restaurant-abh/services/ajax', ['exports', 'ember-ajax/services/ajax'], 
 define('restaurant-abh/services/currentuserservice', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Service.extend({});
 });
-define('restaurant-abh/services/loginservice', ['exports', 'ember', 'ember-data/model'], function (exports, _ember, _emberDataModel) {
+define('restaurant-abh/services/loginservice', ['exports', 'ember', 'restaurant-abh/models/user'], function (exports, _ember, _restaurantAbhModelsUser) {
   exports['default'] = _ember['default'].Service.extend({
     checkUser: function checkUser(email, password) {
 
       //Sent POST to Play route
-      $.ajax({
+      return $.ajax({
         url: "/login",
         type: "POST",
         data: '{"email":"' + email + '","password":"' + password + '"}',
         processData: false,
-        contentType: "application/json; charset=UTF-8",
-        async: false
-      }).done(function (data) {
-        console.log(data);
-
-        //Return user JSON
-        return data;
-      }).fail(function (data) {
-        console.log(data);
+        contentType: "application/json; charset=UTF-8"
+      }).then(function (data) {
+        return _restaurantAbhModelsUser['default'].create(data);
       });
     }
   });
@@ -329,11 +339,11 @@ define("restaurant-abh/templates/application", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 39,
+              "line": 37,
               "column": 12
             },
             "end": {
-              "line": 39,
+              "line": 37,
               "column": 37
             }
           },
@@ -371,7 +381,7 @@ define("restaurant-abh/templates/application", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 44,
+            "line": 45,
             "column": 0
           }
         },
@@ -517,18 +527,11 @@ define("restaurant-abh/templates/application", ["exports"], function (exports) {
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n\n    ");
         dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "copyright");
-        var el4 = dom.createTextNode("Copyright © 2016 All rights reserved.");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n\n    ");
-        dom.appendChild(el2, el3);
         var el3 = dom.createElement("nav");
+        dom.setAttribute(el3, "class", "main navbar-right");
         var el4 = dom.createTextNode("\n      ");
         dom.appendChild(el3, el4);
         var el4 = dom.createElement("ul");
-        dom.setAttribute(el4, "class", "navbar-right main");
         var el5 = dom.createTextNode("\n        ");
         dom.appendChild(el4, el5);
         var el5 = dom.createElement("li");
@@ -560,7 +563,14 @@ define("restaurant-abh/templates/application", ["exports"], function (exports) {
         var el4 = dom.createTextNode("\n    ");
         dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n  ");
+        var el3 = dom.createTextNode("\n\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3, "class", "copyright");
+        var el4 = dom.createTextNode("Copyright © 2016 All rights reserved.");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n\n  ");
         dom.appendChild(el2, el3);
         dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n");
@@ -575,10 +585,10 @@ define("restaurant-abh/templates/application", ["exports"], function (exports) {
         var morphs = new Array(3);
         morphs[0] = dom.createMorphAt(dom.childAt(element0, [1, 1, 1, 3, 5]), 0, 0);
         morphs[1] = dom.createMorphAt(element0, 3, 3);
-        morphs[2] = dom.createMorphAt(dom.childAt(fragment, [2, 1, 5, 1, 5]), 0, 0);
+        morphs[2] = dom.createMorphAt(dom.childAt(fragment, [2, 1, 3, 1, 5]), 0, 0);
         return morphs;
       },
-      statements: [["block", "link-to", ["login"], [], 0, null, ["loc", [null, [10, 16], [10, 53]]]], ["content", "outlet", ["loc", [null, [16, 4], [16, 14]]]], ["block", "link-to", ["login"], [], 1, null, ["loc", [null, [39, 12], [39, 49]]]]],
+      statements: [["block", "link-to", ["login"], [], 0, null, ["loc", [null, [10, 16], [10, 53]]]], ["content", "outlet", ["loc", [null, [16, 4], [16, 14]]]], ["block", "link-to", ["login"], [], 1, null, ["loc", [null, [37, 12], [37, 49]]]]],
       locals: [],
       templates: [child0, child1]
     };
@@ -586,6 +596,42 @@ define("restaurant-abh/templates/application", ["exports"], function (exports) {
 });
 define("restaurant-abh/templates/login", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.5.1",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 4,
+              "column": 31
+            },
+            "end": {
+              "line": 4,
+              "column": 85
+            }
+          },
+          "moduleName": "restaurant-abh/templates/login.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Create account");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
     return {
       meta: {
         "fragmentReason": {
@@ -625,13 +671,9 @@ define("restaurant-abh/templates/login", ["exports"], function (exports) {
         dom.appendChild(el3, el4);
         var el4 = dom.createElement("h1");
         dom.setAttribute(el4, "class", "title");
-        var el5 = dom.createTextNode("Login ");
+        var el5 = dom.createTextNode("Login  ");
         dom.appendChild(el4, el5);
-        var el5 = dom.createElement("a");
-        dom.setAttribute(el5, "href", "#");
-        dom.setAttribute(el5, "class", "register");
-        var el6 = dom.createTextNode("Create account");
-        dom.appendChild(el5, el6);
+        var el5 = dom.createComment("");
         dom.appendChild(el4, el5);
         dom.appendChild(el3, el4);
         var el4 = dom.createTextNode("\n\n      ");
@@ -681,17 +723,290 @@ define("restaurant-abh/templates/login", ["exports"], function (exports) {
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [0, 1, 1, 3]);
-        var element1 = dom.childAt(element0, [5]);
-        var morphs = new Array(3);
+        var element0 = dom.childAt(fragment, [0, 1, 1]);
+        var element1 = dom.childAt(element0, [3]);
+        var element2 = dom.childAt(element1, [5]);
+        var morphs = new Array(4);
         morphs[0] = dom.createMorphAt(dom.childAt(element0, [1]), 1, 1);
-        morphs[1] = dom.createMorphAt(dom.childAt(element0, [3]), 1, 1);
-        morphs[2] = dom.createElementMorph(element1);
+        morphs[1] = dom.createMorphAt(dom.childAt(element1, [1]), 1, 1);
+        morphs[2] = dom.createMorphAt(dom.childAt(element1, [3]), 1, 1);
+        morphs[3] = dom.createElementMorph(element2);
         return morphs;
       },
-      statements: [["inline", "input", [], ["type", "email", "class", "form-control input_fields", "value", ["subexpr", "@mut", [["get", "email", ["loc", [null, [8, 71], [8, 76]]]]], [], []], "placeholder", "Email"], ["loc", [null, [8, 10], [8, 98]]]], ["inline", "input", [], ["type", "password", "class", "form-control input_fields", "value", ["subexpr", "@mut", [["get", "password", ["loc", [null, [12, 74], [12, 82]]]]], [], []], "placeholder", "Password"], ["loc", [null, [12, 10], [12, 107]]]], ["element", "action", ["login"], [], ["loc", [null, [15, 16], [15, 34]]]]],
+      statements: [["block", "link-to", ["register"], ["class", "register"], 0, null, ["loc", [null, [4, 31], [4, 97]]]], ["inline", "input", [], ["type", "email", "class", "form-control input_fields", "value", ["subexpr", "@mut", [["get", "email", ["loc", [null, [8, 71], [8, 76]]]]], [], []], "placeholder", "Email"], ["loc", [null, [8, 10], [8, 98]]]], ["inline", "input", [], ["type", "password", "class", "form-control input_fields", "value", ["subexpr", "@mut", [["get", "password", ["loc", [null, [12, 74], [12, 82]]]]], [], []], "placeholder", "Password"], ["loc", [null, [12, 10], [12, 107]]]], ["element", "action", ["login"], [], ["loc", [null, [15, 16], [15, 34]]]]],
       locals: [],
-      templates: []
+      templates: [child0]
+    };
+  })());
+});
+define("restaurant-abh/templates/register", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.5.1",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 4,
+              "column": 39
+            },
+            "end": {
+              "line": 4,
+              "column": 81
+            }
+          },
+          "moduleName": "restaurant-abh/templates/register.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Login");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "triple-curlies"
+        },
+        "revision": "Ember@2.5.1",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 51,
+            "column": 6
+          }
+        },
+        "moduleName": "restaurant-abh/templates/register.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "container");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "row");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3, "class", "col-md-6 col-center-block login_register_container");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("h1");
+        dom.setAttribute(el4, "class", "title");
+        var el5 = dom.createTextNode("Create Account ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("form");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "form-group");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "form-group");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "form-group");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "form-group");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "form-group");
+        dom.setAttribute(el5, "style", "height:54px; overflow:visible;");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "register_select_list_country_container");
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("select");
+        dom.setAttribute(el7, "class", "form-control select_fields");
+        var el8 = dom.createTextNode("\n              ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("option");
+        dom.setAttribute(el8, "value", "Bosnia and Herzegovina");
+        var el9 = dom.createTextNode("Bosnia and Herzegovina");
+        dom.appendChild(el8, el9);
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n              ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("option");
+        dom.setAttribute(el8, "value", "Croatia");
+        var el9 = dom.createTextNode("Croatia");
+        dom.appendChild(el8, el9);
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n              ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("option");
+        dom.setAttribute(el8, "value", "Serbia");
+        var el9 = dom.createTextNode("Serbia");
+        dom.appendChild(el8, el9);
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n            ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "register_select_list_country_container");
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("select");
+        dom.setAttribute(el7, "class", "form-control select_fields");
+        var el8 = dom.createTextNode("\n              ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("option");
+        dom.setAttribute(el8, "value", "Sarajevo");
+        var el9 = dom.createTextNode("Sarajevo");
+        dom.appendChild(el8, el9);
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n              ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("option");
+        dom.setAttribute(el8, "value", "Zagreb");
+        var el9 = dom.createTextNode("Zagreb");
+        dom.appendChild(el8, el9);
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n              ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("option");
+        dom.setAttribute(el8, "value", "Belgrade");
+        var el9 = dom.createTextNode("Belgrade");
+        dom.appendChild(el8, el9);
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n            ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "form-group");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "form-group");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("button");
+        dom.setAttribute(el5, "class", "btn button");
+        var el6 = dom.createTextNode("Create Account");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n     ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [0, 1, 1]);
+        var element1 = dom.childAt(element0, [3]);
+        var element2 = dom.childAt(element1, [15]);
+        var morphs = new Array(8);
+        morphs[0] = dom.createMorphAt(dom.childAt(element0, [1]), 1, 1);
+        morphs[1] = dom.createMorphAt(dom.childAt(element1, [1]), 1, 1);
+        morphs[2] = dom.createMorphAt(dom.childAt(element1, [3]), 1, 1);
+        morphs[3] = dom.createMorphAt(dom.childAt(element1, [5]), 1, 1);
+        morphs[4] = dom.createMorphAt(dom.childAt(element1, [7]), 1, 1);
+        morphs[5] = dom.createMorphAt(dom.childAt(element1, [11]), 1, 1);
+        morphs[6] = dom.createMorphAt(dom.childAt(element1, [13]), 1, 1);
+        morphs[7] = dom.createElementMorph(element2);
+        return morphs;
+      },
+      statements: [["block", "link-to", ["login"], ["class", "register"], 0, null, ["loc", [null, [4, 39], [4, 93]]]], ["inline", "input", [], ["type", "text", "class", "form-control input_fields", "value", ["subexpr", "@mut", [["get", "firstName", ["loc", [null, [8, 70], [8, 79]]]]], [], []], "placeholder", "First Name"], ["loc", [null, [8, 10], [8, 106]]]], ["inline", "input", [], ["type", "text", "class", "form-control input_fields", "value", ["subexpr", "@mut", [["get", "lastName", ["loc", [null, [12, 70], [12, 78]]]]], [], []], "placeholder", "Last Name"], ["loc", [null, [12, 10], [12, 104]]]], ["inline", "input", [], ["type", "text", "class", "form-control input_fields", "value", ["subexpr", "@mut", [["get", "email", ["loc", [null, [16, 70], [16, 75]]]]], [], []], "placeholder", "Email"], ["loc", [null, [16, 10], [16, 97]]]], ["inline", "input", [], ["type", "text", "class", "form-control input_fields", "value", ["subexpr", "@mut", [["get", "phone", ["loc", [null, [20, 70], [20, 75]]]]], [], []], "placeholder", "Phone Number"], ["loc", [null, [20, 10], [20, 104]]]], ["inline", "input", [], ["type", "password", "class", "form-control input_fields", "value", ["subexpr", "@mut", [["get", "password", ["loc", [null, [41, 74], [41, 82]]]]], [], []], "placeholder", "Password"], ["loc", [null, [41, 10], [41, 107]]]], ["inline", "input", [], ["type", "password", "class", "form-control input_fields", "value", ["subexpr", "@mut", [["get", "confirmpassword", ["loc", [null, [44, 74], [44, 89]]]]], [], []], "placeholder", "Confirm Password"], ["loc", [null, [44, 10], [44, 122]]]], ["element", "action", ["createAccount"], [], ["loc", [null, [47, 16], [47, 42]]]]],
+      locals: [],
+      templates: [child0]
     };
   })());
 });
@@ -773,7 +1088,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("restaurant-abh/app")["default"].create({"name":"restaurant-abh","version":"0.0.0+"});
+  require("restaurant-abh/app")["default"].create({"name":"restaurant-abh","version":"0.0.0+9b365710"});
 }
 
 /* jshint ignore:end */

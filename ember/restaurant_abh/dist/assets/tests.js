@@ -13,7 +13,16 @@ define('restaurant-abh/tests/controllers/login.jshint', ['exports'], function (e
   QUnit.module('JSHint - controllers/login.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/login.js should pass jshint.\ncontrollers/login.js: line 1, col 26, Missing semicolon.\ncontrollers/login.js: line 2, col 8, \'user\' is defined but never used.\n\n2 errors');
+    assert.ok(false, 'controllers/login.js should pass jshint.\ncontrollers/login.js: line 1, col 26, Missing semicolon.\ncontrollers/login.js: line 10, col 13, \'self\' is defined but never used.\ncontrollers/login.js: line 2, col 8, \'user\' is defined but never used.\n\n3 errors');
+  });
+});
+define('restaurant-abh/tests/controllers/register.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint - controllers/register.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'controllers/register.js should pass jshint.');
   });
 });
 define('restaurant-abh/tests/helpers/destroy-app', ['exports', 'ember'], function (exports, _ember) {
@@ -147,6 +156,15 @@ define('restaurant-abh/tests/routes/login.jshint', ['exports'], function (export
     assert.ok(true, 'routes/login.js should pass jshint.');
   });
 });
+define('restaurant-abh/tests/routes/register.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint - routes/register.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'routes/register.js should pass jshint.');
+  });
+});
 define('restaurant-abh/tests/routes/restaurants.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -171,7 +189,7 @@ define('restaurant-abh/tests/services/loginservice.jshint', ['exports'], functio
   QUnit.module('JSHint - services/loginservice.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'services/loginservice.js should pass jshint.\nservices/loginservice.js: line 8, col 5, \'$\' is not defined.\nservices/loginservice.js: line 2, col 8, \'user\' is defined but never used.\n\n2 errors');
+    assert.ok(false, 'services/loginservice.js should pass jshint.\nservices/loginservice.js: line 8, col 12, \'$\' is not defined.\n\n1 error');
   });
 });
 define('restaurant-abh/tests/test-helper', ['exports', 'restaurant-abh/tests/helpers/resolver', 'ember-qunit'], function (exports, _restaurantAbhTestsHelpersResolver, _emberQunit) {
@@ -207,6 +225,28 @@ define('restaurant-abh/tests/unit/controllers/login-test.jshint', ['exports'], f
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'unit/controllers/login-test.js should pass jshint.');
+  });
+});
+define('restaurant-abh/tests/unit/controllers/register-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {
+
+  (0, _emberQunit.moduleFor)('controller:register', 'Unit | Controller | register', {
+    // Specify the other units that are required for this test.
+    // needs: ['controller:foo']
+  });
+
+  // Replace this with your real tests.
+  (0, _emberQunit.test)('it exists', function (assert) {
+    var controller = this.subject();
+    assert.ok(controller);
+  });
+});
+define('restaurant-abh/tests/unit/controllers/register-test.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint - unit/controllers/register-test.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'unit/controllers/register-test.js should pass jshint.');
   });
 });
 define('restaurant-abh/tests/unit/models/user-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {
@@ -250,6 +290,27 @@ define('restaurant-abh/tests/unit/routes/login-test.jshint', ['exports'], functi
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'unit/routes/login-test.js should pass jshint.');
+  });
+});
+define('restaurant-abh/tests/unit/routes/register-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {
+
+  (0, _emberQunit.moduleFor)('route:register', 'Unit | Route | register', {
+    // Specify the other units that are required for this test.
+    // needs: ['controller:foo']
+  });
+
+  (0, _emberQunit.test)('it exists', function (assert) {
+    var route = this.subject();
+    assert.ok(route);
+  });
+});
+define('restaurant-abh/tests/unit/routes/register-test.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint - unit/routes/register-test.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'unit/routes/register-test.js should pass jshint.');
   });
 });
 define('restaurant-abh/tests/unit/routes/restaurants-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {

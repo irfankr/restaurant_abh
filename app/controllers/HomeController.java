@@ -4,6 +4,8 @@ import play.mvc.*;
 
 import views.html.*;
 
+import play.db.*;
+
 /**
  * This controller contains an action to handle HTTP requests
  * to the application's home page.

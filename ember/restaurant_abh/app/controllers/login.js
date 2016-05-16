@@ -7,14 +7,17 @@ export default Ember.Controller.extend({
     currentuserservice: Ember.inject.service(),
     actions: {
       login: function(){
+        var self = this;
+
         //Get values from form
         var email = this.get('email');
         var password = this.get('password');
 
-        //Call login service (NE ZNAM MOZE LI RESPONSE OVAKO)
-        this.get("loginservice").checkUser(email, password, function(response){
-          console.log("Odgovor" + response);
-        });
+        //Call login service
+        this.get("loginservice").checkUser(email, password)
+          .done(function(user) {
+            console.log(user);
+          });
 
 
         console.log("Email form input:" + email);
