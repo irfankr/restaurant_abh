@@ -54,35 +54,98 @@ public class UserController extends Controller {
         if (loginForm.hasErrors()) {
             return badRequest("Some error happend!");
         } else {
-            User user = findByEmailAndPassword(loginForm.get().email, loginForm.get().password);
+            User user = User.findByEmailAndPassword(loginForm.get().email, loginForm.get().password);
             if(user == null) {
                 return badRequest("{error: \"User data is not valid!\"}");
             } else {
+                //Put user id in session
                 session().clear();
-                session("email", loginForm.get().email);
+                session("idUser", Long.toString(user.getId()));
+
                 return ok(Json.toJson(user));
             }
         }
     }
 
-    @Transactional
-    public static User findByEmailAndPassword(String email, String password){
-        try {
-            TypedQuery<User> query = JPA.em().createQuery("SELECT u FROM User u WHERE email = ? AND password = ?", User.class);
-            query.setParameter(1, email);
-            query.setParameter(2, password);
-            User user = query.getSingleResult();
 
-            return user;
-        } catch(NoResultException noresult) { //If there is no user with
-            return null;
+    public Result logout(){
+        //Delete user from session
+        session().clear();
+
+        return ok();
+    }
+
+    @Transactional
+    public Result currentUser(){
+        User user = getCurrentUser();
+        if(user == null){
+            return badRequest("{error: \"User doesn't exist!\"}");
+        } else {
+            return ok(Json.toJson(user));
         }
     }
 
-    public static class UserLoginDto {
+    @Transactional
+    public static User getCurrentUser() {
+        //Creare user object
+        User user = new User();
 
-        public String email;
-        public String password;
+        //Get user id from session
+        if(session("idUser") == null){
+            return null;
+        } else {
+            long userId = Long.parseLong(session("idUser"));
+            //Logger.info("SESSION ID: " + session("idUser"));
+
+            //Find user with that id
+            user = user.findById(userId);
+
+            if(user == null){
+                return null;
+            } else {
+                return user;
+            }
+        }
 
     }
+
+    /* Get data from register */
+    @Transactional
+    public Result register() {
+        //Create loginForm
+        Form<UserRegisterDto> RegisterForm = form(UserRegisterDto.class).bindFromRequest();
+
+        //Create user object
+        User user = new User();
+
+        user.setFirstName(RegisterForm.get().firstName);
+        user.setLastName(RegisterForm.get().lastName);
+        user.setEmail(RegisterForm.get().email);
+        user.setPhone(RegisterForm.get().phone);
+        user.setPassword(RegisterForm.get().password);
+        user.setCity(RegisterForm.get().city);
+        user.setCountry(RegisterForm.get().country);
+
+        //Store user in database
+        user.save();
+
+        return ok(Json.toJson(user));
+    }
+
+    public static class UserLoginDto {
+        public String email;
+        public String password;
+    }
+
+    public static class UserRegisterDto {
+        public long id;
+        public String email;
+        public String password;
+        public String firstName;
+        public String lastName;
+        public String phone;
+        public String country;
+        public String city;
+    }
+
 }

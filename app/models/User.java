@@ -2,6 +2,7 @@ package models;
 
 import play.*;
 import play.data.DynamicForm;
+import static play.data.Form.*;
 import play.data.Form;
 import play.mvc.*;
 
@@ -115,26 +116,35 @@ public class User {
     }
 
 
-    public static User findById(long id){ return JPA.em().find(User.class, id); }
-
-    public void save() {
-        EntityManager em = JPA.em();
-        Query query = em.createNativeQuery("INSERT INTO users (email, password, firstName, lastName, phone, country, city) VALUES(?, ?, ?, ?, ?, ?, ?)");
-        query.setParameter(1, this.getEmail());
-        query.setParameter(2, this.getPassword());
-        query.setParameter(3, this.getFirstName());
-        query.setParameter(4, this.getLastName());
-        query.setParameter(5, this.getPhone());
-        query.setParameter(6, this.getCountry());
-        query.setParameter(7, this.getCity());
-        query.executeUpdate();
-
-        //JPA.em().persist(this);
+    @Transactional
+    public static User findById(long id){
+        try {
+            return JPA.em().find(User.class, id);
+        } catch(NoResultException noresult) { //If there is no user with
+            return null;
+        }
     }
+
+    public void save() { JPA.em().persist(this); }
 
     public void update() { JPA.em().merge(this); }
 
     public void delete() {
         JPA.em().remove(this);
     }
+
+    @Transactional
+    public static User findByEmailAndPassword(String email, String password){
+        try {
+            TypedQuery<User> query = JPA.em().createQuery("SELECT u FROM User u WHERE email = ? AND password = ?", User.class);
+            query.setParameter(1, email);
+            query.setParameter(2, password);
+            User user = query.getSingleResult();
+
+            return user;
+        } catch(NoResultException noresult) { //If there is no user with
+            return null;
+        }
+    }
+
 }
