@@ -2,7 +2,6 @@ import Ember from 'ember'
 import user from 'ember-data/model';
 
 export default Ember.Controller.extend({
-
     loginservice: Ember.inject.service(),
     currentuserservice: Ember.inject.service(),
     actions: {
@@ -17,11 +16,12 @@ export default Ember.Controller.extend({
         this.get("loginservice").checkUser(email, password)
           .done(function(user) {
             console.log(user);
+            //console.log("Email usera: " + user.get("email"));
           });
 
 
-        console.log("Email form input:" + email);
-        console.log("Password form input:" + password);
+        //console.log("Email form input:" + email);
+        //console.log("Password form input:" + password);
       }
     }
 });

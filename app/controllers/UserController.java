@@ -2,6 +2,7 @@ package controllers;
 
 import play.*;
 import play.data.DynamicForm;
+import static play.data.Form.*;
 import play.data.Form;
 import play.mvc.*;
 
@@ -47,55 +48,41 @@ public class UserController extends Controller {
     /* Get data from login */
     @Transactional
     public Result login() {
+        //Create loginForm
+        Form<UserLoginDto> loginForm = form(UserLoginDto.class).bindFromRequest();
 
-        //Get input JSON string to (some) object
-        JsonNode json = request().body().asJson();
-
-        //Convert input JSON to object
-        User user = Json.fromJson(json, User.class);
-
-        //TEST USER INPUT
-        User read_user = findByEmailAndPassword(user.getEmail(), user.getPassword());
-
-        //Check is email and password correct
-        if(read_user.getEmail().equals(user.getEmail()) && read_user.getPassword().equals(user.getPassword())){
-            //Modify user data (test)
-            user.setEmail("Modified by Play: " + user.getEmail());
-            user.setPassword("Modified by Play: " + user.getPassword());
-
-            //Convert modified object to JSON
-            JsonNode userJson = Json.toJson(read_user);
-
-            //Echo Email and Password to Console
-            Logger.info(user.getEmail());
-            Logger.info(user.getPassword());
-
-            return ok(userJson);
+        if (loginForm.hasErrors()) {
+            return badRequest("Some error happend!");
         } else {
-            return badRequest("User data is not valid!");
+            User user = findByEmailAndPassword(loginForm.get().email, loginForm.get().password);
+            if(user == null) {
+                return badRequest("{error: \"User data is not valid!\"}");
+            } else {
+                session().clear();
+                session("email", loginForm.get().email);
+                return ok(Json.toJson(user));
+            }
         }
-
     }
 
     @Transactional
-    public User findByEmailAndPassword(String email, String password){
-        EntityManager em = JPA.em();
-        Query query = em.createNativeQuery("SELECT * FROM users WHERE email = ? AND password = ?");
-        query.setParameter(1, email);
-        query.setParameter(2, password);
+    public static User findByEmailAndPassword(String email, String password){
+        try {
+            TypedQuery<User> query = JPA.em().createQuery("SELECT u FROM User u WHERE email = ? AND password = ?", User.class);
+            query.setParameter(1, email);
+            query.setParameter(2, password);
+            User user = query.getSingleResult();
 
-        Object[] temp_user = (Object[]) query.getSingleResult();
+            return user;
+        } catch(NoResultException noresult) { //If there is no user with
+            return null;
+        }
+    }
 
-        User user = new User();
-        user.setId((int)temp_user[0]);
-        user.setEmail((String)temp_user[1]);
-        user.setPassword((String)temp_user[2]);
-        user.setFirstName((String)temp_user[3]);
-        user.setLastName((String)temp_user[4]);
-        user.setPhone((String)temp_user[5]);
-        user.setCountry((String)temp_user[6]);
-        user.setCity((String)temp_user[7]);
+    public static class UserLoginDto {
 
-        return user;
+        public String email;
+        public String password;
+
     }
 }

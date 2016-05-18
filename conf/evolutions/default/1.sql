@@ -1,8 +1,7 @@
 # --- !Ups
 
-CREATE SEQUENCE users_sequence;
 CREATE TABLE users(
-	id integer default nextval('users_sequence'),
+	id bigint,
 	email varchar(255) NOT NULL,
 	password varchar(255) NOT NULL,
 	firstName varchar(255) NOT NULL,
@@ -13,6 +12,11 @@ CREATE TABLE users(
 	PRIMARY KEY (id)
 );
 
+INSERT INTO users (id, email, password, firstName, lastname, phone, country, city) VALUES (1, 'irfankr91@gmail.com', '12345', 'Irfan', 'Krijestorac', '061506652', 'BiH', 'Sarajevo');
+
+CREATE SEQUENCE hibernate_sequence;
+
 # --- !Downs
 DROP TABLE users;
-DROP SEQUENCE users_sequence;
+
+DROP SEQUENCE IF EXISTS hibernate_sequence;

@@ -29,15 +29,19 @@ import play.db.jpa.JPAApi;
 import play.db.jpa.Transactional;
 import play.db.jpa.JPA;
 
+import java.io.IOException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * Created by irfank on 5/16/16.
  */
 @Entity
 @Table(name="users")
 public class User {
-    @Id @GeneratedValue int id;
+    @Id @GeneratedValue long id;
     private String email;
-    private String password;
+    @JsonIgnore private String password;
     private String firstName;
     private String lastName;
     private String phone;
@@ -46,11 +50,11 @@ public class User {
 
     public User() {}
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -111,12 +115,7 @@ public class User {
     }
 
 
-    public static User findById(int id){
-        EntityManager em = JPA.em();
-        User user = em.find(User.class, id);
-
-        return user;
-    }
+    public static User findById(long id){ return JPA.em().find(User.class, id); }
 
     public void save() {
         EntityManager em = JPA.em();
@@ -129,25 +128,13 @@ public class User {
         query.setParameter(6, this.getCountry());
         query.setParameter(7, this.getCity());
         query.executeUpdate();
+
+        //JPA.em().persist(this);
     }
 
-    public void update() {
-        EntityManager em = JPA.em();
-        Query query = em.createNativeQuery("UPDATE users SET email = ?, password = ?, firstName = ?, lastName = ?, phone = ?, country = ?, city = ? WHERE id = ?");
-        query.setParameter(1, this.getEmail());
-        query.setParameter(2, this.getPassword());
-        query.setParameter(3, this.getFirstName());
-        query.setParameter(4, this.getLastName());
-        query.setParameter(5, this.getPhone());
-        query.setParameter(6, this.getCountry());
-        query.setParameter(7, this.getCity());
-        query.setParameter(8, this.getId());
-        query.executeUpdate();
-    }
+    public void update() { JPA.em().merge(this); }
 
     public void delete() {
-        User user = this.findById(this.getId());
-        EntityManager em = JPA.em();
-        em.remove(user);
+        JPA.em().remove(this);
     }
 }
