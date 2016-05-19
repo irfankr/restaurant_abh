@@ -1,0 +1,1 @@
+/home/irfank/Play_applications/restaurant_abh/ember/restaurant_abh/tmp/creator-output_path-21v6K9Nh.tmp/version.js
