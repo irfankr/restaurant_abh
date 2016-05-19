@@ -9,5 +9,7 @@ export default Ember.Route.extend({
     if(this.get('userLoggedIn') == false){
       self.transitionTo('login');
     }
+
+    //console.log("Ispis iz route:" + this.get('currentuserservice.userFirstName'));
   }
 });

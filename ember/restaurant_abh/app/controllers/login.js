@@ -33,7 +33,7 @@ export default Ember.Controller.extend({
           //Call login service
           this.get("loginservice").checkUser(email, password)
             .done(function(user) {
-              //Set that user is logged in
+              //Set current user data from response
               self.get("currentuserservice").setUser(user);
 
               //Display successfull notification

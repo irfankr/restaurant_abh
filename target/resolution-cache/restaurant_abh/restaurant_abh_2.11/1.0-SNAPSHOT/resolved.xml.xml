@@ -4,7 +4,7 @@
 		module="restaurant_abh_2.11"
 		revision="1.0-SNAPSHOT"
 		status="integration"
-		publication="20160511125217"
+		publication="20160518160014"
 	>
 		<description>
 		restaurant_abh
@@ -47,5 +47,9 @@
 		<dependency org="com.typesafe.play" name="play-java-jdbc_2.11" rev="2.5.3" conf="compile->default(compile)"/>
 		<dependency org="com.typesafe.play" name="play-cache_2.11" rev="2.5.3" conf="compile->default(compile)"/>
 		<dependency org="com.typesafe.play" name="play-java-ws_2.11" rev="2.5.3" conf="compile->default(compile)"/>
+		<dependency org="org.postgresql" name="postgresql" rev="9.4-1206-jdbc42" conf="compile->default(compile)"/>
+		<dependency org="com.typesafe.play" name="play-java-jpa_2.11" rev="2.5.3" conf="compile->default(compile)"/>
+		<dependency org="org.hibernate" name="hibernate-entitymanager" rev="5.1.0.Final" conf="compile->default(compile)"/>
+		<dependency org="com.typesafe.play" name="play-jdbc-evolutions_2.11" rev="2.5.3" conf="compile->default(compile)"/>
 	</dependencies>
 </ivy-module>

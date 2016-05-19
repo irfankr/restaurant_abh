@@ -1,21 +1,27 @@
-2016-05-12 15:13:33,641 [INFO] from play.core.server.NettyServer in pool-6-thread-4 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
-2016-05-12 15:14:12,303 [INFO] from application in ForkJoinPool-1-worker-1 - ApplicationTimer demo: Starting application at 2016-05-12T13:14:12.299Z
-2016-05-12 15:14:13,355 [INFO] from play.api.Play in ForkJoinPool-1-worker-1 - Application started (Dev)
-2016-05-12 15:14:26,813 [INFO] from application in application-akka.actor.default-dispatcher-5 - Modified by Play: irfankr91@gmail.com
-2016-05-12 15:14:26,814 [INFO] from application in application-akka.actor.default-dispatcher-5 - Modified by Play: 12345
-2016-05-12 15:46:09,332 [INFO] from application in application-akka.actor.default-dispatcher-27 - Modified by Play: irfankr91@gmail.com
-2016-05-12 15:46:09,333 [INFO] from application in application-akka.actor.default-dispatcher-27 - Modified by Play: 12345
-2016-05-12 15:49:18,529 [INFO] from application in application-akka.actor.default-dispatcher-28 - Modified by Play: irfankr91@gmail.com
-2016-05-12 15:49:18,530 [INFO] from application in application-akka.actor.default-dispatcher-28 - Modified by Play: 12345
-2016-05-12 15:54:58,922 [INFO] from application in application-akka.actor.default-dispatcher-39 - Modified by Play: irfankr91@gmail.com
-2016-05-12 15:54:58,924 [INFO] from application in application-akka.actor.default-dispatcher-39 - Modified by Play: 12345
-2016-05-12 15:55:54,388 [INFO] from application in application-akka.actor.default-dispatcher-41 - Modified by Play: irfankr91@gmail.com
-2016-05-12 15:55:54,388 [INFO] from application in application-akka.actor.default-dispatcher-41 - Modified by Play: 12345
-2016-05-12 15:58:20,831 [INFO] from application in application-akka.actor.default-dispatcher-48 - Modified by Play: irfankr91@gmail.com
-2016-05-12 15:58:20,831 [INFO] from application in application-akka.actor.default-dispatcher-48 - Modified by Play: 12345
-2016-05-12 15:59:13,546 [INFO] from application in application-akka.actor.default-dispatcher-49 - Modified by Play: irfankr91@gmail.com
-2016-05-12 15:59:13,546 [INFO] from application in application-akka.actor.default-dispatcher-49 - Modified by Play: 12345
-2016-05-12 16:01:22,284 [INFO] from application in application-akka.actor.default-dispatcher-55 - Modified by Play: irfankr91@gmail.com
-2016-05-12 16:01:22,284 [INFO] from application in application-akka.actor.default-dispatcher-55 - Modified by Play: 12345
-2016-05-12 16:02:46,346 [INFO] from application in application-akka.actor.default-dispatcher-57 - Modified by Play: irfankr91@gmail.com
-2016-05-12 16:02:46,346 [INFO] from application in application-akka.actor.default-dispatcher-57 - Modified by Play: 12345
+2016-05-20 00:09:40,902 [INFO] from play.core.server.NettyServer in pool-6-thread-4 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+2016-05-20 00:09:50,450 [WARN] from application in ForkJoinPool-1-worker-1 - application.conf @ file:/home/irfank/Play_applications/restaurant_abh/target/scala-2.11/classes/application.conf: 354: user is deprecated, use username instead
+2016-05-20 00:09:50,462 [INFO] from application in ForkJoinPool-1-worker-1 - Creating Pool for datasource 'default'
+2016-05-20 00:09:50,653 [INFO] from play.api.db.HikariCPConnectionPool in ForkJoinPool-1-worker-1 - datasource [default] bound to JNDI as DefaultDS
+2016-05-20 00:09:50,663 [INFO] from play.api.db.DefaultDBApi in ForkJoinPool-1-worker-1 - Database [default] connected at jdbc:postgresql://127.0.0.1:5432/restaurant_abh
+2016-05-20 00:09:51,010 [INFO] from application in ForkJoinPool-1-worker-1 - ApplicationTimer demo: Starting application at 2016-05-19T22:09:51.008Z
+2016-05-20 00:09:51,302 [INFO] from play.api.Play in ForkJoinPool-1-worker-1 - Application started (Dev)
+2016-05-20 00:19:06,292 [INFO] from application in application-akka.actor.default-dispatcher-6 - ApplicationTimer demo: Stopping application at 2016-05-19T22:19:06.292Z after 555s.
+2016-05-20 00:19:06,297 [INFO] from application in application-akka.actor.default-dispatcher-6 - Shutting down connection pool.
+2016-05-20 00:19:06,515 [WARN] from application in application-akka.actor.default-dispatcher-6 - application.conf @ file:/home/irfank/Play_applications/restaurant_abh/target/scala-2.11/classes/application.conf: 354: user is deprecated, use username instead
+2016-05-20 00:19:06,515 [INFO] from application in application-akka.actor.default-dispatcher-6 - Creating Pool for datasource 'default'
+2016-05-20 00:19:06,538 [INFO] from play.api.db.HikariCPConnectionPool in application-akka.actor.default-dispatcher-6 - datasource [default] bound to JNDI as DefaultDS
+2016-05-20 00:19:06,538 [INFO] from play.api.db.DefaultDBApi in application-akka.actor.default-dispatcher-6 - Database [default] connected at jdbc:postgresql://127.0.0.1:5432/restaurant_abh
+2016-05-20 00:19:06,564 [INFO] from application in application-akka.actor.default-dispatcher-6 - ApplicationTimer demo: Starting application at 2016-05-19T22:19:06.564Z
+2016-05-20 00:19:06,694 [INFO] from play.api.Play in application-akka.actor.default-dispatcher-6 - Application started (Dev)
+2016-05-20 00:19:27,888 [INFO] from application in application-akka.actor.default-dispatcher-7 - ApplicationTimer demo: Stopping application at 2016-05-19T22:19:27.888Z after 21s.
+2016-05-20 00:19:27,890 [INFO] from application in application-akka.actor.default-dispatcher-7 - Shutting down connection pool.
+2016-05-20 00:19:28,085 [WARN] from application in application-akka.actor.default-dispatcher-7 - application.conf @ file:/home/irfank/Play_applications/restaurant_abh/target/scala-2.11/classes/application.conf: 354: user is deprecated, use username instead
+2016-05-20 00:19:28,085 [INFO] from application in application-akka.actor.default-dispatcher-7 - Creating Pool for datasource 'default'
+2016-05-20 00:19:28,095 [INFO] from play.api.db.HikariCPConnectionPool in application-akka.actor.default-dispatcher-7 - datasource [default] bound to JNDI as DefaultDS
+2016-05-20 00:19:28,095 [INFO] from play.api.db.DefaultDBApi in application-akka.actor.default-dispatcher-7 - Database [default] connected at jdbc:postgresql://127.0.0.1:5432/restaurant_abh
+2016-05-20 00:19:28,150 [INFO] from application in application-akka.actor.default-dispatcher-7 - ApplicationTimer demo: Starting application at 2016-05-19T22:19:28.150Z
+2016-05-20 00:19:28,258 [INFO] from play.api.Play in application-akka.actor.default-dispatcher-7 - Application started (Dev)
+2016-05-20 00:20:26,706 [WARN] from org.hibernate.hql.internal.ast.HqlSqlWalker in application-akka.actor.default-dispatcher-2 - [DEPRECATION] Encountered positional parameter near line 1, column 43 in HQL: [SELECT u FROM models.User u WHERE email = ? AND password = ?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2016-05-20 00:20:26,712 [WARN] from org.hibernate.hql.internal.ast.HqlSqlWalker in application-akka.actor.default-dispatcher-2 - [DEPRECATION] Encountered positional parameter near line 1, column 60 in HQL: [SELECT u FROM models.User u WHERE email = ? AND password = ?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2016-05-20 00:20:26,776 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-2 - select user0_.id as id1_0_, user0_.city as city2_0_, user0_.country as country3_0_, user0_.email as email4_0_, user0_.firstName as firstNam5_0_, user0_.lastName as lastName6_0_, user0_.password as password7_0_, user0_.phone as phone8_0_ from users user0_ where user0_.email=? and user0_.password=?
+2016-05-20 00:20:37,484 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-9 - select user0_.id as id1_0_, user0_.city as city2_0_, user0_.country as country3_0_, user0_.email as email4_0_, user0_.firstName as firstNam5_0_, user0_.lastName as lastName6_0_, user0_.password as password7_0_, user0_.phone as phone8_0_ from users user0_ where user0_.email=? and user0_.password=?

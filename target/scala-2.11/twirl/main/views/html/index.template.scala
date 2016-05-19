@@ -21,34 +21,50 @@ import play.data._
 import play.api.data.Field
 import play.mvc.Http.Context.Implicit._
 
-class index extends BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with play.twirl.api.Template1[String,play.twirl.api.HtmlFormat.Appendable] {
+class index extends BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with play.twirl.api.Template0[play.twirl.api.HtmlFormat.Appendable] {
 
-  /*
- * This template takes a single argument, a String containing a
- * message to display.
- */
-  def apply/*5.2*/(message: String):play.twirl.api.HtmlFormat.Appendable = {
+  /**/
+  def apply():play.twirl.api.HtmlFormat.Appendable = {
     _display_ {
       {
 
 
-Seq[Any](format.raw/*5.19*/("""
+Seq[Any](format.raw/*1.1*/("""<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>RestaurantAbh</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-"""),format.raw/*11.4*/("""
-"""),_display_(/*12.2*/main("Welcome to Play")/*12.25*/ {_display_(Seq[Any](format.raw/*12.27*/("""
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,300italic,200italic,400italic,600,700,600italic,900,700italic,900italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
-    """),format.raw/*17.8*/("""
-    """),_display_(/*18.6*/play20/*18.12*/.welcome(message, style = "Java")),format.raw/*18.45*/("""
+    <base href="/" />
+<meta name="restaurant-abh/config/environment" content="%7B%22modulePrefix%22%3A%22restaurant-abh%22%2C%22environment%22%3A%22production%22%2C%22baseURL%22%3A%22/%22%2C%22locationType%22%3A%22auto%22%2C%22EmberENV%22%3A%7B%22FEATURES%22%3A%7B%7D%7D%2C%22APP%22%3A%7B%22name%22%3A%22restaurant-abh%22%2C%22version%22%3A%220.0.0+6353a9f6%22%7D%2C%22exportApplicationGlobal%22%3Afalse%7D" />
 
-""")))}),format.raw/*20.2*/("""
+    <link rel="stylesheet" href="assets/vendor-2844a25793b5418bfda0b835780278dd.css">
+    <link rel="stylesheet" href="assets/restaurant-abh-440d17d29b81b96de7260a6236a0a971.css">
+
+    
+  </head>
+  <body>
+    
+
+    <script src="assets/vendor-b6e742cd131dc1b8166d53ad97339826.js"></script>
+    <script src="assets/restaurant-abh-82aec194fc7ec2f1b18a21bb2ac533b4.js"></script>
+
+    
+  </body>
+</html>
 """))
       }
     }
   }
 
-  def render(message:String): play.twirl.api.HtmlFormat.Appendable = apply(message)
+  def render(): play.twirl.api.HtmlFormat.Appendable = apply()
 
-  def f:((String) => play.twirl.api.HtmlFormat.Appendable) = (message) => apply(message)
+  def f:(() => play.twirl.api.HtmlFormat.Appendable) = () => apply()
 
   def ref: this.type = this
 
@@ -57,18 +73,15 @@ Seq[Any](format.raw/*5.19*/("""
 
 }
 
-/*
- * This template takes a single argument, a String containing a
- * message to display.
- */
+/**/
 object index extends index_Scope0.index
               /*
                   -- GENERATED --
-                  DATE: Wed May 11 12:52:25 CEST 2016
+                  DATE: Fri May 20 00:09:42 CEST 2016
                   SOURCE: /home/irfank/Play_applications/restaurant_abh/app/views/index.scala.html
-                  HASH: c00f1c05d68754c3b12a2a3ffaafe456cbad7d39
-                  MATRIX: 834->95|946->112|975->308|1003->310|1035->333|1075->335|1108->464|1140->470|1155->476|1209->509|1242->512
-                  LINES: 30->5|35->5|37->11|38->12|38->12|38->12|40->17|41->18|41->18|41->18|43->20
+                  HASH: 46e1635840705a8f4147e3cb7ae0256b48731fe5
+                  MATRIX: 827->0
+                  LINES: 32->1
                   -- GENERATED --
               */
           

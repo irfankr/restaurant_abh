@@ -6,7 +6,7 @@ export default Ember.Service.extend({
 
     //Sent POST to Play route
     return $.ajax({
-      url: "/login",
+      url: "/api/v1/login",
       type: "POST",
       data: '{"email":"'+email+'","password":"'+password+'"}',
       processData: false,

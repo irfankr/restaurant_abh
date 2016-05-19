@@ -7,5 +7,6 @@ export default Ember.Service.extend({
   userFirstName:null,
   setUser(user){
     this.set("userLoggedIn", true);
+    this.set("userFirstName", user.get("firstName"));
   }
 });

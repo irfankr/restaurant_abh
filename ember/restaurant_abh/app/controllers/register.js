@@ -56,7 +56,7 @@ export default Ember.Controller.extend({
 
             //Sent POST to Play route
             return $.ajax({
-              url: "/register",
+              url: "/api/v1/register",
               type: "POST",
               data: data,
               processData: false,

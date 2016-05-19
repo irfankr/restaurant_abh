@@ -76,7 +76,7 @@ a:link, a:visited {
 }
 
 .selectize-control.single .selectize-input, .selectize-control.single .selectize-input input {
-  font-family:'Source Sans Pro'; font-weight: 600; font-size:16px; padding-top:15px; padding-bottom:15px; background-color:#FFF; color:#000;
+  font-family:'Source Sans Pro'; font-weight: 600; font-size:16px; padding-top:17px; padding-bottom:17px; background-color:#FFF; color:#000;
 }
 /* Footer */
 footer {

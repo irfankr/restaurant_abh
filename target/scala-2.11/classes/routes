@@ -2,14 +2,24 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+# Ember.JS files
+GET     /assets/*file               controllers.Assets.versioned(path="/public/ember/assets", file: Asset)
+GET     /                           controllers.HomeController.index(slug = "")
+GET     /*slug                      controllers.HomeController.index(slug)
+
+
 # An example controller showing a sample home page
-GET     /                           controllers.HomeController.index
+# GET     /api/v1/                    controllers.HomeController.index
 # An example controller showing how to use dependency injection
-GET     /count                      controllers.CountController.count
+GET     /api/v1/count               controllers.CountController.count
 # An example controller showing how to write asynchronous code
-GET     /message                    controllers.AsyncController.message
+GET     /api/v1/message             controllers.AsyncController.message
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+# GET     /assets/*file             controllers.Assets.versioned(path="/public", file: Asset)
 
-POST    /login                      controllers.UserController.login
+POST    /api/v1/login               controllers.UserController.login
+GET     /api/v1/currentUser         controllers.UserController.currentUser
+GET     /api/v1/logout              controllers.UserController.logout
+
+POST    /api/v1/register            controllers.UserController.register
