@@ -71,6 +71,13 @@ a:link, a:visited {
 .register_select_list_country_container {
   float:left; width:50%;
 }
+.loginNotifications, .registerNotifications {
+  display:none;
+}
+
+.selectize-control.single .selectize-input, .selectize-control.single .selectize-input input {
+  font-family:'Source Sans Pro'; font-weight: 600; font-size:16px; padding-top:15px; padding-bottom:15px; background-color:#FFF; color:#000;
+}
 /* Footer */
 footer {
   margin-top:-150px; height:150px; overflow:hidden; z-index:99; background-color:#131d24;

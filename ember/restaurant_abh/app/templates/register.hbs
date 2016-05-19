@@ -5,29 +5,50 @@
 
       <form>
         <div class="form-group">
-          {{input type="text" class="form-control input_fields" value=firstName placeholder="First Name"}}
+          {{input type="text" class="form-control input_fields" value=user.firstName placeholder="First Name"}}
         </div>
 
         <div class="form-group">
-          {{input type="text" class="form-control input_fields" value=lastName placeholder="Last Name"}}
+          {{input type="text" class="form-control input_fields" value=user.lastName placeholder="Last Name"}}
         </div>
 
         <div class="form-group">
-          {{input type="text" class="form-control input_fields" value=email placeholder="Email"}}
+          {{input type="text" class="form-control input_fields" value=user.email placeholder="Email"}}
         </div>
 
         <div class="form-group">
-          {{input type="text" class="form-control input_fields" value=phone placeholder="Phone Number"}}
+          {{input type="text" class="form-control input_fields" value=user.phone placeholder="Phone Number"}}
         </div>
 
-
+        <div class="form-group" style="height:54px; overflow:visible;">
+          <div class="register_select_list_country_container">
+            {{ember-selectize
+              content=countries
+              value=user.country
+              placeholder="Select country"
+             }}
+          </div>
+          <div class="register_select_list_country_container">
+            {{ember-selectize
+              content=cities
+              value=user.city
+              placeholder="Select city"
+             }}
+          </div>
+        </div>
 
         <div class="form-group">
-          {{input type="password" class="form-control input_fields" value=password placeholder="Password"}}
+          {{input type="password" class="form-control input_fields" value=user.password placeholder="Password"}}
         </div>
         <div class="form-group">
-          {{input type="password" class="form-control input_fields" value=confirmpassword placeholder="Confirm Password"}}
+          {{input type="password" class="form-control input_fields" value=user.confirmpassword placeholder="Confirm Password"}}
         </div>
+
+        <div class="form-group registerNotifications">
+              <div class="alert alert-danger" role="alert">
+                <div class="alertText"></div>
+              </div>
+            </div>
 
         <button {{action 'register'}} class="btn button">Create Account</button>
       </form>

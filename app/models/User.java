@@ -133,7 +133,6 @@ public class User {
         JPA.em().remove(this);
     }
 
-    @Transactional
     public static User findByEmailAndPassword(String email, String password){
         try {
             TypedQuery<User> query = JPA.em().createQuery("SELECT u FROM User u WHERE email = ? AND password = ?", User.class);

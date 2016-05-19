@@ -100,11 +100,7 @@ public class UserController extends Controller {
             //Find user with that id
             user = user.findById(userId);
 
-            if(user == null){
-                return null;
-            } else {
-                return user;
-            }
+            return user;
         }
 
     }
