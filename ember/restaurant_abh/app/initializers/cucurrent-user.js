@@ -1,4 +1,5 @@
 import User from '../models/user';
+import Currentuserservice from '../services/currentuserservice';
 
 export function initialize(application) {
   var self = this;
@@ -22,9 +23,19 @@ export function initialize(application) {
     //Continue with app
     application.advanceReadiness();
 
+
     //self.transitionTo('login');
-  }).then(function(data) {
-    console.log(data);
+  }).done(function(data) {
+    //console.log(data);
+
+    var servistest = Currentuserservice.create();
+    var user = User.create(data);
+
+    //Insert user data in service
+    servistest.setUser(user);
+
+    application.unregister('service:currentuserservice');
+    application.register('service:currentuserservice', servistest, {instantiate: false, singleton: true});
 
     //Inject service
     application.inject('route', 'currentuserservice', 'service:currentuserservice');
@@ -39,6 +50,5 @@ export function initialize(application) {
 }
 
 export default {
-  user: 'current-user',
-  initialize,
+  initialize
 };

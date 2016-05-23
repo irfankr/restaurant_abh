@@ -1,13 +1,20 @@
 <div id="wrap">
   <div id="main">
+  {{log currentuserservice}}
     <header class="container-fluid navigation_black">
       <div class="container">
         <nav>
-          <a class="app_name" href="#">Restaurant ABH</a>
+          <a class="app_name" href="#">Restaurant ABH {{currentuserservice.userLoggedIn}}</a>
           <ul class="navbar-right">
             <li>{{#link-to 'index'}}Home{{/link-to}}</li>
             <li>{{#link-to 'restaurants'}}Restaurants{{/link-to}}</li>
-            <li>{{#link-to 'login'}}Login{{/link-to}}</li>
+
+            {{#if currentuserservice.userLoggedIn}}
+              <li>{{currentuserservice.userFirstName}}</li>
+            {{else}}
+              <li>{{#link-to 'login'}}Login{{/link-to}}</li>
+            {{/if}}
+
           </ul>
         </nav>
       </div>

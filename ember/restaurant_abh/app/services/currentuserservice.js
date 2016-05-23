@@ -6,8 +6,10 @@ export default Ember.Service.extend({
   userId:null,
   userFirstName:null,
   setUser(user){
+    console.log(user);
     this.set("userLoggedIn", true);
-    this.set("userFirstName", user.get("firstName"));
+    console.log(this.get('userLoggedIn'));
+    this.set("userFirstName", user.get('firstName'));
   },
   init: function() {
     console.log('Hello From Session Service');

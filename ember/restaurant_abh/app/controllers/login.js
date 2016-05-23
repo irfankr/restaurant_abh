@@ -32,7 +32,9 @@ export default Ember.Controller.extend({
         } else {
           //Call login service
           this.get("loginservice").checkUser(email, password)
-            .done(function(user) {
+            .done(function(data) {
+              var user = User.create(data);
+
               //Set current user data from response
               self.get("currentuserservice").setUser(user);
 
