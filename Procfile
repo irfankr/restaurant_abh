@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/restaurant_abh -Dhttp.port=$PORT -Dplay.evolutions.db.default.autoApply=true -Ddb.default.driver=org.postgresql.Driver -Ddb.default.url=$DATABASE_URL -Ddb.default.jndiName=DefaultDS -Djpa.default=defaultPersistenceUnit -Djpa.dialect=org.hibernate.dialect.PostgreSQLDialect -Djpa.ddl=update
+web: target/universal/stage/bin/restaurant_abh -Dhttp.port=${PORT} -Dplay.evolutions.db.default.autoApply=true -Ddb.default.driver=org.postgresql.Driver -Ddb.default.url=${DATABASE_URL}
