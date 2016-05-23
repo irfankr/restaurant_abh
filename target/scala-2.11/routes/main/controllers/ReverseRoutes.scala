@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/home/irfank/Play_applications/restaurant_abh/conf/routes
-// @DATE:Fri May 20 00:19:23 CEST 2016
+// @DATE:Sun May 22 01:51:48 CEST 2016
 
 import play.api.mvc.{ QueryStringBindable, PathBindable, Call, JavascriptLiteral }
 import play.core.routing.{ HandlerDef, ReverseRouteContext, queryString, dynamicString }
@@ -28,14 +28,14 @@ package controllers {
   
   }
 
-  // @LINE:14
+  // @LINE:12
   class ReverseCountController(_prefix: => String) {
     def _defaultPrefix: String = {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
   
-    // @LINE:14
+    // @LINE:12
     def count(): Call = {
       import ReverseRouteContext.empty
       Call("GET", _prefix + { _defaultPrefix } + "api/v1/count")
@@ -43,32 +43,32 @@ package controllers {
   
   }
 
-  // @LINE:21
+  // @LINE:19
   class ReverseUserController(_prefix: => String) {
     def _defaultPrefix: String = {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
   
-    // @LINE:22
+    // @LINE:20
     def currentUser(): Call = {
       import ReverseRouteContext.empty
       Call("GET", _prefix + { _defaultPrefix } + "api/v1/currentUser")
     }
   
-    // @LINE:23
+    // @LINE:21
     def logout(): Call = {
       import ReverseRouteContext.empty
       Call("GET", _prefix + { _defaultPrefix } + "api/v1/logout")
     }
   
-    // @LINE:25
+    // @LINE:23
     def register(): Call = {
       import ReverseRouteContext.empty
       Call("POST", _prefix + { _defaultPrefix } + "api/v1/register")
     }
   
-    // @LINE:21
+    // @LINE:19
     def login(): Call = {
       import ReverseRouteContext.empty
       Call("POST", _prefix + { _defaultPrefix } + "api/v1/login")
@@ -76,24 +76,24 @@ package controllers {
   
   }
 
-  // @LINE:7
+  // @LINE:25
   class ReverseHomeController(_prefix: => String) {
     def _defaultPrefix: String = {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
   
-    // @LINE:7
+    // @LINE:25
     def index(slug:String): Call = {
     
       (slug: @unchecked) match {
       
-        // @LINE:7
+        // @LINE:25
         case (slug) if slug == "" =>
           implicit val _rrc = new ReverseRouteContext(Map(("slug", "")))
           Call("GET", _prefix)
       
-        // @LINE:8
+        // @LINE:26
         case (slug)  =>
           import ReverseRouteContext.empty
           Call("GET", _prefix + { _defaultPrefix } + implicitly[PathBindable[String]].unbind("slug", slug))
@@ -104,14 +104,14 @@ package controllers {
   
   }
 
-  // @LINE:16
+  // @LINE:14
   class ReverseAsyncController(_prefix: => String) {
     def _defaultPrefix: String = {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
   
-    // @LINE:16
+    // @LINE:14
     def message(): Call = {
       import ReverseRouteContext.empty
       Call("GET", _prefix + { _defaultPrefix } + "api/v1/message")

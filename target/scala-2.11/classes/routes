@@ -4,12 +4,10 @@
 
 # Ember.JS files
 GET     /assets/*file               controllers.Assets.versioned(path="/public/ember/assets", file: Asset)
-GET     /                           controllers.HomeController.index(slug = "")
-GET     /*slug                      controllers.HomeController.index(slug)
 
 
 # An example controller showing a sample home page
-# GET     /api/v1/                    controllers.HomeController.index
+# GET   /api/v1/                    controllers.HomeController.index
 # An example controller showing how to use dependency injection
 GET     /api/v1/count               controllers.CountController.count
 # An example controller showing how to write asynchronous code
@@ -23,3 +21,6 @@ GET     /api/v1/currentUser         controllers.UserController.currentUser
 GET     /api/v1/logout              controllers.UserController.logout
 
 POST    /api/v1/register            controllers.UserController.register
+
+GET     /                           controllers.HomeController.index(slug = "")
+GET     /*slug                      controllers.HomeController.index(slug)

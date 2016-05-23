@@ -1,1 +1,10 @@
-2016-05-21 14:12:44,460 [INFO] from play.core.server.NettyServer in pool-6-thread-4 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+2016-05-23 11:23:11,395 [INFO] from play.core.server.NettyServer in pool-6-thread-7 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+2016-05-23 11:26:25,162 [WARN] from application in ForkJoinPool-1-worker-1 - application.conf @ file:/home/irfank/Play_applications/restaurant_abh/target/scala-2.11/classes/application.conf: 354: user is deprecated, use username instead
+2016-05-23 11:26:25,170 [INFO] from application in ForkJoinPool-1-worker-1 - Creating Pool for datasource 'default'
+2016-05-23 11:26:25,320 [INFO] from play.api.db.HikariCPConnectionPool in ForkJoinPool-1-worker-1 - datasource [default] bound to JNDI as DefaultDS
+2016-05-23 11:26:25,331 [INFO] from play.api.db.DefaultDBApi in ForkJoinPool-1-worker-1 - Database [default] connected at jdbc:postgresql://127.0.0.1:5432/restaurant_abh
+2016-05-23 11:26:25,631 [INFO] from application in ForkJoinPool-1-worker-1 - ApplicationTimer demo: Starting application at 2016-05-23T09:26:25.630Z
+2016-05-23 11:26:25,874 [INFO] from play.api.Play in ForkJoinPool-1-worker-1 - Application started (Dev)
+2016-05-23 11:26:45,512 [WARN] from org.hibernate.hql.internal.ast.HqlSqlWalker in application-akka.actor.default-dispatcher-3 - [DEPRECATION] Encountered positional parameter near line 1, column 43 in HQL: [SELECT u FROM models.User u WHERE email = ? AND password = ?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2016-05-23 11:26:45,518 [WARN] from org.hibernate.hql.internal.ast.HqlSqlWalker in application-akka.actor.default-dispatcher-3 - [DEPRECATION] Encountered positional parameter near line 1, column 60 in HQL: [SELECT u FROM models.User u WHERE email = ? AND password = ?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2016-05-23 11:26:45,582 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-3 - select user0_.id as id1_0_, user0_.city as city2_0_, user0_.country as country3_0_, user0_.email as email4_0_, user0_.firstName as firstNam5_0_, user0_.lastName as lastName6_0_, user0_.password as password7_0_, user0_.phone as phone8_0_ from users user0_ where user0_.email=? and user0_.password=?

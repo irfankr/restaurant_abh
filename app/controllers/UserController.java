@@ -67,7 +67,6 @@ public class UserController extends Controller {
         }
     }
 
-
     public Result logout(){
         //Delete user from session
         session().clear();

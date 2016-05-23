@@ -77,7 +77,7 @@ Seq[Any](format.raw/*1.1*/("""<!DOCTYPE html>
 object index extends index_Scope0.index
               /*
                   -- GENERATED --
-                  DATE: Fri May 20 00:09:42 CEST 2016
+                  DATE: Sun May 22 01:39:56 CEST 2016
                   SOURCE: /home/irfank/Play_applications/restaurant_abh/app/views/index.scala.html
                   HASH: 46e1635840705a8f4147e3cb7ae0256b48731fe5
                   MATRIX: 827->0

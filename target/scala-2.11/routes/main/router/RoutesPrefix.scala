@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/home/irfank/Play_applications/restaurant_abh/conf/routes
-// @DATE:Fri May 20 00:19:23 CEST 2016
+// @DATE:Sun May 22 01:51:48 CEST 2016
 
 
 package router {

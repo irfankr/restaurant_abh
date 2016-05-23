@@ -6,7 +6,7 @@ body, html {
 }
 
 div {
-  position:relative;
+   position: relative;
 }
 
 /* Sticky footer */
@@ -31,7 +31,7 @@ a:link, a:visited {
 
 /* Navigation */
 .navigation_black {
-  height:85px; line-height:85px; background-color:#FFF; margin-bottom:85px;
+  height:85px; line-height:85px; margin-bottom:85px; z-index:50; position: relative; background-color:#FFF;
 }
   .navigation_black a:link, .navigation_black a:visited {
     color:#131d24; font-size:16px;
@@ -80,7 +80,7 @@ a:link, a:visited {
 }
 /* Footer */
 footer {
-  margin-top:-150px; height:150px; overflow:hidden; z-index:99; background-color:#131d24;
+  margin-top:-150px; height:150px; overflow:hidden; z-index:99; background-color:#131d24; position: relative;
 }
   footer nav.additional {
     margin-top:50px; display:inline-block; height:30px;
@@ -114,4 +114,71 @@ footer nav.main {
     footer nav.main li a:hover {
 
     }
+
+/* Homepage */
+.home_header_big {
+  height:680px; z-index:10; top:0px; left:0px; width:100%; margin-top:-170px;
+}
+  .home_header_big .background {
+    height:680px; background-size:cover; background-image:url('./images/home_header_big.jpeg'); background-position:center center; opacity: 0.9;
+  }
+  .home_header_big h1 {
+    font-family:'Source Sans Pro'; font-weight: 300; font-size:48px; padding-top:230px; color:#FFF; text-align:center;
+  }
+  .home_header_big h2 {
+    font-family:'Source Sans Pro'; font-weight: 600; font-size:20px; color:#FFF; text-align:center;
+  }
+
+h1.homepage_title {
+  font-family:'Source Sans Pro'; font-weight: 300; font-size:30px; color:#131d24; text-align:center; margin-top:73px; margin-bottom:50px;
+}
+
+.homepage_location {
+  float:left; width:25%; margin-bottom:25px;
+}
+  .homepage_location a.location:link, .homepage_location a.location:visited {
+    font-family:'Source Sans Pro'; font-weight: 400; font-size:20px; color:#131d24;
+  }
+    .homepage_location a.location:hover {
+    }
+  .homepage_location .details {
+    font-family:'Source Sans Pro'; font-weight: 400; font-size:18px; color:#A1A5A7;
+  }
+
+/* Restaurant box */
+.restaurant_box {
+  width:298px; margin-bottom:50px; float:left; margin-right:38px;
+}
+.restaurant_box:nth-child(3n) {
+  width:298px; margin-bottom:50px; float:left; margin-right:0px;
+}
+  .restaurant_box img.restaurant_thumb {
+  }
+  .restaurant_box a.restaurant_name:link, .restaurant_box a.restaurant_name:visited {
+    display:block; font-family:'Source Sans Pro'; font-weight: 400; font-size:24px; color:#131d24; margin-top:20px;
+  }
+    .restaurant_box a.restaurant_name:hover {
+     }
+  .restaurant_box .restaurant_marks {
+    line-height:30px;
+  }
+    .restaurant_box .restaurant_marks .votes {
+      font-family:'Source Sans Pro'; font-weight: 400; font-size:16px; color:#A1A5A7; margin-left:10px; margin-right:10px;
+    }
+    .restaurant_box .restaurant_marks .price_range {
+      color:#A1A5A7; letter-spacing: 2px;
+    }
+      .restaurant_box .restaurant_marks .price_range .active {
+        color:#000;
+      }
+    .restaurant_box .restaurant_food {
+      color:#A1A5A7; font-size:16px; margin-top:5px; padding-top:5px; border-top-style:solid; border-top-width:1px; border-top-color:#e5e5e5;
+    }
+  .restaurant_box a.restaurant_reserve:link, .restaurant_box a.restaurant_reserve:visited {
+    display:block; font-family:'Source Sans Pro'; font-weight: 600; font-size:18px; color:#131d24; background-color:#f9f9f9; height:36px; line-height:36px; border: solid 1px #e5e5e5; text-align:center; margin-top:30px;
+  }
+    .restaurant_box a.restaurant_reserve:hover {
+     }
+
+
 

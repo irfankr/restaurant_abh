@@ -1,0 +1,1 @@
+/home/irfank/Play_applications/restaurant_abh/ember/restaurant_abh/tmp/funnel-input_base_path-aJKGEXl5.tmp/0/utils/can-use-new-syntax.js

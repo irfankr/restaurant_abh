@@ -1,0 +1,1 @@
+/home/irfank/Play_applications/restaurant_abh/ember/restaurant_abh/bower_components/ember-cli-test-loader/test-loader.js
