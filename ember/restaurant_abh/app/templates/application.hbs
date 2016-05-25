@@ -1,16 +1,15 @@
 <div id="wrap">
   <div id="main">
-  {{log currentuserservice}}
     <header class="container-fluid navigation_black">
       <div class="container">
         <nav>
-          <a class="app_name" href="#">Restaurant ABH {{currentuserservice.userLoggedIn}}</a>
+          <a class="app_name" href="#">Restaurant ABH</a>
           <ul class="navbar-right">
             <li>{{#link-to 'index'}}Home{{/link-to}}</li>
             <li>{{#link-to 'restaurants'}}Restaurants{{/link-to}}</li>
 
-            {{#if currentuserservice.userLoggedIn}}
-              <li>{{currentuserservice.userFirstName}}</li>
+            {{#if currentUser.userLoggedIn}}
+              <li><a href="javascript:void(0);">Welcome {{currentUser.userFirstName}}</a></li>
             {{else}}
               <li>{{#link-to 'login'}}Login{{/link-to}}</li>
             {{/if}}

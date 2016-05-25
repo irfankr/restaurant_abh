@@ -3,24 +3,27 @@
 # ~~~~
 
 # Ember.JS files
-GET     /assets/*file               controllers.Assets.versioned(path="/public/ember/assets", file: Asset)
+GET     /assets/*file                       controllers.Assets.versioned(path="/public/ember/assets", file: Asset)
 
 
 # An example controller showing a sample home page
-# GET   /api/v1/                    controllers.HomeController.index
+# GET   /api/v1/                            controllers.HomeController.index
 # An example controller showing how to use dependency injection
-GET     /api/v1/count               controllers.CountController.count
+GET     /api/v1/count                       controllers.CountController.count
 # An example controller showing how to write asynchronous code
-GET     /api/v1/message             controllers.AsyncController.message
+GET     /api/v1/message                     controllers.AsyncController.message
 
 # Map static resources from the /public folder to the /assets URL path
-# GET     /assets/*file             controllers.Assets.versioned(path="/public", file: Asset)
+# GET     /assets/*file                     controllers.Assets.versioned(path="/public", file: Asset)
 
-POST    /api/v1/login               controllers.UserController.login
-GET     /api/v1/currentUser         controllers.UserController.currentUser
-GET     /api/v1/logout              controllers.UserController.logout
+POST    /api/v1/login                       controllers.UserController.login
+GET     /api/v1/currentUser                 controllers.UserController.currentUser
+GET     /api/v1/logout                      controllers.UserController.logout
+POST    /api/v1/register                    controllers.UserController.register
 
-POST    /api/v1/register            controllers.UserController.register
+GET     /api/v1/getAllRestaurants           controllers.RestaurantController.getAllRestaurants
+POST    /api/v1/getRestaurantDetails        controllers.RestaurantController.getRestaurantDetails
+GET     /api/v1/getRestaurantsLocations     controllers.RestaurantController.getRestaurantsLocations
 
-GET     /                           controllers.HomeController.index(slug = "")
-GET     /*slug                      controllers.HomeController.index(slug)
+GET     /                                   controllers.HomeController.index(slug = "")
+GET     /*slug                              controllers.HomeController.index(slug)

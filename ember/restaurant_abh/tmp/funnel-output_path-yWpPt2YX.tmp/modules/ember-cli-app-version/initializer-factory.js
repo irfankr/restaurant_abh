@@ -1,1 +1,0 @@
-/home/irfank/Play_applications/restaurant_abh/ember/restaurant_abh/tmp/funnel-input_base_path-W6R9P1O7.tmp/0/initializer-factory.js

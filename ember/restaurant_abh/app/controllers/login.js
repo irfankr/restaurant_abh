@@ -3,8 +3,7 @@ import User from '../models/user';
 
 export default Ember.Controller.extend({
     loginservice: Ember.inject.service(),
-    currentuserservice: Ember.inject.service(),
-    userLoggedIn: Ember.computed.alias('currentuserservice.userLoggedIn'),
+    currentUser: Ember.inject.service(),
     actions: {
       login: function(){
         var self = this;
@@ -36,7 +35,7 @@ export default Ember.Controller.extend({
               var user = User.create(data);
 
               //Set current user data from response
-              self.get("currentuserservice").setUser(user);
+              self.get('currentUser').setUser(user);
 
               //Display successfull notification
               $(".loginNotifications").show();

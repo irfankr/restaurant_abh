@@ -7,13 +7,22 @@ define('restaurant-abh/tests/app.jshint', ['exports'], function (exports) {
     assert.ok(true, 'app.js should pass jshint.');
   });
 });
+define('restaurant-abh/tests/controllers/application.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint - controllers/application.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'controllers/application.js should pass jshint.');
+  });
+});
 define('restaurant-abh/tests/controllers/login.jshint', ['exports'], function (exports) {
   'use strict';
 
   QUnit.module('JSHint - controllers/login.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/login.js should pass jshint.\ncontrollers/login.js: line 24, col 11, \'$\' is not defined.\ncontrollers/login.js: line 26, col 11, \'$\' is not defined.\ncontrollers/login.js: line 29, col 11, \'$\' is not defined.\ncontrollers/login.js: line 31, col 11, \'$\' is not defined.\ncontrollers/login.js: line 40, col 15, \'$\' is not defined.\ncontrollers/login.js: line 42, col 15, \'$\' is not defined.\ncontrollers/login.js: line 44, col 15, \'$\' is not defined.\ncontrollers/login.js: line 2, col 8, \'User\' is defined but never used.\n\n8 errors');
+    assert.ok(false, 'controllers/login.js should pass jshint.\ncontrollers/login.js: line 23, col 11, \'$\' is not defined.\ncontrollers/login.js: line 25, col 11, \'$\' is not defined.\ncontrollers/login.js: line 28, col 11, \'$\' is not defined.\ncontrollers/login.js: line 30, col 11, \'$\' is not defined.\ncontrollers/login.js: line 41, col 15, \'$\' is not defined.\ncontrollers/login.js: line 43, col 15, \'$\' is not defined.\ncontrollers/login.js: line 45, col 15, \'$\' is not defined.\n\n7 errors');
   });
 });
 define('restaurant-abh/tests/controllers/register.jshint', ['exports'], function (exports) {
@@ -25,13 +34,22 @@ define('restaurant-abh/tests/controllers/register.jshint', ['exports'], function
     assert.ok(false, 'controllers/register.js should pass jshint.\ncontrollers/register.js: line 35, col 44, Expected \'!==\' and instead saw \'!=\'.\ncontrollers/register.js: line 23, col 13, \'$\' is not defined.\ncontrollers/register.js: line 25, col 13, \'$\' is not defined.\ncontrollers/register.js: line 27, col 13, \'$\' is not defined.\ncontrollers/register.js: line 30, col 13, \'$\' is not defined.\ncontrollers/register.js: line 32, col 13, \'$\' is not defined.\ncontrollers/register.js: line 34, col 13, \'$\' is not defined.\ncontrollers/register.js: line 37, col 13, \'$\' is not defined.\ncontrollers/register.js: line 39, col 13, \'$\' is not defined.\ncontrollers/register.js: line 41, col 13, \'$\' is not defined.\ncontrollers/register.js: line 49, col 13, \'$\' is not defined.\ncontrollers/register.js: line 51, col 13, \'$\' is not defined.\ncontrollers/register.js: line 53, col 13, \'$\' is not defined.\ncontrollers/register.js: line 58, col 20, \'$\' is not defined.\n\n14 errors');
   });
 });
+define('restaurant-abh/tests/controllers/restaurant.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint - controllers/restaurant.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'controllers/restaurant.js should pass jshint.');
+  });
+});
 define('restaurant-abh/tests/controllers/restaurants.jshint', ['exports'], function (exports) {
   'use strict';
 
   QUnit.module('JSHint - controllers/restaurants.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'controllers/restaurants.js should pass jshint.');
+    assert.ok(false, 'controllers/restaurants.js should pass jshint.\ncontrollers/restaurants.js: line 21, col 18, \'i\' is already defined.\ncontrollers/restaurants.js: line 43, col 7, Unreachable \'return\' after \'return\'.\ncontrollers/restaurants.js: line 14, col 16, \'priceRangeString\' is defined but never used.\ncontrollers/restaurants.js: line 28, col 14, \'$\' is not defined.\ncontrollers/restaurants.js: line 43, col 14, \'$\' is not defined.\ncontrollers/restaurants.js: line 2, col 8, \'Restaurant\' is defined but never used.\n\n6 errors');
   });
 });
 define('restaurant-abh/tests/helpers/destroy-app', ['exports', 'ember'], function (exports, _ember) {
@@ -129,13 +147,22 @@ define('restaurant-abh/tests/helpers/start-app.jshint', ['exports'], function (e
     assert.ok(true, 'helpers/start-app.js should pass jshint.');
   });
 });
-define('restaurant-abh/tests/initializers/cucurrent-user.jshint', ['exports'], function (exports) {
+define('restaurant-abh/tests/initializers/current-user.jshint', ['exports'], function (exports) {
   'use strict';
 
-  QUnit.module('JSHint - initializers/cucurrent-user.js');
+  QUnit.module('JSHint - initializers/current-user.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'initializers/cucurrent-user.js should pass jshint.\ninitializers/cucurrent-user.js: line 4, col 7, \'self\' is defined but never used.\ninitializers/cucurrent-user.js: line 15, col 10, \'$\' is not defined.\ninitializers/cucurrent-user.js: line 1, col 8, \'User\' is defined but never used.\n\n3 errors');
+    assert.ok(false, 'initializers/current-user.js should pass jshint.\ninitializers/current-user.js: line 5, col 7, \'self\' is defined but never used.\ninitializers/current-user.js: line 12, col 10, \'$\' is not defined.\n\n2 errors');
+  });
+});
+define('restaurant-abh/tests/models/restaurant.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint - models/restaurant.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'models/restaurant.js should pass jshint.');
   });
 });
 define('restaurant-abh/tests/models/user.jshint', ['exports'], function (exports) {
@@ -198,7 +225,7 @@ define('restaurant-abh/tests/routes/restaurant.jshint', ['exports'], function (e
   QUnit.module('JSHint - routes/restaurant.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'routes/restaurant.js should pass jshint.');
+    assert.ok(false, 'routes/restaurant.js should pass jshint.\nroutes/restaurant.js: line 23, col 16, \'i\' is already defined.\nroutes/restaurant.js: line 37, col 12, \'$\' is not defined.\n\n2 errors');
   });
 });
 define('restaurant-abh/tests/routes/restaurants.jshint', ['exports'], function (exports) {
@@ -207,16 +234,16 @@ define('restaurant-abh/tests/routes/restaurants.jshint', ['exports'], function (
   QUnit.module('JSHint - routes/restaurants.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'routes/restaurants.js should pass jshint.\nroutes/restaurants.js: line 9, col 35, Expected \'===\' and instead saw \'==\'.\n\n1 error');
+    assert.ok(true, 'routes/restaurants.js should pass jshint.');
   });
 });
-define('restaurant-abh/tests/services/currentuserservice.jshint', ['exports'], function (exports) {
+define('restaurant-abh/tests/services/current-user-service.jshint', ['exports'], function (exports) {
   'use strict';
 
-  QUnit.module('JSHint - services/currentuserservice.js');
+  QUnit.module('JSHint - services/current-user-service.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'services/currentuserservice.js should pass jshint.\nservices/currentuserservice.js: line 2, col 8, \'User\' is defined but never used.\n\n1 error');
+    assert.ok(false, 'services/current-user-service.js should pass jshint.\nservices/current-user-service.js: line 2, col 8, \'User\' is defined but never used.\n\n1 error');
   });
 });
 define('restaurant-abh/tests/services/loginservice.jshint', ['exports'], function (exports) {
@@ -239,6 +266,28 @@ define('restaurant-abh/tests/test-helper.jshint', ['exports'], function (exports
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'test-helper.js should pass jshint.');
+  });
+});
+define('restaurant-abh/tests/unit/controllers/application-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {
+
+  (0, _emberQunit.moduleFor)('controller:application', 'Unit | Controller | application', {
+    // Specify the other units that are required for this test.
+    // needs: ['controller:foo']
+  });
+
+  // Replace this with your real tests.
+  (0, _emberQunit.test)('it exists', function (assert) {
+    var controller = this.subject();
+    assert.ok(controller);
+  });
+});
+define('restaurant-abh/tests/unit/controllers/application-test.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint - unit/controllers/application-test.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'unit/controllers/application-test.js should pass jshint.');
   });
 });
 define('restaurant-abh/tests/unit/controllers/login-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {
@@ -283,6 +332,28 @@ define('restaurant-abh/tests/unit/controllers/register-test.jshint', ['exports']
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'unit/controllers/register-test.js should pass jshint.');
+  });
+});
+define('restaurant-abh/tests/unit/controllers/restaurant-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {
+
+  (0, _emberQunit.moduleFor)('controller:restaurant', 'Unit | Controller | restaurant', {
+    // Specify the other units that are required for this test.
+    // needs: ['controller:foo']
+  });
+
+  // Replace this with your real tests.
+  (0, _emberQunit.test)('it exists', function (assert) {
+    var controller = this.subject();
+    assert.ok(controller);
+  });
+});
+define('restaurant-abh/tests/unit/controllers/restaurant-test.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint - unit/controllers/restaurant-test.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'unit/controllers/restaurant-test.js should pass jshint.');
   });
 });
 define('restaurant-abh/tests/unit/controllers/restaurants-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {
@@ -335,6 +406,28 @@ define('restaurant-abh/tests/unit/initializers/cucurrent-user-test.jshint', ['ex
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'unit/initializers/cucurrent-user-test.js should pass jshint.');
+  });
+});
+define('restaurant-abh/tests/unit/models/restaurant-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {
+
+  (0, _emberQunit.moduleForModel)('restaurant', 'Unit | Model | restaurant', {
+    // Specify the other units that are required for this test.
+    needs: []
+  });
+
+  (0, _emberQunit.test)('it exists', function (assert) {
+    var model = this.subject();
+    // let store = this.store();
+    assert.ok(!!model);
+  });
+});
+define('restaurant-abh/tests/unit/models/restaurant-test.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint - unit/models/restaurant-test.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'unit/models/restaurant-test.js should pass jshint.');
   });
 });
 define('restaurant-abh/tests/unit/models/user-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {
@@ -462,6 +555,50 @@ define('restaurant-abh/tests/unit/routes/restaurants-test.jshint', ['exports'], 
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'unit/routes/restaurants-test.js should pass jshint.');
+  });
+});
+define('restaurant-abh/tests/unit/services/curent-user-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {
+
+  (0, _emberQunit.moduleFor)('service:curent-user', 'Unit | Service | curent user', {
+    // Specify the other units that are required for this test.
+    // needs: ['service:foo']
+  });
+
+  // Replace this with your real tests.
+  (0, _emberQunit.test)('it exists', function (assert) {
+    var service = this.subject();
+    assert.ok(service);
+  });
+});
+define('restaurant-abh/tests/unit/services/curent-user-test.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint - unit/services/curent-user-test.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'unit/services/curent-user-test.js should pass jshint.');
+  });
+});
+define('restaurant-abh/tests/unit/services/current-user-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {
+
+  (0, _emberQunit.moduleFor)('service:current-user', 'Unit | Service | current user', {
+    // Specify the other units that are required for this test.
+    // needs: ['service:foo']
+  });
+
+  // Replace this with your real tests.
+  (0, _emberQunit.test)('it exists', function (assert) {
+    var service = this.subject();
+    assert.ok(service);
+  });
+});
+define('restaurant-abh/tests/unit/services/current-user-test.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint - unit/services/current-user-test.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'unit/services/current-user-test.js should pass jshint.');
   });
 });
 define('restaurant-abh/tests/unit/services/currentuserservice-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {

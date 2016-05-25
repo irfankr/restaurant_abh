@@ -1,33 +1,8 @@
 <div class="container" style="overflow:auto;">
-
-  <div class="restaurant_box">
-    <img class="restaurant_thumb" src="assets/images/restaurant_thumb.png" />
-    {{#link-to 'restaurant' class='restaurant_name'}}Restaurant name{{/link-to}}
-    <div class="restaurant_marks">
-      <img src="assets/images/star_active.png" />
-      <img src="assets/images/star_active.png" />
-      <img src="assets/images/star_active.png" />
-      <img src="assets/images/star_active.png" />
-      <img src="assets/images/star_inactive.png" />
-      <span class="votes">(1745)</span>
-      <span class="price_range">
-        <span class="active">$$$$</span>$
-      </span>
-    </div>
-    <div class="restaurant_food">Italian | International | Mediterranean</div>
-    <a class="restaurant_reserve" href="#">Reserve now</a>
-  </div>
-
-
-
-
-
-
-
-
-  <div class="restaurant_box">
-      <img class="restaurant_thumb" src="assets/images/restaurant_thumb.png" />
-      {{#link-to 'restaurant' class='restaurant_name'}}Restaurant name{{/link-to}}
+  {{#each listRestaurants as |restaurantlist|}}
+    <div class="restaurant_box">
+      <img class="restaurant_thumb" src="assets/images/restaurants/thumbnails/{{restaurantlist.imageFileName}}.jpg" />
+      {{#link-to 'restaurant' restaurantlist.id class='restaurant_name'}}{{restaurantlist.restaurantName}}{{/link-to}}
       <div class="restaurant_marks">
         <img src="assets/images/star_active.png" />
         <img src="assets/images/star_active.png" />
@@ -36,80 +11,15 @@
         <img src="assets/images/star_inactive.png" />
         <span class="votes">(1745)</span>
         <span class="price_range">
-          <span class="active">$$$$</span>$
+          {{restaurantlist.priceRange}}
         </span>
       </div>
-      <div class="restaurant_food">Italian | International | Mediterranean</div>
+      <div class="restaurant_food">{{restaurantlist.foodType}}</div>
       <a class="restaurant_reserve" href="#">Reserve now</a>
     </div>
-    <div class="restaurant_box">
-        <img class="restaurant_thumb" src="assets/images/restaurant_thumb.png" />
-        {{#link-to 'restaurant' class='restaurant_name'}}Restaurant name{{/link-to}}
-        <div class="restaurant_marks">
-          <img src="assets/images/star_active.png" />
-          <img src="assets/images/star_active.png" />
-          <img src="assets/images/star_active.png" />
-          <img src="assets/images/star_active.png" />
-          <img src="assets/images/star_inactive.png" />
-          <span class="votes">(1745)</span>
-          <span class="price_range">
-            <span class="active">$$$$</span>$
-          </span>
-        </div>
-        <div class="restaurant_food">Italian | International | Mediterranean</div>
-        <a class="restaurant_reserve" href="#">Reserve now</a>
-      </div>
-      <div class="restaurant_box">
-          <img class="restaurant_thumb" src="assets/images/restaurant_thumb.png" />
-          {{#link-to 'restaurant' class='restaurant_name'}}Restaurant name{{/link-to}}
-          <div class="restaurant_marks">
-            <img src="assets/images/star_active.png" />
-            <img src="assets/images/star_active.png" />
-            <img src="assets/images/star_active.png" />
-            <img src="assets/images/star_active.png" />
-            <img src="assets/images/star_inactive.png" />
-            <span class="votes">(1745)</span>
-            <span class="price_range">
-              <span class="active">$$$$</span>$
-            </span>
-          </div>
-          <div class="restaurant_food">Italian | International | Mediterranean</div>
-          <a class="restaurant_reserve" href="#">Reserve now</a>
-        </div>
-        <div class="restaurant_box">
-            <img class="restaurant_thumb" src="assets/images/restaurant_thumb.png" />
-            {{#link-to 'restaurant' class='restaurant_name'}}Restaurant name{{/link-to}}
-            <div class="restaurant_marks">
-              <img src="assets/images/star_active.png" />
-              <img src="assets/images/star_active.png" />
-              <img src="assets/images/star_active.png" />
-              <img src="assets/images/star_active.png" />
-              <img src="assets/images/star_inactive.png" />
-              <span class="votes">(1745)</span>
-              <span class="price_range">
-                <span class="active">$$$$</span>$
-              </span>
-            </div>
-            <div class="restaurant_food">Italian | International | Mediterranean</div>
-            <a class="restaurant_reserve" href="#">Reserve now</a>
-          </div>
-          <div class="restaurant_box">
-              <img class="restaurant_thumb" src="assets/images/restaurant_thumb.png" />
-              {{#link-to 'restaurant' class='restaurant_name'}}Restaurant name{{/link-to}}
-              <div class="restaurant_marks">
-                <img src="assets/images/star_active.png" />
-                <img src="assets/images/star_active.png" />
-                <img src="assets/images/star_active.png" />
-                <img src="assets/images/star_active.png" />
-                <img src="assets/images/star_inactive.png" />
-                <span class="votes">(1745)</span>
-                <span class="price_range">
-                  <span class="active">$$$$</span>$
-                </span>
-              </div>
-              <div class="restaurant_food">Italian | International | Mediterranean</div>
-              <a class="restaurant_reserve" href="#">Reserve now</a>
-            </div>
+  {{else}}
+    Sorry, nobody is here.
+  {{/each}}
 </div>
 
 <h1 class="homepage_title" style="margin-bottom:75px;">Popular locations</h1>
@@ -141,3 +51,5 @@
   <div class="homepage_location"><a class="location" href="#">Sarajevo</a><div class="details">316 restaurants</div></div>
 
 </div>
+
+{{currentuserservice.userFirstName}}

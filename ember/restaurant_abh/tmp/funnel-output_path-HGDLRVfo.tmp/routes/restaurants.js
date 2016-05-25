@@ -1,1 +1,0 @@
-/home/irfank/Play_applications/restaurant_abh/ember/restaurant_abh/tmp/funnel-input_base_path-ZnziM699.tmp/0/routes/restaurants.js

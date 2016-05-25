@@ -1,1 +1,0 @@
-/home/irfank/Play_applications/restaurant_abh/ember/restaurant_abh/tmp/funnel-input_base_path-VC6eWnVZ.tmp/0/bower_components/ember-cli-test-loader/test-loader.js

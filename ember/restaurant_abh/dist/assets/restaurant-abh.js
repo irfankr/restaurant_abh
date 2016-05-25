@@ -35,11 +35,96 @@ define('restaurant-abh/components/app-version', ['exports', 'ember-cli-app-versi
 define('restaurant-abh/components/ember-selectize', ['exports', 'ember-cli-selectize/components/ember-selectize'], function (exports, _emberCliSelectizeComponentsEmberSelectize) {
   exports['default'] = _emberCliSelectizeComponentsEmberSelectize['default'];
 });
+define('restaurant-abh/components/g-map-address-marker', ['exports', 'ember-g-map/components/g-map-address-marker'], function (exports, _emberGMapComponentsGMapAddressMarker) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberGMapComponentsGMapAddressMarker['default'];
+    }
+  });
+});
+define('restaurant-abh/components/g-map-address-route', ['exports', 'ember-g-map/components/g-map-address-route'], function (exports, _emberGMapComponentsGMapAddressRoute) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberGMapComponentsGMapAddressRoute['default'];
+    }
+  });
+});
+define('restaurant-abh/components/g-map-infowindow', ['exports', 'ember-g-map/components/g-map-infowindow'], function (exports, _emberGMapComponentsGMapInfowindow) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberGMapComponentsGMapInfowindow['default'];
+    }
+  });
+});
+define('restaurant-abh/components/g-map-marker', ['exports', 'ember-g-map/components/g-map-marker'], function (exports, _emberGMapComponentsGMapMarker) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberGMapComponentsGMapMarker['default'];
+    }
+  });
+});
+define('restaurant-abh/components/g-map-polyline-coordinate', ['exports', 'ember-g-map/components/g-map-polyline-coordinate'], function (exports, _emberGMapComponentsGMapPolylineCoordinate) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberGMapComponentsGMapPolylineCoordinate['default'];
+    }
+  });
+});
+define('restaurant-abh/components/g-map-polyline', ['exports', 'ember-g-map/components/g-map-polyline'], function (exports, _emberGMapComponentsGMapPolyline) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberGMapComponentsGMapPolyline['default'];
+    }
+  });
+});
+define('restaurant-abh/components/g-map-route-address-waypoint', ['exports', 'ember-g-map/components/g-map-route-address-waypoint'], function (exports, _emberGMapComponentsGMapRouteAddressWaypoint) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberGMapComponentsGMapRouteAddressWaypoint['default'];
+    }
+  });
+});
+define('restaurant-abh/components/g-map-route-waypoint', ['exports', 'ember-g-map/components/g-map-route-waypoint'], function (exports, _emberGMapComponentsGMapRouteWaypoint) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberGMapComponentsGMapRouteWaypoint['default'];
+    }
+  });
+});
+define('restaurant-abh/components/g-map-route', ['exports', 'ember-g-map/components/g-map-route'], function (exports, _emberGMapComponentsGMapRoute) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberGMapComponentsGMapRoute['default'];
+    }
+  });
+});
+define('restaurant-abh/components/g-map', ['exports', 'ember-g-map/components/g-map'], function (exports, _emberGMapComponentsGMap) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberGMapComponentsGMap['default'];
+    }
+  });
+});
+define('restaurant-abh/controllers/application', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Controller.extend({
+    //currentuserservice: Ember.inject.service()
+    currentUser: _ember['default'].inject.service()
+  });
+});
 define('restaurant-abh/controllers/login', ['exports', 'ember', 'restaurant-abh/models/user'], function (exports, _ember, _restaurantAbhModelsUser) {
   exports['default'] = _ember['default'].Controller.extend({
     loginservice: _ember['default'].inject.service(),
-    currentuserservice: _ember['default'].inject.service(),
-    userLoggedIn: _ember['default'].computed.alias('currentuserservice.userLoggedIn'),
+    currentUser: _ember['default'].inject.service(),
     actions: {
       login: function login() {
         var self = this;
@@ -66,9 +151,11 @@ define('restaurant-abh/controllers/login', ['exports', 'ember', 'restaurant-abh/
           $(".alertText").html('<strong>Warning!</strong> Email is not valid.');
         } else {
           //Call login service
-          this.get("loginservice").checkUser(email, password).done(function (user) {
+          this.get("loginservice").checkUser(email, password).done(function (data) {
+            var user = _restaurantAbhModelsUser['default'].create(data);
+
             //Set current user data from response
-            self.get("currentuserservice").setUser(user);
+            self.get('currentUser').setUser(user);
 
             //Display successfull notification
             $(".loginNotifications").show();
@@ -162,9 +249,68 @@ define('restaurant-abh/controllers/register', ['exports', 'ember', 'restaurant-a
     }
   });
 });
-define('restaurant-abh/controllers/restaurants', ['exports', 'ember'], function (exports, _ember) {
+define('restaurant-abh/controllers/restaurant', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Controller.extend({
-    currentuserservice: _ember['default'].inject.service()
+    init: function init() {
+      //OVO NE RADI I NE DOBIJEM ID RESTORANA
+      //console.log("Iz kontrolera:" + this.property('model'));
+    }
+  });
+});
+define('restaurant-abh/controllers/restaurants', ['exports', 'ember', 'restaurant-abh/models/restaurant'], function (exports, _ember, _restaurantAbhModelsRestaurant) {
+  exports['default'] = _ember['default'].Controller.extend({
+    CurrentUser: _ember['default'].inject.service(),
+    listRestaurants: null,
+    listRestaurantsLocations: null,
+    testvar: null,
+    init: function init() {
+      var self = this;
+      this._super.apply(this, arguments);
+
+      //Function that creates string for pricerange (5max)
+      function priceRangeString(priceRange) {
+        var priceRangeString = '<span class="active">';
+        for (var i = 1; i <= priceRange; i++) {
+          priceRangeString += '$';
+        }
+        priceRangeString += '</span>';
+
+        for (var i = 5; i > priceRange; i--) {
+          priceRangeString += '$';
+        }
+        return priceRangeString;
+      }
+
+      //Get list of all restaurants from database
+      return $.ajax({
+        url: "/api/v1/getAllRestaurants",
+        type: "GET",
+        processData: false,
+        contentType: "application/json; charset=UTF-8"
+      }).fail(function (data) {
+        console.log(data);
+      }).then(function (data) {
+        //console.log(data);
+        self.set('listRestaurants', data);
+
+        console.log("LISTA RESTORANA:" + self.get('listRestaurants'));
+      });
+
+      //Get list of all restaurants locations
+      return $.ajax({
+        url: "/api/v1/getRestaurantsLocations",
+        type: "GET",
+        processData: false,
+        contentType: "application/json; charset=UTF-8"
+      }).fail(function (data) {
+        console.log(data);
+      }).then(function (data) {
+        //console.log(data);
+        self.set('listRestaurantsLocations', data);
+      });
+
+      //console.log("Ispis iz route:" + this.get('currentuserservice.userFirstName'));
+    }
   });
 });
 define('restaurant-abh/helpers/pluralize', ['exports', 'ember-inflector/lib/helpers/pluralize'], function (exports, _emberInflectorLibHelpersPluralize) {
@@ -191,7 +337,7 @@ define('restaurant-abh/initializers/container-debug-adapter', ['exports', 'ember
     }
   };
 });
-define("restaurant-abh/initializers/cucurrent-user", ["exports", "restaurant-abh/models/user"], function (exports, _restaurantAbhModelsUser) {
+define('restaurant-abh/initializers/current-user', ['exports', 'restaurant-abh/models/user', 'restaurant-abh/services/current-user-service'], function (exports, _restaurantAbhModelsUser, _restaurantAbhServicesCurrentUserService) {
   exports.initialize = initialize;
 
   function initialize(application) {
@@ -201,10 +347,6 @@ define("restaurant-abh/initializers/cucurrent-user", ["exports", "restaurant-abh
 
     //Start waiting for response from Play
     application.deferReadiness();
-
-    // fetch current user
-    // - inject if user exists;
-    // - nista
 
     return $.ajax({
       url: "/api/v1/currentUser",
@@ -216,12 +358,25 @@ define("restaurant-abh/initializers/cucurrent-user", ["exports", "restaurant-abh
       //Continue with app
       application.advanceReadiness();
 
+      var servistest = _restaurantAbhServicesCurrentUserService['default'].create();
+      application.register('service:current-user', servistest, { instantiate: false, singleton: true });
+
       //self.transitionTo('login');
-    }).then(function (data) {
-      console.log(data);
+    }).done(function (data) {
+      //console.log(data);
+
+      var servistest = _restaurantAbhServicesCurrentUserService['default'].create();
+      var user = _restaurantAbhModelsUser['default'].create(data);
+
+      //Insert user data in service
+      servistest.setUser(user);
+
+      //application.unregister('service:currentuserservice');
+      //application.register('service:currentuserservice', servistest, {instantiate: false, singleton: true});
+      application.register('service:current-user', servistest, { instantiate: false, singleton: true });
 
       //Inject service
-      application.inject('route', 'currentuserservice', 'service:currentuserservice');
+      //application.inject('route', 'CurrentUser', 'service:current-user');
 
       //Continue with app
       application.advanceReadiness();
@@ -230,8 +385,7 @@ define("restaurant-abh/initializers/cucurrent-user", ["exports", "restaurant-abh
     });
   }
 
-  exports["default"] = {
-    user: 'current-user',
+  exports['default'] = {
     initialize: initialize
   };
 });
@@ -374,6 +528,9 @@ define("restaurant-abh/instance-initializers/ember-data", ["exports", "ember-dat
     initialize: _emberDataPrivateInstanceInitializersInitializeStoreService["default"]
   };
 });
+define('restaurant-abh/models/restaurant', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Object.extend({});
+});
 define('restaurant-abh/models/user', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Object.extend({});
 });
@@ -390,7 +547,7 @@ define('restaurant-abh/router', ['exports', 'ember', 'restaurant-abh/config/envi
     this.route('login');
     this.route('restaurants');
     this.route('register');
-    this.route('restaurant');
+    this.route('restaurant', { path: '/restaurant/:restaurantId' });
   });
 
   exports['default'] = Router;
@@ -404,22 +561,73 @@ define('restaurant-abh/routes/login', ['exports', 'ember'], function (exports, _
 define('restaurant-abh/routes/register', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Route.extend({});
 });
-define('restaurant-abh/routes/restaurant', ['exports', 'ember'], function (exports, _ember) {
-  exports['default'] = _ember['default'].Route.extend({});
+define('restaurant-abh/routes/restaurant', ['exports', 'ember', 'restaurant-abh/models/restaurant'], function (exports, _ember, _restaurantAbhModelsRestaurant) {
+  exports['default'] = _ember['default'].Route.extend({
+    restaurantId: null,
+    restaurant: _restaurantAbhModelsRestaurant['default'].create(),
+    model: function model(param) {
+      //OVO RADI I OVO POMOCU PARAM DOBIJEM ID RESTORANA
+      //console.log("ID iz URL:" + param.restaurantId);
+      //this.store.push(param.restaurantId);
+      //return param.id;
+
+      var self = this;
+
+      //Function that creates string for pricerange (5max)
+      function priceRangeString(priceRange) {
+        var priceRangeString = '<span class="active">';
+        for (var i = 1; i <= priceRange; i++) {
+          priceRangeString += '$';
+        }
+        priceRangeString += '</span>';
+
+        for (var i = 5; i > priceRange; i--) {
+          priceRangeString += '$';
+        }
+        return priceRangeString;
+      }
+
+      //Put url id into restaurant object
+      this.set('restaurant.id', param.restaurantId);
+
+      //Convert object in JSON
+      var data = JSON.stringify(this.get('restaurant'));
+
+      //Ajax call to get restaurant details
+      return $.ajax({
+        url: "/api/v1/getRestaurantDetails",
+        type: "POST",
+        data: data,
+        processData: false,
+        contentType: "application/json; charset=UTF-8"
+      }).fail(function (data) {
+        console.log(data);
+      }).then(function (data) {
+        //console.log(data);
+        self.set('restaurantDetails', data);
+
+        var restaurantDetails = self.get('restaurantDetails');
+
+        //String with price range string
+        restaurantDetails.priceRange = priceRangeString(restaurantDetails.priceRange);
+        //console.log("STRING" + restaurantDetails.priceRange);
+
+        return restaurantDetails;
+
+        //console.log("DETALJI RESTORANA: " + self.get('restaurantDetails.restaurantName'));
+      });
+    }
+  });
 });
 define('restaurant-abh/routes/restaurants', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Route.extend({
-    loginservice: _ember['default'].inject.service(),
-    currentuserservice: _ember['default'].inject.service(),
-    userLoggedIn: _ember['default'].computed.alias('currentuserservice.userLoggedIn'),
-    beforeModel: function beforeModel() {
+    /*
+      Ovim se zabranjivalo da se prikaze ova stranica ako nije ulogovan
       var self = this;
-      if (this.get('userLoggedIn') == false) {
+      if(this.get('userLoggedIn') == false){
         self.transitionTo('login');
       }
-
-      //console.log("Ispis iz route:" + this.get('currentuserservice.userFirstName'));
-    }
+      */
   });
 });
 define('restaurant-abh/services/ajax', ['exports', 'ember-ajax/services/ajax'], function (exports, _emberAjaxServicesAjax) {
@@ -430,14 +638,16 @@ define('restaurant-abh/services/ajax', ['exports', 'ember-ajax/services/ajax'], 
     }
   });
 });
-define('restaurant-abh/services/currentuserservice', ['exports', 'ember', 'restaurant-abh/models/user'], function (exports, _ember, _restaurantAbhModelsUser) {
+define('restaurant-abh/services/current-user-service', ['exports', 'ember', 'restaurant-abh/models/user'], function (exports, _ember, _restaurantAbhModelsUser) {
   exports['default'] = _ember['default'].Service.extend({
     userLoggedIn: false,
     userId: null,
     userFirstName: null,
     setUser: function setUser(user) {
+      console.log(user);
       this.set("userLoggedIn", true);
-      this.set("userFirstName", user.get("firstName"));
+      //console.log(this.get('userLoggedIn'));
+      this.set("userFirstName", user.get('firstName'));
     },
     init: function init() {
       console.log('Hello From Session Service');
@@ -552,12 +762,12 @@ define("restaurant-abh/templates/application", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 10,
-              "column": 16
+              "line": 11,
+              "column": 12
             },
             "end": {
-              "line": 10,
-              "column": 41
+              "line": 13,
+              "column": 12
             }
           },
           "moduleName": "restaurant-abh/templates/application.hbs"
@@ -568,19 +778,68 @@ define("restaurant-abh/templates/application", ["exports"], function (exports) {
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("Login");
+          var el1 = dom.createTextNode("              ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("li");
+          var el2 = dom.createElement("a");
+          dom.setAttribute(el2, "href", "javascript:void(0);");
+          var el3 = dom.createTextNode("Welcome ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createComment("");
+          dom.appendChild(el2, el3);
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
           dom.appendChild(el0, el1);
           return el0;
         },
-        buildRenderNodes: function buildRenderNodes() {
-          return [];
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1, 0]), 1, 1);
+          return morphs;
         },
-        statements: [],
+        statements: [["content", "currentUser.userFirstName", ["loc", [null, [12, 56], [12, 85]]]]],
         locals: [],
         templates: []
       };
     })();
     var child3 = (function () {
+      var child0 = (function () {
+        return {
+          meta: {
+            "fragmentReason": false,
+            "revision": "Ember@2.5.1",
+            "loc": {
+              "source": null,
+              "start": {
+                "line": 14,
+                "column": 18
+              },
+              "end": {
+                "line": 14,
+                "column": 43
+              }
+            },
+            "moduleName": "restaurant-abh/templates/application.hbs"
+          },
+          isEmpty: false,
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode("Login");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes() {
+            return [];
+          },
+          statements: [],
+          locals: [],
+          templates: []
+        };
+      })();
       return {
         meta: {
           "fragmentReason": false,
@@ -588,11 +847,55 @@ define("restaurant-abh/templates/application", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 34,
+              "line": 13,
               "column": 12
             },
             "end": {
-              "line": 34,
+              "line": 15,
+              "column": 12
+            }
+          },
+          "moduleName": "restaurant-abh/templates/application.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("              ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("li");
+          var el2 = dom.createComment("");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1]), 0, 0);
+          return morphs;
+        },
+        statements: [["block", "link-to", ["login"], [], 0, null, ["loc", [null, [14, 18], [14, 55]]]]],
+        locals: [],
+        templates: [child0]
+      };
+    })();
+    var child4 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.5.1",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 40,
+              "column": 12
+            },
+            "end": {
+              "line": 40,
               "column": 36
             }
           },
@@ -616,7 +919,7 @@ define("restaurant-abh/templates/application", ["exports"], function (exports) {
         templates: []
       };
     })();
-    var child4 = (function () {
+    var child5 = (function () {
       return {
         meta: {
           "fragmentReason": false,
@@ -624,11 +927,11 @@ define("restaurant-abh/templates/application", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 35,
+              "line": 41,
               "column": 12
             },
             "end": {
-              "line": 35,
+              "line": 41,
               "column": 49
             }
           },
@@ -652,7 +955,7 @@ define("restaurant-abh/templates/application", ["exports"], function (exports) {
         templates: []
       };
     })();
-    var child5 = (function () {
+    var child6 = (function () {
       return {
         meta: {
           "fragmentReason": false,
@@ -660,11 +963,11 @@ define("restaurant-abh/templates/application", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 36,
+              "line": 42,
               "column": 12
             },
             "end": {
-              "line": 36,
+              "line": 42,
               "column": 37
             }
           },
@@ -702,7 +1005,7 @@ define("restaurant-abh/templates/application", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 44,
+            "line": 50,
             "column": 0
           }
         },
@@ -755,11 +1058,9 @@ define("restaurant-abh/templates/application", ["exports"], function (exports) {
         var el8 = dom.createComment("");
         dom.appendChild(el7, el8);
         dom.appendChild(el6, el7);
-        var el7 = dom.createTextNode("\n            ");
+        var el7 = dom.createTextNode("\n\n");
         dom.appendChild(el6, el7);
-        var el7 = dom.createElement("li");
-        var el8 = dom.createComment("");
-        dom.appendChild(el7, el8);
+        var el7 = dom.createComment("");
         dom.appendChild(el6, el7);
         var el7 = dom.createTextNode("\n          ");
         dom.appendChild(el6, el7);
@@ -894,21 +1195,237 @@ define("restaurant-abh/templates/application", ["exports"], function (exports) {
         var morphs = new Array(7);
         morphs[0] = dom.createMorphAt(dom.childAt(element1, [1]), 0, 0);
         morphs[1] = dom.createMorphAt(dom.childAt(element1, [3]), 0, 0);
-        morphs[2] = dom.createMorphAt(dom.childAt(element1, [5]), 0, 0);
+        morphs[2] = dom.createMorphAt(element1, 5, 5);
         morphs[3] = dom.createMorphAt(element0, 3, 3);
         morphs[4] = dom.createMorphAt(dom.childAt(element2, [1]), 0, 0);
         morphs[5] = dom.createMorphAt(dom.childAt(element2, [3]), 0, 0);
         morphs[6] = dom.createMorphAt(dom.childAt(element2, [5]), 0, 0);
         return morphs;
       },
-      statements: [["block", "link-to", ["index"], [], 0, null, ["loc", [null, [8, 16], [8, 52]]]], ["block", "link-to", ["restaurants"], [], 1, null, ["loc", [null, [9, 16], [9, 65]]]], ["block", "link-to", ["login"], [], 2, null, ["loc", [null, [10, 16], [10, 53]]]], ["content", "outlet", ["loc", [null, [16, 4], [16, 14]]]], ["block", "link-to", ["index"], [], 3, null, ["loc", [null, [34, 12], [34, 48]]]], ["block", "link-to", ["restaurants"], [], 4, null, ["loc", [null, [35, 12], [35, 61]]]], ["block", "link-to", ["login"], [], 5, null, ["loc", [null, [36, 12], [36, 49]]]]],
+      statements: [["block", "link-to", ["index"], [], 0, null, ["loc", [null, [8, 16], [8, 52]]]], ["block", "link-to", ["restaurants"], [], 1, null, ["loc", [null, [9, 16], [9, 65]]]], ["block", "if", [["get", "currentUser.userLoggedIn", ["loc", [null, [11, 18], [11, 42]]]]], [], 2, 3, ["loc", [null, [11, 12], [15, 19]]]], ["content", "outlet", ["loc", [null, [22, 4], [22, 14]]]], ["block", "link-to", ["index"], [], 4, null, ["loc", [null, [40, 12], [40, 48]]]], ["block", "link-to", ["restaurants"], [], 5, null, ["loc", [null, [41, 12], [41, 61]]]], ["block", "link-to", ["login"], [], 6, null, ["loc", [null, [42, 12], [42, 49]]]]],
       locals: [],
-      templates: [child0, child1, child2, child3, child4, child5]
+      templates: [child0, child1, child2, child3, child4, child5, child6]
     };
   })());
 });
 define("restaurant-abh/templates/index", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.5.1",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 14,
+              "column": 4
+            },
+            "end": {
+              "line": 14,
+              "column": 68
+            }
+          },
+          "moduleName": "restaurant-abh/templates/index.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Restaurant name");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child1 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.5.1",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 39,
+              "column": 6
+            },
+            "end": {
+              "line": 39,
+              "column": 70
+            }
+          },
+          "moduleName": "restaurant-abh/templates/index.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Restaurant name");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child2 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.5.1",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 56,
+              "column": 8
+            },
+            "end": {
+              "line": 56,
+              "column": 72
+            }
+          },
+          "moduleName": "restaurant-abh/templates/index.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Restaurant name");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child3 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.5.1",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 73,
+              "column": 10
+            },
+            "end": {
+              "line": 73,
+              "column": 74
+            }
+          },
+          "moduleName": "restaurant-abh/templates/index.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Restaurant name");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child4 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.5.1",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 90,
+              "column": 12
+            },
+            "end": {
+              "line": 90,
+              "column": 76
+            }
+          },
+          "moduleName": "restaurant-abh/templates/index.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Restaurant name");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child5 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.5.1",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 107,
+              "column": 14
+            },
+            "end": {
+              "line": 107,
+              "column": 78
+            }
+          },
+          "moduleName": "restaurant-abh/templates/index.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("Restaurant name");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
     return {
       meta: {
         "fragmentReason": {
@@ -983,11 +1500,7 @@ define("restaurant-abh/templates/index", ["exports"], function (exports) {
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n    ");
         dom.appendChild(el2, el3);
-        var el3 = dom.createElement("a");
-        dom.setAttribute(el3, "class", "restaurant_name");
-        dom.setAttribute(el3, "href", "#");
-        var el4 = dom.createTextNode("Restaurant name");
-        dom.appendChild(el3, el4);
+        var el3 = dom.createComment("");
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n    ");
         dom.appendChild(el2, el3);
@@ -1072,11 +1585,7 @@ define("restaurant-abh/templates/index", ["exports"], function (exports) {
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n      ");
         dom.appendChild(el2, el3);
-        var el3 = dom.createElement("a");
-        dom.setAttribute(el3, "class", "restaurant_name");
-        dom.setAttribute(el3, "href", "#");
-        var el4 = dom.createTextNode("Restaurant name");
-        dom.appendChild(el3, el4);
+        var el3 = dom.createComment("");
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n      ");
         dom.appendChild(el2, el3);
@@ -1161,11 +1670,7 @@ define("restaurant-abh/templates/index", ["exports"], function (exports) {
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n        ");
         dom.appendChild(el2, el3);
-        var el3 = dom.createElement("a");
-        dom.setAttribute(el3, "class", "restaurant_name");
-        dom.setAttribute(el3, "href", "#");
-        var el4 = dom.createTextNode("Restaurant name");
-        dom.appendChild(el3, el4);
+        var el3 = dom.createComment("");
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n        ");
         dom.appendChild(el2, el3);
@@ -1250,11 +1755,7 @@ define("restaurant-abh/templates/index", ["exports"], function (exports) {
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n          ");
         dom.appendChild(el2, el3);
-        var el3 = dom.createElement("a");
-        dom.setAttribute(el3, "class", "restaurant_name");
-        dom.setAttribute(el3, "href", "#");
-        var el4 = dom.createTextNode("Restaurant name");
-        dom.appendChild(el3, el4);
+        var el3 = dom.createComment("");
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n          ");
         dom.appendChild(el2, el3);
@@ -1339,11 +1840,7 @@ define("restaurant-abh/templates/index", ["exports"], function (exports) {
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n            ");
         dom.appendChild(el2, el3);
-        var el3 = dom.createElement("a");
-        dom.setAttribute(el3, "class", "restaurant_name");
-        dom.setAttribute(el3, "href", "#");
-        var el4 = dom.createTextNode("Restaurant name");
-        dom.appendChild(el3, el4);
+        var el3 = dom.createComment("");
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n            ");
         dom.appendChild(el2, el3);
@@ -1428,11 +1925,7 @@ define("restaurant-abh/templates/index", ["exports"], function (exports) {
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n              ");
         dom.appendChild(el2, el3);
-        var el3 = dom.createElement("a");
-        dom.setAttribute(el3, "class", "restaurant_name");
-        dom.setAttribute(el3, "href", "#");
-        var el4 = dom.createTextNode("Restaurant name");
-        dom.appendChild(el3, el4);
+        var el3 = dom.createComment("");
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n              ");
         dom.appendChild(el2, el3);
@@ -1838,12 +2331,20 @@ define("restaurant-abh/templates/index", ["exports"], function (exports) {
         dom.appendChild(el0, el1);
         return el0;
       },
-      buildRenderNodes: function buildRenderNodes() {
-        return [];
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [4]);
+        var morphs = new Array(6);
+        morphs[0] = dom.createMorphAt(dom.childAt(element0, [1]), 3, 3);
+        morphs[1] = dom.createMorphAt(dom.childAt(element0, [3]), 3, 3);
+        morphs[2] = dom.createMorphAt(dom.childAt(element0, [5]), 3, 3);
+        morphs[3] = dom.createMorphAt(dom.childAt(element0, [7]), 3, 3);
+        morphs[4] = dom.createMorphAt(dom.childAt(element0, [9]), 3, 3);
+        morphs[5] = dom.createMorphAt(dom.childAt(element0, [11]), 3, 3);
+        return morphs;
       },
-      statements: [],
+      statements: [["block", "link-to", ["restaurant"], ["class", "restaurant_name"], 0, null, ["loc", [null, [14, 4], [14, 80]]]], ["block", "link-to", ["restaurant"], ["class", "restaurant_name"], 1, null, ["loc", [null, [39, 6], [39, 82]]]], ["block", "link-to", ["restaurant"], ["class", "restaurant_name"], 2, null, ["loc", [null, [56, 8], [56, 84]]]], ["block", "link-to", ["restaurant"], ["class", "restaurant_name"], 3, null, ["loc", [null, [73, 10], [73, 86]]]], ["block", "link-to", ["restaurant"], ["class", "restaurant_name"], 4, null, ["loc", [null, [90, 12], [90, 88]]]], ["block", "link-to", ["restaurant"], ["class", "restaurant_name"], 5, null, ["loc", [null, [107, 14], [107, 90]]]]],
       locals: [],
-      templates: []
+      templates: [child0, child1, child2, child3, child4, child5]
     };
   })());
 });
@@ -2261,11 +2762,53 @@ define("restaurant-abh/templates/register", ["exports"], function (exports) {
 });
 define("restaurant-abh/templates/restaurant", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.5.1",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 36,
+              "column": 8
+            },
+            "end": {
+              "line": 38,
+              "column": 8
+            }
+          },
+          "moduleName": "restaurant-abh/templates/restaurant.hbs"
+        },
+        isEmpty: false,
+        arity: 1,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("          ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          return morphs;
+        },
+        statements: [["inline", "g-map-marker", [["get", "google_mapa", ["loc", [null, [37, 25], [37, 36]]]]], ["lat", ["subexpr", "@mut", [["get", "model.latitude", ["loc", [null, [37, 41], [37, 55]]]]], [], []], "lng", ["subexpr", "@mut", [["get", "model.longitude", ["loc", [null, [37, 60], [37, 75]]]]], [], []], "title", "model.restaurantName"], ["loc", [null, [37, 10], [37, 106]]]]],
+        locals: ["google_mapa"],
+        templates: []
+      };
+    })();
     return {
       meta: {
         "fragmentReason": {
           "name": "missing-wrapper",
-          "problems": ["wrong-type"]
+          "problems": ["multiple-nodes"]
         },
         "revision": "Ember@2.5.1",
         "loc": {
@@ -2275,8 +2818,8 @@ define("restaurant-abh/templates/restaurant", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 2,
-            "column": 0
+            "line": 45,
+            "column": 6
           }
         },
         "moduleName": "restaurant-abh/templates/restaurant.hbs"
@@ -2287,26 +2830,418 @@ define("restaurant-abh/templates/restaurant", ["exports"], function (exports) {
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
-        var el1 = dom.createComment("");
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "restaurant_header_big");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "background");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n");
+        var el1 = dom.createTextNode("\n\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "container restaurant_main_container");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "row");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3, "class", "col-md-3");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "restaurant_thumb_container box_shadow");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("img");
+        dom.setAttribute(el5, "width", "210");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("ul");
+        dom.setAttribute(el4, "class", "restaurant_left_menu");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("li");
+        var el6 = dom.createElement("a");
+        dom.setAttribute(el6, "href", "javascript:void(0);");
+        var el7 = dom.createTextNode("About");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("li");
+        var el6 = dom.createElement("a");
+        dom.setAttribute(el6, "href", "javascript:void(0);");
+        var el7 = dom.createTextNode("Menu");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3, "class", "col-md-9");
+        dom.setAttribute(el3, "style", "padding-left:40px;");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "restaurant_details");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("h1");
+        dom.setAttribute(el5, "class", "title");
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "stats");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("img");
+        dom.setAttribute(el6, "src", "assets/images/star_active.png");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("img");
+        dom.setAttribute(el6, "src", "assets/images/star_active.png");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("img");
+        dom.setAttribute(el6, "src", "assets/images/star_active.png");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("img");
+        dom.setAttribute(el6, "src", "assets/images/star_active.png");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("img");
+        dom.setAttribute(el6, "src", "assets/images/star_inactive.png");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("span");
+        dom.setAttribute(el6, "class", "votes");
+        var el7 = dom.createTextNode("(");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createComment("");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode(")");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("span");
+        dom.setAttribute(el6, "class", "price_range");
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createComment("");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("span");
+        dom.setAttribute(el6, "class", "restaurant_food");
+        var el7 = dom.createComment("");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "box_shadow restaurant_data_container");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("h1");
+        dom.setAttribute(el5, "class", "title");
+        var el6 = dom.createTextNode("About Restaurant name");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("h2");
+        dom.setAttribute(el5, "class", "description_title");
+        var el6 = dom.createTextNode("Description");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "description_text");
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var morphs = new Array(1);
-        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
-        dom.insertBoundary(fragment, 0);
+        var element0 = dom.childAt(fragment, [0, 1]);
+        var element1 = dom.childAt(fragment, [2, 1]);
+        var element2 = dom.childAt(element1, [1, 1, 1]);
+        var element3 = dom.childAt(element1, [3]);
+        var element4 = dom.childAt(element3, [1]);
+        var element5 = dom.childAt(element4, [3]);
+        var element6 = dom.childAt(element3, [3]);
+        var morphs = new Array(8);
+        morphs[0] = dom.createAttrMorph(element0, 'style');
+        morphs[1] = dom.createAttrMorph(element2, 'src');
+        morphs[2] = dom.createMorphAt(dom.childAt(element4, [1]), 0, 0);
+        morphs[3] = dom.createMorphAt(dom.childAt(element5, [11]), 1, 1);
+        morphs[4] = dom.createUnsafeMorphAt(dom.childAt(element5, [13]), 1, 1);
+        morphs[5] = dom.createMorphAt(dom.childAt(element5, [15]), 0, 0);
+        morphs[6] = dom.createMorphAt(element6, 3, 3);
+        morphs[7] = dom.createMorphAt(dom.childAt(element6, [7]), 0, 0);
         return morphs;
       },
-      statements: [["content", "outlet", ["loc", [null, [1, 0], [1, 10]]]]],
+      statements: [["attribute", "style", ["concat", ["background-image:url('assets/images/restaurants/cover/", ["get", "model.imageFileName", ["loc", [null, [2, 89], [2, 108]]]], ".jpg');"]]], ["attribute", "src", ["concat", ["assets/images/restaurants/thumbnails/", ["get", "model.imageFileName", ["loc", [null, [9, 57], [9, 76]]]], ".jpg"]]], ["content", "model.restaurantName", ["loc", [null, [19, 26], [19, 50]]]], ["content", "model.votes", ["loc", [null, [26, 31], [26, 46]]]], ["content", "model.priceRange", ["loc", [null, [28, 12], [28, 34]]]], ["content", "model.foodType", ["loc", [null, [30, 40], [30, 58]]]], ["block", "g-map", [], ["lat", ["subexpr", "@mut", [["get", "model.latitude", ["loc", [null, [36, 21], [36, 35]]]]], [], []], "lng", ["subexpr", "@mut", [["get", "model.longitude", ["loc", [null, [36, 40], [36, 55]]]]], [], []], "zoom", 17], 0, null, ["loc", [null, [36, 8], [38, 18]]]], ["content", "model.description", ["loc", [null, [40, 38], [40, 59]]]]],
       locals: [],
-      templates: []
+      templates: [child0]
     };
   })());
 });
 define("restaurant-abh/templates/restaurants", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      var child0 = (function () {
+        return {
+          meta: {
+            "fragmentReason": false,
+            "revision": "Ember@2.5.1",
+            "loc": {
+              "source": null,
+              "start": {
+                "line": 5,
+                "column": 6
+              },
+              "end": {
+                "line": 5,
+                "column": 106
+              }
+            },
+            "moduleName": "restaurant-abh/templates/restaurants.hbs"
+          },
+          isEmpty: false,
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createComment("");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+            var morphs = new Array(1);
+            morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+            dom.insertBoundary(fragment, 0);
+            dom.insertBoundary(fragment, null);
+            return morphs;
+          },
+          statements: [["content", "restaurantlist.restaurantName", ["loc", [null, [5, 73], [5, 106]]]]],
+          locals: [],
+          templates: []
+        };
+      })();
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.5.1",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 2,
+              "column": 2
+            },
+            "end": {
+              "line": 20,
+              "column": 2
+            }
+          },
+          "moduleName": "restaurant-abh/templates/restaurants.hbs"
+        },
+        isEmpty: false,
+        arity: 1,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("    ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("div");
+          dom.setAttribute(el1, "class", "restaurant_box");
+          var el2 = dom.createTextNode("\n      ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createElement("img");
+          dom.setAttribute(el2, "class", "restaurant_thumb");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n      ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createComment("");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n      ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createElement("div");
+          dom.setAttribute(el2, "class", "restaurant_marks");
+          var el3 = dom.createTextNode("\n        ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("img");
+          dom.setAttribute(el3, "src", "assets/images/star_active.png");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n        ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("img");
+          dom.setAttribute(el3, "src", "assets/images/star_active.png");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n        ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("img");
+          dom.setAttribute(el3, "src", "assets/images/star_active.png");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n        ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("img");
+          dom.setAttribute(el3, "src", "assets/images/star_active.png");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n        ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("img");
+          dom.setAttribute(el3, "src", "assets/images/star_inactive.png");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n        ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("span");
+          dom.setAttribute(el3, "class", "votes");
+          var el4 = dom.createTextNode("(1745)");
+          dom.appendChild(el3, el4);
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n        ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("span");
+          dom.setAttribute(el3, "class", "price_range");
+          var el4 = dom.createTextNode("\n          ");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createComment("");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createTextNode("\n        ");
+          dom.appendChild(el3, el4);
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n      ");
+          dom.appendChild(el2, el3);
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n      ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createElement("div");
+          dom.setAttribute(el2, "class", "restaurant_food");
+          var el3 = dom.createComment("");
+          dom.appendChild(el2, el3);
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n      ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createElement("a");
+          dom.setAttribute(el2, "class", "restaurant_reserve");
+          dom.setAttribute(el2, "href", "#");
+          var el3 = dom.createTextNode("Reserve now");
+          dom.appendChild(el2, el3);
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n    ");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var element0 = dom.childAt(fragment, [1]);
+          var element1 = dom.childAt(element0, [1]);
+          var morphs = new Array(4);
+          morphs[0] = dom.createAttrMorph(element1, 'src');
+          morphs[1] = dom.createMorphAt(element0, 3, 3);
+          morphs[2] = dom.createMorphAt(dom.childAt(element0, [5, 13]), 1, 1);
+          morphs[3] = dom.createMorphAt(dom.childAt(element0, [7]), 0, 0);
+          return morphs;
+        },
+        statements: [["attribute", "src", ["concat", ["assets/images/restaurants/thumbnails/", ["get", "restaurantlist.imageFileName", ["loc", [null, [4, 80], [4, 108]]]], ".jpg"]]], ["block", "link-to", ["restaurant", ["get", "restaurantlist.id", ["loc", [null, [5, 30], [5, 47]]]]], ["class", "restaurant_name"], 0, null, ["loc", [null, [5, 6], [5, 118]]]], ["content", "restaurantlist.priceRange", ["loc", [null, [14, 10], [14, 39]]]], ["content", "restaurantlist.foodType", ["loc", [null, [17, 35], [17, 62]]]]],
+        locals: ["restaurantlist"],
+        templates: [child0]
+      };
+    })();
+    var child1 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.5.1",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 20,
+              "column": 2
+            },
+            "end": {
+              "line": 22,
+              "column": 2
+            }
+          },
+          "moduleName": "restaurant-abh/templates/restaurants.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("    Sorry, nobody is here.\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
     return {
       meta: {
         "fragmentReason": {
@@ -2321,7 +3256,7 @@ define("restaurant-abh/templates/restaurants", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 147,
+            "line": 56,
             "column": 0
           }
         },
@@ -2336,541 +3271,9 @@ define("restaurant-abh/templates/restaurants", ["exports"], function (exports) {
         var el1 = dom.createElement("div");
         dom.setAttribute(el1, "class", "container");
         dom.setAttribute(el1, "style", "overflow:auto;");
-        var el2 = dom.createTextNode("\n\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("div");
-        dom.setAttribute(el2, "class", "restaurant_box");
-        var el3 = dom.createTextNode("\n    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("img");
-        dom.setAttribute(el3, "class", "restaurant_thumb");
-        dom.setAttribute(el3, "src", "assets/images/restaurant_thumb.png");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("a");
-        dom.setAttribute(el3, "class", "restaurant_name");
-        dom.setAttribute(el3, "href", "#");
-        var el4 = dom.createTextNode("Restaurant name");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "restaurant_marks");
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_inactive.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("span");
-        dom.setAttribute(el4, "class", "votes");
-        var el5 = dom.createTextNode("(1745)");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("span");
-        dom.setAttribute(el4, "class", "price_range");
-        var el5 = dom.createTextNode("\n        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("span");
-        dom.setAttribute(el5, "class", "active");
-        var el6 = dom.createTextNode("$$$$");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("$\n      ");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n    ");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "restaurant_food");
-        var el4 = dom.createTextNode("Italian | International | Mediterranean");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("a");
-        dom.setAttribute(el3, "class", "restaurant_reserve");
-        dom.setAttribute(el3, "href", "#");
-        var el4 = dom.createTextNode("Reserve now");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n  ");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n\n\n\n\n\n\n\n\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("div");
-        dom.setAttribute(el2, "class", "restaurant_box");
-        var el3 = dom.createTextNode("\n      ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("img");
-        dom.setAttribute(el3, "class", "restaurant_thumb");
-        dom.setAttribute(el3, "src", "assets/images/restaurant_thumb.png");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n      ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("a");
-        dom.setAttribute(el3, "class", "restaurant_name");
-        dom.setAttribute(el3, "href", "#");
-        var el4 = dom.createTextNode("Restaurant name");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n      ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "restaurant_marks");
-        var el4 = dom.createTextNode("\n        ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n        ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n        ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n        ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n        ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_inactive.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n        ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("span");
-        dom.setAttribute(el4, "class", "votes");
-        var el5 = dom.createTextNode("(1745)");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n        ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("span");
-        dom.setAttribute(el4, "class", "price_range");
-        var el5 = dom.createTextNode("\n          ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("span");
-        dom.setAttribute(el5, "class", "active");
-        var el6 = dom.createTextNode("$$$$");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("$\n        ");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n      ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "restaurant_food");
-        var el4 = dom.createTextNode("Italian | International | Mediterranean");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n      ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("a");
-        dom.setAttribute(el3, "class", "restaurant_reserve");
-        dom.setAttribute(el3, "href", "#");
-        var el4 = dom.createTextNode("Reserve now");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n    ");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n    ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("div");
-        dom.setAttribute(el2, "class", "restaurant_box");
-        var el3 = dom.createTextNode("\n        ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("img");
-        dom.setAttribute(el3, "class", "restaurant_thumb");
-        dom.setAttribute(el3, "src", "assets/images/restaurant_thumb.png");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n        ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("a");
-        dom.setAttribute(el3, "class", "restaurant_name");
-        dom.setAttribute(el3, "href", "#");
-        var el4 = dom.createTextNode("Restaurant name");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n        ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "restaurant_marks");
-        var el4 = dom.createTextNode("\n          ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n          ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n          ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n          ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n          ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_inactive.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n          ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("span");
-        dom.setAttribute(el4, "class", "votes");
-        var el5 = dom.createTextNode("(1745)");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n          ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("span");
-        dom.setAttribute(el4, "class", "price_range");
-        var el5 = dom.createTextNode("\n            ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("span");
-        dom.setAttribute(el5, "class", "active");
-        var el6 = dom.createTextNode("$$$$");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("$\n          ");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n        ");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n        ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "restaurant_food");
-        var el4 = dom.createTextNode("Italian | International | Mediterranean");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n        ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("a");
-        dom.setAttribute(el3, "class", "restaurant_reserve");
-        dom.setAttribute(el3, "href", "#");
-        var el4 = dom.createTextNode("Reserve now");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n      ");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n      ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("div");
-        dom.setAttribute(el2, "class", "restaurant_box");
-        var el3 = dom.createTextNode("\n          ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("img");
-        dom.setAttribute(el3, "class", "restaurant_thumb");
-        dom.setAttribute(el3, "src", "assets/images/restaurant_thumb.png");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n          ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("a");
-        dom.setAttribute(el3, "class", "restaurant_name");
-        dom.setAttribute(el3, "href", "#");
-        var el4 = dom.createTextNode("Restaurant name");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n          ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "restaurant_marks");
-        var el4 = dom.createTextNode("\n            ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n            ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n            ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n            ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n            ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_inactive.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n            ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("span");
-        dom.setAttribute(el4, "class", "votes");
-        var el5 = dom.createTextNode("(1745)");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n            ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("span");
-        dom.setAttribute(el4, "class", "price_range");
-        var el5 = dom.createTextNode("\n              ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("span");
-        dom.setAttribute(el5, "class", "active");
-        var el6 = dom.createTextNode("$$$$");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("$\n            ");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n          ");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n          ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "restaurant_food");
-        var el4 = dom.createTextNode("Italian | International | Mediterranean");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n          ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("a");
-        dom.setAttribute(el3, "class", "restaurant_reserve");
-        dom.setAttribute(el3, "href", "#");
-        var el4 = dom.createTextNode("Reserve now");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n        ");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n        ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("div");
-        dom.setAttribute(el2, "class", "restaurant_box");
-        var el3 = dom.createTextNode("\n            ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("img");
-        dom.setAttribute(el3, "class", "restaurant_thumb");
-        dom.setAttribute(el3, "src", "assets/images/restaurant_thumb.png");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n            ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("a");
-        dom.setAttribute(el3, "class", "restaurant_name");
-        dom.setAttribute(el3, "href", "#");
-        var el4 = dom.createTextNode("Restaurant name");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n            ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "restaurant_marks");
-        var el4 = dom.createTextNode("\n              ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n              ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n              ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n              ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n              ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_inactive.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n              ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("span");
-        dom.setAttribute(el4, "class", "votes");
-        var el5 = dom.createTextNode("(1745)");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n              ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("span");
-        dom.setAttribute(el4, "class", "price_range");
-        var el5 = dom.createTextNode("\n                ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("span");
-        dom.setAttribute(el5, "class", "active");
-        var el6 = dom.createTextNode("$$$$");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("$\n              ");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n            ");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n            ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "restaurant_food");
-        var el4 = dom.createTextNode("Italian | International | Mediterranean");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n            ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("a");
-        dom.setAttribute(el3, "class", "restaurant_reserve");
-        dom.setAttribute(el3, "href", "#");
-        var el4 = dom.createTextNode("Reserve now");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n          ");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n          ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("div");
-        dom.setAttribute(el2, "class", "restaurant_box");
-        var el3 = dom.createTextNode("\n              ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("img");
-        dom.setAttribute(el3, "class", "restaurant_thumb");
-        dom.setAttribute(el3, "src", "assets/images/restaurant_thumb.png");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n              ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("a");
-        dom.setAttribute(el3, "class", "restaurant_name");
-        dom.setAttribute(el3, "href", "#");
-        var el4 = dom.createTextNode("Restaurant name");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n              ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "restaurant_marks");
-        var el4 = dom.createTextNode("\n                ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n                ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n                ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n                ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_active.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n                ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("img");
-        dom.setAttribute(el4, "src", "assets/images/star_inactive.png");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n                ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("span");
-        dom.setAttribute(el4, "class", "votes");
-        var el5 = dom.createTextNode("(1745)");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n                ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("span");
-        dom.setAttribute(el4, "class", "price_range");
-        var el5 = dom.createTextNode("\n                  ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("span");
-        dom.setAttribute(el5, "class", "active");
-        var el6 = dom.createTextNode("$$$$");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("$\n                ");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n              ");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n              ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "restaurant_food");
-        var el4 = dom.createTextNode("Italian | International | Mediterranean");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n              ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("a");
-        dom.setAttribute(el3, "class", "restaurant_reserve");
-        dom.setAttribute(el3, "href", "#");
-        var el4 = dom.createTextNode("Reserve now");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n            ");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n\n");
@@ -3199,7 +3602,7 @@ define("restaurant-abh/templates/restaurants", ["exports"], function (exports) {
         var el2 = dom.createTextNode("\n\n");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n\n\n");
+        var el1 = dom.createTextNode("\n\n");
         dom.appendChild(el0, el1);
         var el1 = dom.createComment("");
         dom.appendChild(el0, el1);
@@ -3208,13 +3611,14 @@ define("restaurant-abh/templates/restaurants", ["exports"], function (exports) {
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var morphs = new Array(1);
-        morphs[0] = dom.createMorphAt(fragment, 6, 6, contextualElement);
+        var morphs = new Array(2);
+        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0]), 1, 1);
+        morphs[1] = dom.createMorphAt(fragment, 6, 6, contextualElement);
         return morphs;
       },
-      statements: [["content", "currentuserservice.userFirstName", ["loc", [null, [146, 0], [146, 36]]]]],
+      statements: [["block", "each", [["get", "listRestaurants", ["loc", [null, [2, 10], [2, 25]]]]], [], 0, 1, ["loc", [null, [2, 2], [22, 11]]]], ["content", "currentuserservice.userFirstName", ["loc", [null, [55, 0], [55, 36]]]]],
       locals: [],
-      templates: []
+      templates: [child0, child1]
     };
   })());
 });
@@ -3250,7 +3654,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("restaurant-abh/app")["default"].create({"name":"restaurant-abh","version":"0.0.0+8b0e2c3b"});
+  require("restaurant-abh/app")["default"].create({"name":"restaurant-abh","version":"0.0.0+f3be547c"});
 }
 
 /* jshint ignore:end */

@@ -89817,6 +89817,2090 @@ define("ember-data/version", ["exports"], function (exports) {
 
   exports["default"] = "2.5.2";
 });
+define('ember-g-map/components/g-map-address-marker', ['exports', 'ember', 'ember-g-map/templates/components/g-map-address-marker'], function (exports, _ember, _emberGMapTemplatesComponentsGMapAddressMarker) {
+  'use strict';
+
+  var _slice = Array.prototype.slice;
+
+  /* global google */
+
+  var computed = _ember['default'].computed;
+  var observer = _ember['default'].observer;
+  var run = _ember['default'].run;
+  var isPresent = _ember['default'].isPresent;
+  var isEmpty = _ember['default'].isEmpty;
+  var typeOf = _ember['default'].typeOf;
+
+  var GMapAddressMarkerComponent = _ember['default'].Component.extend({
+    layout: _emberGMapTemplatesComponentsGMapAddressMarker['default'],
+    classNames: ['g-map-address-marker'],
+
+    map: computed.alias('mapContext.map'),
+
+    didInsertElement: function didInsertElement() {
+      this._super.apply(this, arguments);
+      this.initPlacesService();
+    },
+
+    mapWasSet: observer('map', function () {
+      run.once(this, 'initPlacesService');
+    }),
+
+    initPlacesService: function initPlacesService() {
+      var map = this.get('map');
+      var service = this.get('placesService');
+
+      if (isPresent(map) && isEmpty(service) && typeof FastBoot === 'undefined') {
+        service = new google.maps.places.PlacesService(map);
+        this.set('placesService', service);
+        this.searchLocation();
+      }
+    },
+
+    onAddressChanged: observer('address', function () {
+      run.once(this, 'searchLocation');
+    }),
+
+    searchLocation: function searchLocation() {
+      var _this = this;
+
+      var service = this.get('placesService');
+      var address = this.get('address');
+
+      if (isPresent(service) && isPresent(address) && typeof FastBoot === 'undefined') {
+        var request = { query: address };
+
+        service.textSearch(request, function (results, status) {
+          if (google && status === google.maps.places.PlacesServiceStatus.OK) {
+            _this.updateLocation(results);
+          }
+        });
+      }
+    },
+
+    updateLocation: function updateLocation(results) {
+      var lat = results[0].geometry.location.lat();
+      var lng = results[0].geometry.location.lng();
+
+      this.set('lat', lat);
+      this.set('lng', lng);
+      this.sendOnLocationChange(lat, lng, results);
+    },
+
+    sendOnLocationChange: function sendOnLocationChange() {
+      var onLocationChange = this.attrs.onLocationChange;
+
+      if (typeOf(onLocationChange) === 'function') {
+        onLocationChange.apply(undefined, arguments);
+      } else {
+        this.sendAction.apply(this, ['onLocationChange'].concat(_slice.call(arguments)));
+      }
+    }
+  });
+
+  GMapAddressMarkerComponent.reopenClass({
+    positionalParams: ['mapContext']
+  });
+
+  exports['default'] = GMapAddressMarkerComponent;
+});
+define('ember-g-map/components/g-map-address-route', ['exports', 'ember', 'ember-g-map/templates/components/g-map-address-route'], function (exports, _ember, _emberGMapTemplatesComponentsGMapAddressRoute) {
+  'use strict';
+
+  var _slice = Array.prototype.slice;
+
+  /* global google */
+
+  var computed = _ember['default'].computed;
+  var observer = _ember['default'].observer;
+  var run = _ember['default'].run;
+  var isPresent = _ember['default'].isPresent;
+  var isEmpty = _ember['default'].isEmpty;
+  var typeOf = _ember['default'].typeOf;
+
+  var GMapAddressRouteComponent = _ember['default'].Component.extend({
+    layout: _emberGMapTemplatesComponentsGMapAddressRoute['default'],
+    classNames: ['g-map-address-route'],
+
+    map: computed.alias('mapContext.map'),
+
+    didInsertElement: function didInsertElement() {
+      this._super();
+      this.initPlacesService();
+    },
+
+    mapWasSet: observer('map', function () {
+      run.once(this, 'initPlacesService');
+    }),
+
+    initPlacesService: function initPlacesService() {
+      var map = this.get('map');
+      var service = this.get('placesService');
+
+      if (isPresent(map) && isEmpty(service) && typeof FastBoot === 'undefined') {
+        service = new google.maps.places.PlacesService(map);
+        this.set('placesService', service);
+        this.searchLocations();
+      }
+    },
+
+    onAddressChanged: observer('originAddress', 'destinationAddress', function () {
+      run.once(this, 'searchLocations');
+    }),
+
+    searchLocations: function searchLocations() {
+      var _this = this;
+
+      var service = this.get('placesService');
+      var originAddress = this.get('originAddress');
+      var destinationAddress = this.get('destinationAddress');
+
+      if (isPresent(service) && isPresent(originAddress) && typeof FastBoot === 'undefined') {
+        var originRequest = { query: originAddress };
+
+        service.textSearch(originRequest, function (results, status) {
+          if (google && status === google.maps.places.PlacesServiceStatus.OK) {
+            _this.updateOriginLocation(results);
+          }
+        });
+      }
+
+      if (isPresent(service) && isPresent(destinationAddress) && typeof FastBoot === 'undefined') {
+        var destinationRequest = { query: destinationAddress };
+
+        service.textSearch(destinationRequest, function (results, status) {
+          if (google && status === google.maps.places.PlacesServiceStatus.OK) {
+            _this.updateDestinationLocation(results);
+          }
+        });
+      }
+    },
+
+    updateOriginLocation: function updateOriginLocation(results) {
+      var lat = results[0].geometry.location.lat();
+      var lng = results[0].geometry.location.lng();
+
+      this.set('originLat', lat);
+      this.set('originLng', lng);
+      this.sendOnLocationsChange(lat, lng, results);
+    },
+
+    updateDestinationLocation: function updateDestinationLocation(results) {
+      var lat = results[0].geometry.location.lat();
+      var lng = results[0].geometry.location.lng();
+
+      this.set('destinationLat', lat);
+      this.set('destinationLng', lng);
+      this.sendOnLocationsChange(lat, lng, results);
+    },
+
+    sendOnLocationsChange: function sendOnLocationsChange() {
+      var onLocationsChange = this.attrs.onLocationsChange;
+
+      if (typeOf(onLocationsChange) === 'function') {
+        onLocationsChange.apply(undefined, arguments);
+      } else {
+        this.sendAction.apply(this, ['onLocationsChange'].concat(_slice.call(arguments)));
+      }
+    }
+  });
+
+  GMapAddressRouteComponent.reopenClass({
+    positionalParams: ['mapContext']
+  });
+
+  exports['default'] = GMapAddressRouteComponent;
+});
+define('ember-g-map/components/g-map-infowindow', ['exports', 'ember', 'ember-g-map/templates/components/g-map-infowindow', 'ember-g-map/components/g-map', 'ember-g-map/components/g-map-marker', 'ember-g-map/utils/compact'], function (exports, _ember, _emberGMapTemplatesComponentsGMapInfowindow, _emberGMapComponentsGMap, _emberGMapComponentsGMapMarker, _emberGMapUtilsCompact) {
+  'use strict';
+
+  function _toConsumableArray(arr) {
+    if (Array.isArray(arr)) {
+      for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];return arr2;
+    } else {
+      return Array.from(arr);
+    }
+  }
+
+  var isEmpty = _ember['default'].isEmpty;
+  var isPresent = _ember['default'].isPresent;
+  var observer = _ember['default'].observer;
+  var computed = _ember['default'].computed;
+  var run = _ember['default'].run;
+  var assert = _ember['default'].assert;
+  var typeOf = _ember['default'].typeOf;
+
+  var allowedOptions = _ember['default'].A(['disableAutoPan', 'maxWidth', 'pixelOffset']);
+
+  var OPEN_CLOSE_EVENTS = _ember['default'].A(['click', 'dblclick', 'rightclick', 'mouseover', 'mouseout']);
+
+  var GMapInfowindowComponent = _ember['default'].Component.extend({
+    layout: _emberGMapTemplatesComponentsGMapInfowindow['default'],
+    classNames: ['g-map-marker'],
+
+    map: computed.alias('mapContext.map'),
+    marker: computed.alias('mapContext.marker'),
+
+    init: function init() {
+      this._super(arguments);
+
+      var mapContext = this.get('mapContext');
+      var hasMap = mapContext instanceof _emberGMapComponentsGMap['default'];
+      var hasMarker = mapContext instanceof _emberGMapComponentsGMapMarker['default'];
+      assert('Must be inside {{#g-map}} or {{#g-map-marker}} components with context set', hasMarker || hasMap);
+
+      this.set('hasMarker', hasMarker);
+    },
+
+    didInsertElement: function didInsertElement() {
+      this._super();
+      if (isEmpty(this.get('infowindow'))) {
+        var infowindow = this.buildInfowindow();
+        this.set('infowindow', infowindow);
+      }
+      this.setPosition();
+      this.setMap();
+      this.setMarker();
+      this.setOptions();
+    },
+
+    willDestroyElement: function willDestroyElement() {
+      this.close();
+
+      if (this.get('hasMarker')) {
+        this.get('mapContext').unregisterInfowindow();
+      }
+    },
+
+    optionsChanged: observer.apply(undefined, _toConsumableArray(allowedOptions).concat([function () {
+      run.once(this, 'setOptions');
+    }])),
+
+    setOptions: function setOptions() {
+      var infowindow = this.get('infowindow');
+      var options = (0, _emberGMapUtilsCompact['default'])(this.getProperties(allowedOptions));
+
+      if (isPresent(infowindow) && isPresent(Object.keys(options))) {
+        infowindow.setOptions(options);
+      }
+    },
+
+    buildInfowindow: function buildInfowindow() {
+      var _this = this;
+
+      if (google) {
+        var infowindow = new google.maps.InfoWindow({
+          content: this.get('element')
+        });
+
+        if (isPresent(this.get('attrs.onClose'))) {
+          infowindow.addListener('closeclick', function () {
+            return _this.handleCloseClickEvent();
+          });
+        }
+        return infowindow;
+      }
+    },
+
+    handleCloseClickEvent: function handleCloseClickEvent() {
+      var onClose = this.attrs.onClose;
+
+      if (typeOf(onClose) === 'function') {
+        onClose();
+      } else {
+        this.sendAction('onClose');
+      }
+    },
+
+    open: function open() {
+      var infowindow = this.get('infowindow');
+      var map = this.get('map');
+      var marker = this.get('marker');
+
+      this.set('isOpen', true);
+      if (isPresent(map) && isPresent(marker)) {
+        infowindow.open(map, marker);
+      } else if (isPresent(map)) {
+        infowindow.open(map);
+      }
+    },
+
+    close: function close() {
+      var infowindow = this.get('infowindow');
+      if (isPresent(infowindow)) {
+        this.set('isOpen', false);
+        infowindow.close();
+      }
+    },
+
+    mapWasSet: observer('map', function () {
+      run.once(this, 'setMap');
+    }),
+
+    setMap: function setMap() {
+      if (this.get('hasMarker') === false) {
+        this.open();
+      }
+    },
+
+    markerWasSet: observer('marker', function () {
+      run.once(this, 'setMarker');
+    }),
+
+    setMarker: function setMarker() {
+      var map = this.get('map');
+      var marker = this.get('marker');
+      var context = this.get('mapContext');
+      var infowindow = this.get('infowindow');
+
+      if (isPresent(infowindow) && isPresent(map) && isPresent(marker)) {
+        var openEvent = this.retrieveOpenEvent();
+        var closeEvent = this.retrieveCloseEvent();
+        context.registerInfowindow(this, openEvent, closeEvent);
+      }
+    },
+
+    coordsChanged: observer('lat', 'lng', function () {
+      run.once(this, 'setPosition');
+    }),
+
+    setPosition: function setPosition() {
+      var infowindow = this.get('infowindow');
+      var lat = this.get('lat');
+      var lng = this.get('lng');
+
+      if (isPresent(infowindow) && isPresent(lat) && isPresent(lng) && typeof FastBoot === 'undefined') {
+        var position = new google.maps.LatLng(lat, lng);
+        infowindow.setPosition(position);
+      }
+    },
+
+    retrieveOpenEvent: function retrieveOpenEvent() {
+      var openEvent = this.get('openOn');
+      return OPEN_CLOSE_EVENTS.contains(openEvent) ? openEvent : 'click';
+    },
+
+    retrieveCloseEvent: function retrieveCloseEvent() {
+      var closeEvent = this.get('closeOn');
+      return OPEN_CLOSE_EVENTS.contains(closeEvent) ? closeEvent : null;
+    }
+  });
+
+  GMapInfowindowComponent.reopenClass({
+    positionalParams: ['mapContext']
+  });
+
+  exports['default'] = GMapInfowindowComponent;
+});
+define('ember-g-map/components/g-map-marker', ['exports', 'ember', 'ember-g-map/templates/components/g-map-marker', 'ember-g-map/components/g-map'], function (exports, _ember, _emberGMapTemplatesComponentsGMapMarker, _emberGMapComponentsGMap) {
+  'use strict';
+
+  var isEmpty = _ember['default'].isEmpty;
+  var isPresent = _ember['default'].isPresent;
+  var observer = _ember['default'].observer;
+  var computed = _ember['default'].computed;
+  var run = _ember['default'].run;
+  var assert = _ember['default'].assert;
+  var typeOf = _ember['default'].typeOf;
+
+  var GMapMarkerComponent = _ember['default'].Component.extend({
+    layout: _emberGMapTemplatesComponentsGMapMarker['default'],
+    classNames: ['g-map-marker'],
+
+    map: computed.alias('mapContext.map'),
+
+    init: function init() {
+      this._super(arguments);
+      this.infowindow = null;
+      if (isEmpty(this.get('group'))) {
+        this.set('group', null);
+      }
+
+      var mapContext = this.get('mapContext');
+      assert('Must be inside {{#g-map}} component with context set', mapContext instanceof _emberGMapComponentsGMap['default']);
+
+      mapContext.registerMarker(this);
+    },
+
+    didInsertElement: function didInsertElement() {
+      this._super();
+      if (isEmpty(this.get('marker')) && typeof FastBoot === 'undefined') {
+        var marker = new google.maps.Marker();
+        this.set('marker', marker);
+      }
+      this.setPosition();
+      this.setIcon();
+      this.setLabel();
+      this.setTitle();
+      this.setMap();
+      this.setOnClick();
+    },
+
+    willDestroyElement: function willDestroyElement() {
+      this.unsetMarkerFromMap();
+      this.get('mapContext').unregisterMarker(this);
+    },
+
+    registerInfowindow: function registerInfowindow(infowindow, openEvent, closeEvent) {
+      this.set('infowindow', infowindow);
+      this.attachOpenCloseEvents(infowindow, openEvent, closeEvent);
+    },
+
+    unregisterInfowindow: function unregisterInfowindow() {
+      this.set('infowindow', null);
+    },
+
+    attachOpenCloseEvents: function attachOpenCloseEvents(infowindow, openEvent, closeEvent) {
+      var marker = this.get('marker');
+      if (openEvent === closeEvent) {
+        this.attachTogglingInfowindowEvent(marker, infowindow, openEvent);
+      } else {
+        this.attachOpenInfowindowEvent(marker, infowindow, openEvent);
+        this.attachCloseInfowindowEvent(marker, infowindow, closeEvent);
+      }
+    },
+
+    attachOpenInfowindowEvent: function attachOpenInfowindowEvent(marker, infowindow, event) {
+      if (isPresent(event)) {
+        marker.addListener(event, function () {
+          return infowindow.open();
+        });
+      }
+    },
+
+    attachCloseInfowindowEvent: function attachCloseInfowindowEvent(marker, infowindow, event) {
+      if (isPresent(event)) {
+        marker.addListener(event, function () {
+          return infowindow.close();
+        });
+      }
+    },
+
+    attachTogglingInfowindowEvent: function attachTogglingInfowindowEvent(marker, infowindow, event) {
+      if (isPresent(event)) {
+        marker.addListener(event, function () {
+          if (infowindow.get('isOpen')) {
+            infowindow.close();
+          } else {
+            infowindow.open();
+          }
+        });
+      }
+    },
+
+    unsetMarkerFromMap: function unsetMarkerFromMap() {
+      var marker = this.get('marker');
+      if (isPresent(marker)) {
+        marker.setMap(null);
+      }
+    },
+
+    mapWasSet: observer('map', function () {
+      run.once(this, 'setMap');
+    }),
+
+    setMap: function setMap() {
+      var map = this.get('map');
+      var marker = this.get('marker');
+
+      if (isPresent(marker) && isPresent(map)) {
+        marker.setMap(map);
+      }
+    },
+
+    coordsChanged: observer('lat', 'lng', function () {
+      run.once(this, 'setPosition');
+    }),
+
+    setPosition: function setPosition() {
+      var marker = this.get('marker');
+      var lat = this.get('lat');
+      var lng = this.get('lng');
+
+      if (isPresent(marker) && isPresent(lat) && isPresent(lng) && typeof FastBoot === 'undefined') {
+        var position = new google.maps.LatLng(lat, lng);
+        marker.setPosition(position);
+      }
+    },
+
+    iconChanged: observer('icon', function () {
+      run.once(this, 'setIcon');
+    }),
+
+    setIcon: function setIcon() {
+      var marker = this.get('marker');
+      var icon = this.get('icon');
+
+      if (isPresent(marker) && isPresent(icon)) {
+        marker.setIcon(icon);
+      }
+    },
+
+    setOnClick: function setOnClick() {
+      var _this = this;
+
+      var marker = this.get('marker');
+      if (isPresent(marker)) {
+        marker.addListener('click', function () {
+          return _this.sendOnClick();
+        });
+      }
+    },
+
+    labelChanged: observer('label', function () {
+      run.once(this, 'setLabel');
+    }),
+
+    setLabel: function setLabel() {
+      var marker = this.get('marker');
+      var label = this.get('label');
+
+      if (isPresent(marker) && isPresent(label)) {
+        marker.setLabel(label);
+      }
+    },
+
+    titleChanged: observer('title', function () {
+      run.once(this, 'setTitle');
+    }),
+
+    setTitle: function setTitle() {
+      var marker = this.get('marker');
+      var title = this.get('title');
+
+      if (isPresent(marker) && isPresent(title)) {
+        marker.setTitle(title);
+      }
+    },
+
+    sendOnClick: function sendOnClick() {
+      var onClick = this.attrs.onClick;
+
+      var mapContext = this.get('mapContext');
+      var group = this.get('group');
+
+      if (typeOf(onClick) === 'function') {
+        onClick();
+      } else {
+        this.sendAction('onClick');
+      }
+
+      if (isPresent(group)) {
+        mapContext.groupMarkerClicked(this, group);
+      }
+    },
+
+    closeInfowindow: function closeInfowindow() {
+      var infowindow = this.get('infowindow');
+      if (isPresent(infowindow)) {
+        infowindow.close();
+      }
+    }
+  });
+
+  GMapMarkerComponent.reopenClass({
+    positionalParams: ['mapContext']
+  });
+
+  exports['default'] = GMapMarkerComponent;
+});
+define('ember-g-map/components/g-map-polyline-coordinate', ['exports', 'ember', 'ember-g-map/templates/components/g-map-polyline-coordinate', 'ember-g-map/components/g-map-polyline'], function (exports, _ember, _emberGMapTemplatesComponentsGMapPolylineCoordinate, _emberGMapComponentsGMapPolyline) {
+  'use strict';
+
+  var isEmpty = _ember['default'].isEmpty;
+  var isPresent = _ember['default'].isPresent;
+  var observer = _ember['default'].observer;
+  var computed = _ember['default'].computed;
+  var run = _ember['default'].run;
+  var assert = _ember['default'].assert;
+
+  var GMapPolylineCoordinateComponent = _ember['default'].Component.extend({
+    layout: _emberGMapTemplatesComponentsGMapPolylineCoordinate['default'],
+    classNames: ['g-map-polyline-coordinate'],
+
+    polyline: computed.alias('polylineContext.polyline'),
+
+    init: function init() {
+      this._super(arguments);
+
+      var polylineContext = this.get('polylineContext');
+      assert('Must be inside {{#g-map-polyline}} component with context set', polylineContext instanceof _emberGMapComponentsGMapPolyline['default']);
+
+      polylineContext.registerCoordinate(this);
+    },
+
+    didInsertElement: function didInsertElement() {
+      this._super();
+      if (isEmpty(this.get('coordinate'))) {
+        var coordinate = new google.maps.LatLng();
+        this.set('coordinate', coordinate);
+      }
+      this.setPosition();
+    },
+
+    willDestroyElement: function willDestroyElement() {
+      this.get('polylineContext').unregisterCoordinate(this);
+    },
+
+    coordsChanged: observer('lat', 'lng', function () {
+      run.once(this, 'setPosition');
+    }),
+
+    setPosition: function setPosition() {
+      var polylineContext = this.get('polylineContext');
+      var lat = this.get('lat');
+      var lng = this.get('lng');
+
+      if (isPresent(polylineContext) && isPresent(lat) && isPresent(lng)) {
+        var coordinate = new google.maps.LatLng(lat, lng);
+        this.set('coordinate', coordinate);
+        polylineContext.setPath();
+      }
+    }
+  });
+
+  GMapPolylineCoordinateComponent.reopenClass({
+    positionalParams: ['polylineContext']
+  });
+
+  exports['default'] = GMapPolylineCoordinateComponent;
+});
+define('ember-g-map/components/g-map-polyline', ['exports', 'ember', 'ember-g-map/templates/components/g-map-polyline', 'ember-g-map/components/g-map', 'ember-g-map/utils/compact'], function (exports, _ember, _emberGMapTemplatesComponentsGMapPolyline, _emberGMapComponentsGMap, _emberGMapUtilsCompact) {
+  'use strict';
+
+  function _toConsumableArray(arr) {
+    if (Array.isArray(arr)) {
+      for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];return arr2;
+    } else {
+      return Array.from(arr);
+    }
+  }
+
+  var isEmpty = _ember['default'].isEmpty;
+  var isPresent = _ember['default'].isPresent;
+  var observer = _ember['default'].observer;
+  var computed = _ember['default'].computed;
+  var run = _ember['default'].run;
+  var assert = _ember['default'].assert;
+  var typeOf = _ember['default'].typeOf;
+
+  var allowedPolylineOptions = _ember['default'].A(['strokeColor', 'strokeWeight', 'strokeOpacity', 'zIndex']);
+
+  var GMapPolylineComponent = _ember['default'].Component.extend({
+    layout: _emberGMapTemplatesComponentsGMapPolyline['default'],
+    classNames: ['g-map-polyline'],
+
+    map: computed.alias('mapContext.map'),
+
+    init: function init() {
+      this._super(arguments);
+      this.infowindow = null;
+      this.set('coordinates', _ember['default'].A());
+      if (isEmpty(this.get('group'))) {
+        this.set('group', null);
+      }
+
+      var mapContext = this.get('mapContext');
+      assert('Must be inside {{#g-map}} component with context set', mapContext instanceof _emberGMapComponentsGMap['default']);
+
+      mapContext.registerPolyline(this);
+    },
+
+    didInsertElement: function didInsertElement() {
+      this._super();
+      if (isEmpty(this.get('polyline'))) {
+        var options = (0, _emberGMapUtilsCompact['default'])(this.getProperties(allowedPolylineOptions));
+        var polyline = new google.maps.Polyline(options);
+        this.set('polyline', polyline);
+      }
+      this.setMap();
+      this.setPath();
+      this.updatePolylineOptions();
+      this.setOnClick();
+    },
+
+    willDestroyElement: function willDestroyElement() {
+      this.unsetPolylineFromMap();
+      this.get('mapContext').unregisterPolyline(this);
+    },
+
+    registerCoordinate: function registerCoordinate(coordinate) {
+      this.get('coordinates').addObject(coordinate);
+    },
+
+    unregisterCoordinate: function unregisterCoordinate(coordinate) {
+      this.get('coordinates').removeObject(coordinate);
+      this.setPath();
+    },
+
+    unsetPolylineFromMap: function unsetPolylineFromMap() {
+      var polyline = this.get('polyline');
+      if (isPresent(polyline)) {
+        polyline.setMap(null);
+      }
+    },
+
+    mapWasSet: observer('map', function () {
+      run.once(this, 'setMap');
+    }),
+
+    setMap: function setMap() {
+      var map = this.get('map');
+      var polyline = this.get('polyline');
+
+      if (isPresent(polyline) && isPresent(map)) {
+        polyline.setMap(map);
+      }
+    },
+
+    setPath: function setPath() {
+      var polyline = this.get('polyline');
+      var coordinates = this.get('coordinates');
+
+      if (isPresent(polyline) && isPresent(coordinates)) {
+        var coordArray = _ember['default'].A(this.get('coordinates').mapBy('coordinate')).compact();
+        polyline.setPath(coordArray);
+      }
+    },
+
+    polylineOptionsChanged: observer.apply(undefined, _toConsumableArray(allowedPolylineOptions).concat([function () {
+      run.once(this, 'updatePolylineOptions');
+    }])),
+
+    updatePolylineOptions: function updatePolylineOptions() {
+      var polyline = this.get('polyline');
+      var options = (0, _emberGMapUtilsCompact['default'])(this.getProperties(allowedPolylineOptions));
+
+      if (isPresent(polyline) && isPresent(Object.keys(options))) {
+        polyline.setOptions(options);
+      }
+    },
+
+    setOnClick: function setOnClick() {
+      var _this = this;
+
+      var polyline = this.get('polyline');
+      if (isPresent(polyline)) {
+        polyline.addListener('click', function () {
+          return _this.sendOnClick();
+        });
+      }
+    },
+
+    sendOnClick: function sendOnClick() {
+      var onClick = this.attrs.onClick;
+
+      if (typeOf(onClick) === 'function') {
+        onClick();
+      } else {
+        this.sendAction('onClick');
+      }
+    }
+  });
+
+  GMapPolylineComponent.reopenClass({
+    positionalParams: ['mapContext']
+  });
+
+  exports['default'] = GMapPolylineComponent;
+});
+define('ember-g-map/components/g-map-route-address-waypoint', ['exports', 'ember', 'ember-g-map/templates/components/g-map-route-address-waypoint'], function (exports, _ember, _emberGMapTemplatesComponentsGMapRouteAddressWaypoint) {
+  'use strict';
+
+  var isEmpty = _ember['default'].isEmpty;
+  var isPresent = _ember['default'].isPresent;
+  var observer = _ember['default'].observer;
+  var computed = _ember['default'].computed;
+  var run = _ember['default'].run;
+
+  var GMapRouteAddressWaypointComponent = _ember['default'].Component.extend({
+    layout: _emberGMapTemplatesComponentsGMapRouteAddressWaypoint['default'],
+    classNames: ['g-map-route-address-waypoint'],
+
+    map: computed.alias('routeContext.map'),
+
+    didInsertElement: function didInsertElement() {
+      this._super();
+      this.initPlacesService();
+    },
+
+    initPlacesService: _ember['default'].observer('map', function () {
+      var map = this.get('map');
+      var service = this.get('placesService');
+
+      if (isPresent(map) && isEmpty(service) && typeof FastBoot === 'undefined') {
+        service = new google.maps.places.PlacesService(map);
+        this.set('placesService', service);
+
+        this.searchLocation();
+      }
+    }),
+
+    onAddressChanged: observer('address', function () {
+      run.once(this, 'searchLocation');
+    }),
+
+    searchLocation: function searchLocation() {
+      var _this = this;
+
+      var service = this.get('placesService');
+      var address = this.get('address');
+
+      if (isPresent(service) && isPresent(address)) {
+        var request = { query: address };
+
+        service.textSearch(request, function (results, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            _this.updateLocation(results);
+          }
+        });
+      }
+    },
+
+    updateLocation: function updateLocation(results) {
+      var lat = results[0].geometry.location.lat();
+      var lng = results[0].geometry.location.lng();
+
+      this.set('lat', lat);
+      this.set('lng', lng);
+    }
+  });
+
+  GMapRouteAddressWaypointComponent.reopenClass({
+    positionalParams: ['routeContext']
+  });
+
+  exports['default'] = GMapRouteAddressWaypointComponent;
+});
+define('ember-g-map/components/g-map-route-waypoint', ['exports', 'ember', 'ember-g-map/templates/components/g-map-route-waypoint', 'ember-g-map/components/g-map-route'], function (exports, _ember, _emberGMapTemplatesComponentsGMapRouteWaypoint, _emberGMapComponentsGMapRoute) {
+  'use strict';
+
+  var isEmpty = _ember['default'].isEmpty;
+  var isPresent = _ember['default'].isPresent;
+  var observer = _ember['default'].observer;
+  var computed = _ember['default'].computed;
+  var run = _ember['default'].run;
+  var assert = _ember['default'].assert;
+
+  var GMapRouteWaypointComponent = _ember['default'].Component.extend({
+    layout: _emberGMapTemplatesComponentsGMapRouteWaypoint['default'],
+    classNames: ['g-map-route-waypoint'],
+
+    map: computed.alias('routeContext.map'),
+
+    init: function init() {
+      this._super(arguments);
+      if (isEmpty(this.stopover)) {
+        this.stopover = true;
+      }
+
+      var routeContext = this.get('routeContext');
+      assert('Must be inside {{#g-map-route}} component with routeContext set', routeContext instanceof _emberGMapComponentsGMapRoute['default']);
+    },
+
+    didInsertElement: function didInsertElement() {
+      this._super();
+      this.updateWaypoint();
+    },
+
+    willDestroyElement: function willDestroyElement() {
+      this.get('routeContext').unregisterWaypoint(this);
+    },
+
+    coordsChanged: observer('lat', 'lng', function () {
+      run.once(this, 'updateWaypoint');
+    }),
+
+    updateWaypoint: function updateWaypoint() {
+      var _getProperties = this.getProperties(['lat', 'lng']);
+
+      var lat = _getProperties.lat;
+      var lng = _getProperties.lng;
+
+      if (isPresent(lat) && isPresent(lng) && typeof FastBoot === 'undefined') {
+        var _location = new google.maps.LatLng(lat, lng);
+        this.set('waypoint', {
+          location: _location,
+          stopover: this.get('stopover')
+        });
+      }
+    },
+
+    waypointWasSet: observer('waypoint', function () {
+      run.once(this, 'updateRoute');
+    }),
+
+    updateRoute: function updateRoute() {
+      var routeContext = this.get('routeContext');
+      var waypoint = this.get('waypoint');
+
+      if (isPresent(waypoint) && isPresent(routeContext)) {
+        routeContext.registerWaypoint(this);
+      }
+    }
+  });
+
+  GMapRouteWaypointComponent.reopenClass({
+    positionalParams: ['routeContext']
+  });
+
+  exports['default'] = GMapRouteWaypointComponent;
+});
+define('ember-g-map/components/g-map-route', ['exports', 'ember', 'ember-g-map/templates/components/g-map-route', 'ember-g-map/components/g-map', 'ember-g-map/utils/compact'], function (exports, _ember, _emberGMapTemplatesComponentsGMapRoute, _emberGMapComponentsGMap, _emberGMapUtilsCompact) {
+  'use strict';
+
+  function _toConsumableArray(arr) {
+    if (Array.isArray(arr)) {
+      for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];return arr2;
+    } else {
+      return Array.from(arr);
+    }
+  }
+
+  var isEmpty = _ember['default'].isEmpty;
+  var isPresent = _ember['default'].isPresent;
+  var observer = _ember['default'].observer;
+  var computed = _ember['default'].computed;
+  var run = _ember['default'].run;
+  var assert = _ember['default'].assert;
+
+  var allowedPolylineOptions = _ember['default'].A(['strokeColor', 'strokeWeight', 'strokeOpacity', 'zIndex']);
+
+  var TRAVEL_MODES = {
+    walking: _ember['default'].get(window, 'google.maps.TravelMode.WALKING'),
+    bicycling: _ember['default'].get(window, 'google.maps.TravelMode.BICYCLING'),
+    transit: _ember['default'].get(window, 'google.maps.TravelMode.TRANSIT'),
+    driving: _ember['default'].get(window, 'google.maps.TravelMode.DRIVING')
+  };
+
+  var GMapRouteComponent = _ember['default'].Component.extend({
+    layout: _emberGMapTemplatesComponentsGMapRoute['default'],
+    classNames: ['g-map-marker'],
+    positionalParams: ['mapContext'],
+
+    map: computed.alias('mapContext.map'),
+
+    init: function init() {
+      this._super(arguments);
+      this.set('waypoints', _ember['default'].A());
+      var mapContext = this.get('mapContext');
+      assert('Must be inside {{#g-map}} component with context set', mapContext instanceof _emberGMapComponentsGMap['default']);
+    },
+
+    didInsertElement: function didInsertElement() {
+      this._super();
+      this.initDirectionsService();
+    },
+
+    willDestroyElement: function willDestroyElement() {
+      var renderer = this.get('directionsRenderer');
+      if (isPresent(renderer)) {
+        renderer.setMap(null);
+      }
+    },
+
+    mapWasSet: observer('map', function () {
+      run.once(this, 'initDirectionsService');
+    }),
+
+    initDirectionsService: function initDirectionsService() {
+      var map = this.get('map');
+      var service = this.get('directionsService');
+      var renderer = this.get('directionsRenderer');
+
+      if (isPresent(map) && isEmpty(service) && isEmpty(renderer) && typeof FastBoot === 'undefined') {
+        var rendererOptions = {
+          map: map,
+          suppressMarkers: true,
+          preserveViewport: true
+        };
+        renderer = new google.maps.DirectionsRenderer(rendererOptions);
+        service = new google.maps.DirectionsService();
+
+        this.set('directionsRenderer', renderer);
+        this.set('directionsService', service);
+
+        this.updateRoute();
+        this.updatePolylineOptions();
+      }
+    },
+
+    onLocationsChanged: observer('originLat', 'originLng', 'destinationLat', 'destinationLng', 'travelMode', function () {
+      run.once(this, 'updateRoute');
+    }),
+
+    updateRoute: function updateRoute() {
+      var service = this.get('directionsService');
+      var renderer = this.get('directionsRenderer');
+      var originLat = this.get('originLat');
+      var originLng = this.get('originLng');
+      var destinationLat = this.get('destinationLat');
+      var destinationLng = this.get('destinationLng');
+      var waypoints = this.get('waypoints').mapBy('waypoint');
+
+      if (isPresent(service) && isPresent(renderer) && isPresent(originLat) && isPresent(originLng) && isPresent(destinationLat) && isPresent(destinationLng) && typeof FastBoot === 'undefined') {
+        var origin = new google.maps.LatLng(this.get('originLat'), this.get('originLng'));
+        var destination = new google.maps.LatLng(this.get('destinationLat'), this.get('destinationLng'));
+        var travelMode = this.retrieveTravelMode(this.get('travelMode'));
+        var request = {
+          origin: origin,
+          destination: destination,
+          travelMode: travelMode,
+          waypoints: waypoints
+        };
+
+        service.route(request, function (response, status) {
+          if (status === google.maps.DirectionsStatus.OK) {
+            renderer.setDirections(response);
+          }
+        });
+      }
+    },
+
+    polylineOptionsChanged: observer.apply(undefined, _toConsumableArray(allowedPolylineOptions).concat([function () {
+      run.once(this, 'updatePolylineOptions');
+    }])),
+
+    updatePolylineOptions: function updatePolylineOptions() {
+      var renderer = this.get('directionsRenderer');
+      var polylineOptions = (0, _emberGMapUtilsCompact['default'])(this.getProperties(allowedPolylineOptions));
+
+      if (isPresent(renderer) && isPresent(Object.keys(polylineOptions))) {
+        renderer.setOptions({ polylineOptions: polylineOptions });
+
+        var directions = renderer.getDirections();
+        if (isPresent(directions)) {
+          renderer.setDirections(directions);
+        }
+      }
+    },
+
+    retrieveTravelMode: function retrieveTravelMode(mode) {
+      return TRAVEL_MODES.hasOwnProperty(mode) ? TRAVEL_MODES[mode] : TRAVEL_MODES.driving;
+    },
+
+    registerWaypoint: function registerWaypoint(waypoint) {
+      this.get('waypoints').addObject(waypoint);
+    },
+
+    unregisterWaypoint: function unregisterWaypoint(waypoint) {
+      this.get('waypoints').removeObject(waypoint);
+    },
+
+    waypointsChanged: observer('waypoints.@each.location', function () {
+      run.once(this, 'updateRoute');
+    })
+  });
+
+  GMapRouteComponent.reopenClass({
+    positionalParams: ['mapContext']
+  });
+
+  exports['default'] = GMapRouteComponent;
+});
+define('ember-g-map/components/g-map', ['exports', 'ember', 'ember-g-map/templates/components/g-map'], function (exports, _ember, _emberGMapTemplatesComponentsGMap) {
+  'use strict';
+
+  var isEmpty = _ember['default'].isEmpty;
+  var isPresent = _ember['default'].isPresent;
+  var computed = _ember['default'].computed;
+  var observer = _ember['default'].observer;
+  var run = _ember['default'].run;
+
+  exports['default'] = _ember['default'].Component.extend({
+    layout: _emberGMapTemplatesComponentsGMap['default'],
+    classNames: ['g-map'],
+    bannedOptions: _ember['default'].A(['center', 'zoom']),
+
+    init: function init() {
+      this._super();
+      this.set('markers', _ember['default'].A());
+      this.set('polylines', _ember['default'].A());
+      if (isEmpty(this.get('options'))) {
+        this.set('options', {});
+      }
+    },
+
+    permittedOptions: computed('options', function () {
+      var _getProperties = this.getProperties(['options', 'bannedOptions']);
+
+      var options = _getProperties.options;
+      var bannedOptions = _getProperties.bannedOptions;
+
+      var permittedOptions = {};
+      for (var option in options) {
+        if (options.hasOwnProperty(option) && !bannedOptions.contains(option)) {
+          permittedOptions[option] = options[option];
+        }
+      }
+      return permittedOptions;
+    }),
+
+    didInsertElement: function didInsertElement() {
+      this._super();
+      if (isEmpty(this.get('map')) && typeof FastBoot === 'undefined') {
+        var canvas = this.$().find('.g-map-canvas').get(0);
+        var options = this.get('permittedOptions');
+        this.set('map', new google.maps.Map(canvas, options));
+      }
+      this.setZoom();
+      this.setCenter();
+      if (this.get('shouldFit')) {
+        this.fitToMarkers();
+      }
+    },
+
+    permittedOptionsChanged: observer('permittedOptions', function () {
+      run.once(this, 'setOptions');
+    }),
+
+    setOptions: function setOptions() {
+      var map = this.get('map');
+      var options = this.get('permittedOptions');
+      if (isPresent(map)) {
+        map.setOptions(options);
+      }
+    },
+
+    zoomChanged: observer('zoom', function () {
+      run.once(this, 'setZoom');
+    }),
+
+    setZoom: function setZoom() {
+      var map = this.get('map');
+      var zoom = this.get('zoom');
+      if (isPresent(map)) {
+        map.setZoom(zoom);
+      }
+    },
+
+    coordsChanged: observer('lat', 'lng', function () {
+      run.once(this, 'setCenter');
+    }),
+
+    setCenter: function setCenter() {
+      var map = this.get('map');
+      var lat = this.get('lat');
+      var lng = this.get('lng');
+
+      if (isPresent(map) && isPresent(lat) && isPresent(lng) && typeof FastBoot === 'undefined') {
+        var center = new google.maps.LatLng(lat, lng);
+        map.setCenter(center);
+      }
+    },
+
+    registerMarker: function registerMarker(marker) {
+      this.get('markers').addObject(marker);
+    },
+
+    unregisterMarker: function unregisterMarker(marker) {
+      this.get('markers').removeObject(marker);
+    },
+
+    registerPolyline: function registerPolyline(polyline) {
+      this.get('polylines').addObject(polyline);
+    },
+
+    unregisterPolyline: function unregisterPolyline(polyline) {
+      this.get('polylines').removeObject(polyline);
+    },
+
+    shouldFit: computed('markersFitMode', function () {
+      return _ember['default'].A(['init', 'live']).contains(this.get('markersFitMode'));
+    }),
+
+    markersChanged: observer('markers.@each.lat', 'markers.@each.lng', function () {
+      if (this.get('markersFitMode') === 'live') {
+        run.once(this, 'fitToMarkers');
+      }
+    }),
+
+    fitToMarkers: function fitToMarkers() {
+      var _this = this;
+
+      var markers = this.get('markers').filter(function (marker) {
+        return isPresent(marker.get('lat')) && isPresent(marker.get('lng'));
+      });
+
+      if (markers.length > 0 && typeof FastBoot === 'undefined') {
+        (function () {
+          var map = _this.get('map');
+          var bounds = new google.maps.LatLngBounds();
+          var points = markers.map(function (marker) {
+            return new google.maps.LatLng(marker.get('lat'), marker.get('lng'));
+          });
+
+          points.forEach(function (point) {
+            return bounds.extend(point);
+          });
+          map.fitBounds(bounds);
+        })();
+      }
+    },
+
+    groupMarkerClicked: function groupMarkerClicked(marker, group) {
+      var markers = this.get('markers').without(marker).filterBy('group', group);
+      markers.forEach(function (marker) {
+        return marker.closeInfowindow();
+      });
+    }
+  });
+});
+define("ember-g-map/templates/components/g-map-address-marker", ["exports"], function (exports) {
+  "use strict";
+
+  exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      var child0 = (function () {
+        return {
+          meta: {
+            "fragmentReason": false,
+            "revision": "Ember@2.5.1",
+            "loc": {
+              "source": null,
+              "start": {
+                "line": 2,
+                "column": 2
+              },
+              "end": {
+                "line": 4,
+                "column": 2
+              }
+            },
+            "moduleName": "modules/ember-g-map/templates/components/g-map-address-marker.hbs"
+          },
+          isEmpty: false,
+          arity: 1,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode("    ");
+            dom.appendChild(el0, el1);
+            var el1 = dom.createComment("");
+            dom.appendChild(el0, el1);
+            var el1 = dom.createTextNode("\n");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+            var morphs = new Array(1);
+            morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+            return morphs;
+          },
+          statements: [["inline", "yield", [["get", "markerContext", ["loc", [null, [3, 12], [3, 25]]]]], [], ["loc", [null, [3, 4], [3, 27]]]]],
+          locals: ["markerContext"],
+          templates: []
+        };
+      })();
+      return {
+        meta: {
+          "fragmentReason": {
+            "name": "missing-wrapper",
+            "problems": ["wrong-type"]
+          },
+          "revision": "Ember@2.5.1",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 5,
+              "column": 0
+            }
+          },
+          "moduleName": "modules/ember-g-map/templates/components/g-map-address-marker.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+          dom.insertBoundary(fragment, 0);
+          dom.insertBoundary(fragment, null);
+          return morphs;
+        },
+        statements: [["block", "g-map-marker", [["get", "mapContext", ["loc", [null, [2, 18], [2, 28]]]]], ["lat", ["subexpr", "@mut", [["get", "lat", ["loc", [null, [2, 33], [2, 36]]]]], [], []], "lng", ["subexpr", "@mut", [["get", "lng", ["loc", [null, [2, 41], [2, 44]]]]], [], []], "icon", ["subexpr", "@mut", [["get", "icon", ["loc", [null, [2, 50], [2, 54]]]]], [], []], "label", ["subexpr", "@mut", [["get", "label", ["loc", [null, [2, 61], [2, 66]]]]], [], []], "group", ["subexpr", "@mut", [["get", "group", ["loc", [null, [2, 73], [2, 78]]]]], [], []], "title", ["subexpr", "@mut", [["get", "title", ["loc", [null, [2, 85], [2, 90]]]]], [], []]], 0, null, ["loc", [null, [2, 2], [4, 19]]]]],
+        locals: [],
+        templates: [child0]
+      };
+    })();
+    var child1 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.5.1",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 5,
+              "column": 0
+            },
+            "end": {
+              "line": 7,
+              "column": 0
+            }
+          },
+          "moduleName": "modules/ember-g-map/templates/components/g-map-address-marker.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("  ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          return morphs;
+        },
+        statements: [["inline", "g-map-marker", [["get", "mapContext", ["loc", [null, [6, 17], [6, 27]]]]], ["lat", ["subexpr", "@mut", [["get", "lat", ["loc", [null, [6, 32], [6, 35]]]]], [], []], "lng", ["subexpr", "@mut", [["get", "lng", ["loc", [null, [6, 40], [6, 43]]]]], [], []], "icon", ["subexpr", "@mut", [["get", "icon", ["loc", [null, [6, 49], [6, 53]]]]], [], []], "label", ["subexpr", "@mut", [["get", "label", ["loc", [null, [6, 60], [6, 65]]]]], [], []], "title", ["subexpr", "@mut", [["get", "title", ["loc", [null, [6, 72], [6, 77]]]]], [], []], "group", ["subexpr", "@mut", [["get", "group", ["loc", [null, [6, 84], [6, 89]]]]], [], []]], ["loc", [null, [6, 2], [6, 91]]]]],
+        locals: [],
+        templates: []
+      };
+    })();
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "missing-wrapper",
+          "problems": ["wrong-type"]
+        },
+        "revision": "Ember@2.5.1",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 8,
+            "column": 0
+          }
+        },
+        "moduleName": "modules/ember-g-map/templates/components/g-map-address-marker.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        dom.insertBoundary(fragment, 0);
+        dom.insertBoundary(fragment, null);
+        return morphs;
+      },
+      statements: [["block", "if", [["get", "hasBlock", ["loc", [null, [1, 6], [1, 14]]]]], [], 0, 1, ["loc", [null, [1, 0], [7, 7]]]]],
+      locals: [],
+      templates: [child0, child1]
+    };
+  })());
+});
+define("ember-g-map/templates/components/g-map-address-route", ["exports"], function (exports) {
+  "use strict";
+
+  exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      var child0 = (function () {
+        return {
+          meta: {
+            "fragmentReason": false,
+            "revision": "Ember@2.5.1",
+            "loc": {
+              "source": null,
+              "start": {
+                "line": 2,
+                "column": 2
+              },
+              "end": {
+                "line": 8,
+                "column": 2
+              }
+            },
+            "moduleName": "modules/ember-g-map/templates/components/g-map-address-route.hbs"
+          },
+          isEmpty: false,
+          arity: 1,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode("    ");
+            dom.appendChild(el0, el1);
+            var el1 = dom.createComment("");
+            dom.appendChild(el0, el1);
+            var el1 = dom.createTextNode("\n");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+            var morphs = new Array(1);
+            morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+            return morphs;
+          },
+          statements: [["inline", "yield", [["get", "routeContext", ["loc", [null, [7, 12], [7, 24]]]]], [], ["loc", [null, [7, 4], [7, 26]]]]],
+          locals: ["routeContext"],
+          templates: []
+        };
+      })();
+      return {
+        meta: {
+          "fragmentReason": {
+            "name": "missing-wrapper",
+            "problems": ["wrong-type"]
+          },
+          "revision": "Ember@2.5.1",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 9,
+              "column": 0
+            }
+          },
+          "moduleName": "modules/ember-g-map/templates/components/g-map-address-route.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+          dom.insertBoundary(fragment, 0);
+          dom.insertBoundary(fragment, null);
+          return morphs;
+        },
+        statements: [["block", "g-map-route", [["get", "mapContext", ["loc", [null, [2, 17], [2, 27]]]]], ["zIndex", ["subexpr", "@mut", [["get", "zIndex", ["loc", [null, [2, 35], [2, 41]]]]], [], []], "strokeColor", ["subexpr", "@mut", [["get", "strokeColor", ["loc", [null, [3, 28], [3, 39]]]]], [], []], "strokeWeight", ["subexpr", "@mut", [["get", "strokeWeight", ["loc", [null, [3, 53], [3, 65]]]]], [], []], "strokeOpacity", ["subexpr", "@mut", [["get", "strokeOpacity", ["loc", [null, [3, 80], [3, 93]]]]], [], []], "originLat", ["subexpr", "@mut", [["get", "originLat", ["loc", [null, [4, 26], [4, 35]]]]], [], []], "originLng", ["subexpr", "@mut", [["get", "originLng", ["loc", [null, [4, 46], [4, 55]]]]], [], []], "destinationLat", ["subexpr", "@mut", [["get", "destinationLat", ["loc", [null, [5, 31], [5, 45]]]]], [], []], "destinationLng", ["subexpr", "@mut", [["get", "destinationLng", ["loc", [null, [5, 61], [5, 75]]]]], [], []]], 0, null, ["loc", [null, [2, 2], [8, 18]]]]],
+        locals: [],
+        templates: [child0]
+      };
+    })();
+    var child1 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.5.1",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 9,
+              "column": 0
+            },
+            "end": {
+              "line": 14,
+              "column": 0
+            }
+          },
+          "moduleName": "modules/ember-g-map/templates/components/g-map-address-route.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("  ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          return morphs;
+        },
+        statements: [["inline", "g-map-route", [["get", "mapContext", ["loc", [null, [10, 16], [10, 26]]]]], ["zIndex", ["subexpr", "@mut", [["get", "zIndex", ["loc", [null, [10, 34], [10, 40]]]]], [], []], "strokeColor", ["subexpr", "@mut", [["get", "strokeColor", ["loc", [null, [11, 28], [11, 39]]]]], [], []], "strokeWeight", ["subexpr", "@mut", [["get", "strokeWeight", ["loc", [null, [11, 53], [11, 65]]]]], [], []], "strokeOpacity", ["subexpr", "@mut", [["get", "strokeOpacity", ["loc", [null, [11, 80], [11, 93]]]]], [], []], "originLat", ["subexpr", "@mut", [["get", "originLat", ["loc", [null, [12, 26], [12, 35]]]]], [], []], "originLng", ["subexpr", "@mut", [["get", "originLng", ["loc", [null, [12, 46], [12, 55]]]]], [], []], "destinationLat", ["subexpr", "@mut", [["get", "destinationLat", ["loc", [null, [13, 31], [13, 45]]]]], [], []], "destinationLng", ["subexpr", "@mut", [["get", "destinationLng", ["loc", [null, [13, 61], [13, 75]]]]], [], []]], ["loc", [null, [10, 2], [13, 77]]]]],
+        locals: [],
+        templates: []
+      };
+    })();
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "missing-wrapper",
+          "problems": ["wrong-type"]
+        },
+        "revision": "Ember@2.5.1",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 15,
+            "column": 0
+          }
+        },
+        "moduleName": "modules/ember-g-map/templates/components/g-map-address-route.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        dom.insertBoundary(fragment, 0);
+        dom.insertBoundary(fragment, null);
+        return morphs;
+      },
+      statements: [["block", "if", [["get", "hasBlock", ["loc", [null, [1, 6], [1, 14]]]]], [], 0, 1, ["loc", [null, [1, 0], [14, 7]]]]],
+      locals: [],
+      templates: [child0, child1]
+    };
+  })());
+});
+define("ember-g-map/templates/components/g-map-infowindow", ["exports"], function (exports) {
+  "use strict";
+
+  exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      return {
+        meta: {
+          "fragmentReason": {
+            "name": "missing-wrapper",
+            "problems": ["wrong-type"]
+          },
+          "revision": "Ember@2.5.1",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 3,
+              "column": 0
+            }
+          },
+          "moduleName": "modules/ember-g-map/templates/components/g-map-infowindow.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("  ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          return morphs;
+        },
+        statements: [["content", "yield", ["loc", [null, [2, 2], [2, 11]]]]],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child1 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.5.1",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 3,
+              "column": 0
+            },
+            "end": {
+              "line": 6,
+              "column": 0
+            }
+          },
+          "moduleName": "modules/ember-g-map/templates/components/g-map-infowindow.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("  ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("h1");
+          var el2 = dom.createComment("");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n  ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("p");
+          var el2 = dom.createComment("");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(2);
+          morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1]), 0, 0);
+          morphs[1] = dom.createMorphAt(dom.childAt(fragment, [3]), 0, 0);
+          return morphs;
+        },
+        statements: [["content", "title", ["loc", [null, [4, 6], [4, 15]]]], ["content", "message", ["loc", [null, [5, 5], [5, 16]]]]],
+        locals: [],
+        templates: []
+      };
+    })();
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "missing-wrapper",
+          "problems": ["wrong-type"]
+        },
+        "revision": "Ember@2.5.1",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 7,
+            "column": 0
+          }
+        },
+        "moduleName": "modules/ember-g-map/templates/components/g-map-infowindow.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        dom.insertBoundary(fragment, 0);
+        dom.insertBoundary(fragment, null);
+        return morphs;
+      },
+      statements: [["block", "if", [["get", "hasBlock", ["loc", [null, [1, 6], [1, 14]]]]], [], 0, 1, ["loc", [null, [1, 0], [6, 7]]]]],
+      locals: [],
+      templates: [child0, child1]
+    };
+  })());
+});
+define("ember-g-map/templates/components/g-map-marker", ["exports"], function (exports) {
+  "use strict";
+
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "missing-wrapper",
+          "problems": ["wrong-type"]
+        },
+        "revision": "Ember@2.5.1",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 0
+          }
+        },
+        "moduleName": "modules/ember-g-map/templates/components/g-map-marker.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        dom.insertBoundary(fragment, 0);
+        return morphs;
+      },
+      statements: [["inline", "yield", [["get", "this", ["loc", [null, [1, 8], [1, 12]]]]], [], ["loc", [null, [1, 0], [1, 14]]]]],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("ember-g-map/templates/components/g-map-polyline-coordinate", ["exports"], function (exports) {
+  "use strict";
+
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "missing-wrapper",
+          "problems": ["wrong-type"]
+        },
+        "revision": "Ember@2.5.1",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 0
+          }
+        },
+        "moduleName": "modules/ember-g-map/templates/components/g-map-polyline-coordinate.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        dom.insertBoundary(fragment, 0);
+        return morphs;
+      },
+      statements: [["inline", "yield", [["get", "this", ["loc", [null, [1, 8], [1, 12]]]]], [], ["loc", [null, [1, 0], [1, 14]]]]],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("ember-g-map/templates/components/g-map-polyline", ["exports"], function (exports) {
+  "use strict";
+
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "missing-wrapper",
+          "problems": ["wrong-type"]
+        },
+        "revision": "Ember@2.5.1",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 0
+          }
+        },
+        "moduleName": "modules/ember-g-map/templates/components/g-map-polyline.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        dom.insertBoundary(fragment, 0);
+        return morphs;
+      },
+      statements: [["inline", "yield", [["get", "this", ["loc", [null, [1, 8], [1, 12]]]]], [], ["loc", [null, [1, 0], [1, 14]]]]],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("ember-g-map/templates/components/g-map-route-address-waypoint", ["exports"], function (exports) {
+  "use strict";
+
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "missing-wrapper",
+          "problems": ["wrong-type"]
+        },
+        "revision": "Ember@2.5.1",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 0
+          }
+        },
+        "moduleName": "modules/ember-g-map/templates/components/g-map-route-address-waypoint.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        dom.insertBoundary(fragment, 0);
+        return morphs;
+      },
+      statements: [["inline", "g-map-route-waypoint", [["get", "routeContext", ["loc", [null, [1, 23], [1, 35]]]]], ["lat", ["subexpr", "@mut", [["get", "lat", ["loc", [null, [1, 40], [1, 43]]]]], [], []], "lng", ["subexpr", "@mut", [["get", "lng", ["loc", [null, [1, 48], [1, 51]]]]], [], []]], ["loc", [null, [1, 0], [1, 53]]]]],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("ember-g-map/templates/components/g-map-route-waypoint", ["exports"], function (exports) {
+  "use strict";
+
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "missing-wrapper",
+          "problems": ["wrong-type"]
+        },
+        "revision": "Ember@2.5.1",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 0
+          }
+        },
+        "moduleName": "modules/ember-g-map/templates/components/g-map-route-waypoint.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        dom.insertBoundary(fragment, 0);
+        return morphs;
+      },
+      statements: [["content", "yield", ["loc", [null, [1, 0], [1, 9]]]]],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("ember-g-map/templates/components/g-map-route", ["exports"], function (exports) {
+  "use strict";
+
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "missing-wrapper",
+          "problems": ["wrong-type"]
+        },
+        "revision": "Ember@2.5.1",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 0
+          }
+        },
+        "moduleName": "modules/ember-g-map/templates/components/g-map-route.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        dom.insertBoundary(fragment, 0);
+        return morphs;
+      },
+      statements: [["inline", "yield", [["get", "this", ["loc", [null, [1, 8], [1, 12]]]]], [], ["loc", [null, [1, 0], [1, 14]]]]],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("ember-g-map/templates/components/g-map", ["exports"], function (exports) {
+  "use strict";
+
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "missing-wrapper",
+          "problems": ["multiple-nodes"]
+        },
+        "revision": "Ember@2.5.1",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 0
+          }
+        },
+        "moduleName": "modules/ember-g-map/templates/components/g-map.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "g-map-canvas");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "g-map-declarations");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [2]), 1, 1);
+        return morphs;
+      },
+      statements: [["inline", "yield", [["get", "this", ["loc", [null, [3, 10], [3, 14]]]]], [], ["loc", [null, [3, 2], [3, 16]]]]],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define('ember-g-map/utils/compact', ['exports', 'ember'], function (exports, _ember) {
+  'use strict';
+
+  exports['default'] = function (objectInstance) {
+    var compactedObject = {};
+
+    for (var key in objectInstance) {
+      var value = objectInstance[key];
+
+      if (_ember['default'].isPresent(value)) {
+        compactedObject[key] = value;
+      }
+    }
+
+    return compactedObject;
+  };
+});
 define('ember-getowner-polyfill/fake-owner', ['exports', 'ember'], function (exports, _ember) {
   'use strict';
 

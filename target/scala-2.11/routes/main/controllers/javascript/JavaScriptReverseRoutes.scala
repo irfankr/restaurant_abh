@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/home/irfank/Play_applications/restaurant_abh/conf/routes
-// @DATE:Sun May 22 01:51:48 CEST 2016
+// @DATE:Wed May 25 13:25:27 CEST 2016
 
 import play.api.routing.JavaScriptReverseRoute
 import play.api.mvc.{ QueryStringBindable, PathBindable, Call, JavascriptLiteral }
@@ -14,6 +14,46 @@ import _root_.play.libs.F
 // @LINE:6
 package controllers.javascript {
   import ReverseRouteContext.empty
+
+  // @LINE:24
+  class ReverseRestaurantController(_prefix: => String) {
+
+    def _defaultPrefix: String = {
+      if (_prefix.endsWith("/")) "" else "/"
+    }
+
+  
+    // @LINE:25
+    def getRestaurantDetails: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.RestaurantController.getRestaurantDetails",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "api/v1/getRestaurantDetails"})
+        }
+      """
+    )
+  
+    // @LINE:24
+    def getAllRestaurants: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.RestaurantController.getAllRestaurants",
+      """
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "api/v1/getAllRestaurants"})
+        }
+      """
+    )
+  
+    // @LINE:26
+    def getRestaurantsLocations: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.RestaurantController.getRestaurantsLocations",
+      """
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "api/v1/getRestaurantsLocations"})
+        }
+      """
+    )
+  
+  }
 
   // @LINE:6
   class ReverseAssets(_prefix: => String) {
@@ -83,7 +123,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:23
+    // @LINE:22
     def register: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.UserController.register",
       """
@@ -105,7 +145,7 @@ package controllers.javascript {
   
   }
 
-  // @LINE:25
+  // @LINE:28
   class ReverseHomeController(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -113,7 +153,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:25
+    // @LINE:28
     def index: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.HomeController.index",
       """

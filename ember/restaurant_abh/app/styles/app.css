@@ -10,9 +10,9 @@ div {
 }
 
 .box_shadow {
-  -webkit-box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.07);
-  -moz-box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.07);
-  box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.07);
+  -webkit-box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.15);
+  -moz-box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.15);
+  box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.15);
 }
 
 /* Sticky footer */
@@ -52,6 +52,25 @@ a:link, a:visited {
     list-style:none;
   }
     .navigation_black ul li {
+      float:left; padding-left:40px;
+     }
+
+.navigation_white {
+  height:85px; line-height:85px; margin-bottom:85px; z-index:50; position: relative;
+}
+  .navigation_white a:link, .navigation_white a:visited {
+    color:#FFF; font-size:16px;
+  }
+  .navigation_white a:hover {
+
+  }
+  .navigation_white .app_name {
+    font-size:20px !important;
+  }
+  .navigation_white ul {
+    list-style:none;
+  }
+    .navigation_white ul li {
       float:left; padding-left:40px;
      }
 
@@ -220,7 +239,7 @@ ul.restaurant_left_menu {
     font-family:'Source Sans Pro'; font-weight: 400; font-size:30px; color:#FFF; letter-spacing: 1px;
   }
   .restaurant_details .stats {
-    color:#FFFFF; font-size:16px;
+    color:#ADADAD; font-size:16px;
   }
   .restaurant_details .stats .votes {
     margin-left:10px; margin-right:5px;
@@ -234,5 +253,22 @@ ul.restaurant_left_menu {
     .restaurant_details .stats .restaurant_food {
 
     }
+.restaurant_data_container {
+  padding:30px; margin-bottom:20px;
+}
+  .restaurant_data_container .title {
+    font-family:'Source Sans Pro'; font-weight: 400; color:rgba(19, 29, 36, 0.4); font-size:20px; margin:0px; padding:0px; margin-bottom:30px;
+  }
+  .restaurant_data_container .description_title {
+    font-family:'Source Sans Pro'; font-weight: 400; color:rgba(19, 29, 36, 0.4); font-size:18px; margin-top:30px; margin-bottom:20px;
+  }
+  .restaurant_data_container .description_text {
+    font-family:'Source Sans Pro'; font-weight: 400; color:#1a1a1a; font-size:18px;
+  }
+
+
+.g-map-canvas {
+  position:relative; width: 695px; height: 250px; margin-left:-30px;
+}
 
 
