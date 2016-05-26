@@ -1,23 +1,5 @@
 <div id="wrap">
   <div id="main">
-    <header class="container-fluid navigation_black">
-      <div class="container">
-        <nav>
-          <a class="app_name" href="#">Restaurant ABH</a>
-          <ul class="navbar-right">
-            <li>{{#link-to 'index'}}Home{{/link-to}}</li>
-            <li>{{#link-to 'restaurants'}}Restaurants{{/link-to}}</li>
-
-            {{#if currentUser.userLoggedIn}}
-              <li><a href="javascript:void(0);">Welcome {{currentUser.userFirstName}}</a></li>
-            {{else}}
-              <li>{{#link-to 'login'}}Login{{/link-to}}</li>
-            {{/if}}
-
-          </ul>
-        </nav>
-      </div>
-    </header>
 
     {{outlet}}
 

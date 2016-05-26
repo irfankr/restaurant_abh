@@ -1,0 +1,7 @@
+{{#each priceRange as |dolarSign|}}
+  {{#if dolarSign.isFilled}}
+    <span class="active">$</span>
+  {{else}}
+    $
+  {{/if}}
+{{/each}}

@@ -7,7 +7,7 @@
 [0m[[0mdebug[0m] [0m== resolving dependencies for restaurant_abh#restaurant_abh_2.11;1.0-SNAPSHOT [compile][0m
 [0m[[0mdebug[0m] [0m== resolving dependencies restaurant_abh#restaurant_abh_2.11;1.0-SNAPSHOT->org.scala-lang#scala-library;2.11.7 [compile->default(compile)][0m
 [0m[[0minfo[0m] [0mResolving org.scala-lang#scala-library;2.11.7 ...[0m
-[0m[[0mdebug[0m] [0msbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@3af13e53[0m
+[0m[[0mdebug[0m] [0msbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@5f0dd97a[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.scala-lang#scala-library;2.11.7[0m
 [0m[[0mdebug[0m] [0m	found org.scala-lang#scala-library;2.11.7 in sbt-chain[0m
 [0m[[0mdebug[0m] [0m	[2.11.7] org.scala-lang#scala-library;2.11.7[0m
@@ -621,7 +621,7 @@
 [0m[[0mdebug[0m] [0m== resolving dependencies restaurant_abh#restaurant_abh_2.11;1.0-SNAPSHOT->com.typesafe.play#play-server_2.11;2.5.3 [compile->master][0m
 [0m[[0mdebug[0m] [0m== resolving dependencies restaurant_abh#restaurant_abh_2.11;1.0-SNAPSHOT->com.typesafe.play#play-java_2.11;2.5.3 [compile->default(compile)][0m
 [0m[[0minfo[0m] [0mResolving com.typesafe.play#play-java_2.11;2.5.3 ...[0m
-[0m[[0mdebug[0m] [0msbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@44af8ccd[0m
+[0m[[0mdebug[0m] [0msbt-chain: Checking cache for: sbt.ivyint.MergedDescriptors@1b2fc803[0m
 [0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: com.typesafe.play#play-java_2.11;2.5.3[0m
 [0m[[0mdebug[0m] [0m	found com.typesafe.play#play-java_2.11;2.5.3 in sbt-chain[0m
 [0m[[0mdebug[0m] [0m== resolving dependencies restaurant_abh#restaurant_abh_2.11;1.0-SNAPSHOT->com.typesafe.play#play-java_2.11;2.5.3 [compile->runtime][0m
@@ -8843,7 +8843,7 @@
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] com.typesafe.akka#akka-actor_2.11;2.3.8!akka-actor_2.11.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] com.typesafe.akka#akka-testkit_2.11;2.3.8!akka-testkit_2.11.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] com.typesafe#config;1.2.1!config.jar(bundle)[0m
-[0m[[0mdebug[0m] [0m:: resolution report :: resolve 3261ms :: artifacts dl 83ms[0m
+[0m[[0mdebug[0m] [0m:: resolution report :: resolve 4749ms :: artifacts dl 117ms[0m
 [0m[[0mdebug[0m] [0m	report for restaurant_abh#restaurant_abh_2.11;1.0-SNAPSHOT compile produced in /home/irfank/Play_applications/restaurant_abh/target/resolution-cache/reports/restaurant_abh-restaurant_abh_2.11-compile.xml[0m
 [0m[[0mdebug[0m] [0m	report for restaurant_abh#restaurant_abh_2.11;1.0-SNAPSHOT runtime produced in /home/irfank/Play_applications/restaurant_abh/target/resolution-cache/reports/restaurant_abh-restaurant_abh_2.11-runtime.xml[0m
 [0m[[0mdebug[0m] [0m	report for restaurant_abh#restaurant_abh_2.11;1.0-SNAPSHOT test produced in /home/irfank/Play_applications/restaurant_abh/target/resolution-cache/reports/restaurant_abh-restaurant_abh_2.11-test.xml[0m
@@ -8858,5 +8858,5 @@
 [0m[[0mdebug[0m] [0m	report for restaurant_abh#restaurant_abh_2.11;1.0-SNAPSHOT pom produced in /home/irfank/Play_applications/restaurant_abh/target/resolution-cache/reports/restaurant_abh-restaurant_abh_2.11-pom.xml[0m
 [0m[[0mdebug[0m] [0m	report for restaurant_abh#restaurant_abh_2.11;1.0-SNAPSHOT scala-tool produced in /home/irfank/Play_applications/restaurant_abh/target/resolution-cache/reports/restaurant_abh-restaurant_abh_2.11-scala-tool.xml[0m
 [0m[[0mdebug[0m] [0m	report for restaurant_abh#restaurant_abh_2.11;1.0-SNAPSHOT fork-run produced in /home/irfank/Play_applications/restaurant_abh/target/resolution-cache/reports/restaurant_abh-restaurant_abh_2.11-fork-run.xml[0m
-[0m[[0mdebug[0m] [0m	resolve done (3261ms resolve - 83ms download)[0m
+[0m[[0mdebug[0m] [0m	resolve done (4749ms resolve - 117ms download)[0m
 [0m[[0minfo[0m] [0mDone updating.[0m

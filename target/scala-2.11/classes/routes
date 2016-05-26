@@ -6,6 +6,7 @@
 GET     /assets/*file                       controllers.Assets.versioned(path="/public/ember/assets", file: Asset)
 
 
+
 # An example controller showing a sample home page
 # GET   /api/v1/                            controllers.HomeController.index
 # An example controller showing how to use dependency injection
@@ -23,7 +24,12 @@ POST    /api/v1/register                    controllers.UserController.register
 
 GET     /api/v1/getAllRestaurants           controllers.RestaurantController.getAllRestaurants
 POST    /api/v1/getRestaurantDetails        controllers.RestaurantController.getRestaurantDetails
+# POST    /api/v1/getRestaurantMenu           controllers.RestaurantController.getRestaurantMenu
 GET     /api/v1/getRestaurantsLocations     controllers.RestaurantController.getRestaurantsLocations
+POST    /api/v1/makeReservation             controllers.RestaurantController.makeReservation
+# GET     /api/v1/allRestaurantsSortReservationsToday controllers.RestaurantController.getAllRestaurantsSortReservationsToday
+
+# GET     /api/v1/checkReservationAvailability controllers.ReservationController.checkReservationAvailability
 
 GET     /                                   controllers.HomeController.index(slug = "")
 GET     /*slug                              controllers.HomeController.index(slug)

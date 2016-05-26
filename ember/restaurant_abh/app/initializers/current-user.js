@@ -3,7 +3,6 @@ import CurrentUser from '../services/current-user-service';
 
 export function initialize(application) {
   var self = this;
-
   // application.inject('route', 'foo', 'service:foo');
 
   //Start waiting for response from Play

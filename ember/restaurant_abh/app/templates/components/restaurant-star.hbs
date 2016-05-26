@@ -1,0 +1,7 @@
+{{#each stars as |star|}}
+  {{#if star.isFilled}}
+    <img {{action 'voteRestaurant' restaurantId star.starNumber}} src="assets/images/star_active.png" />
+  {{else}}
+    <img {{action 'voteRestaurant' restaurantId star.starNumber}} src="assets/images/star_inactive.png" >
+  {{/if}}
+{{/each}}

@@ -34,6 +34,12 @@ import java.io.IOException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
 /**
  * Created by irfank on 5/16/16.
  */
@@ -43,8 +49,8 @@ public class User {
     @Id @GeneratedValue long id;
     private String email;
     @JsonIgnore private String password;
-    private String firstName;
-    private String lastName;
+    private String firstname;
+    private String lastname;
     private String phone;
     private String country;
     private String city;
@@ -76,19 +82,19 @@ public class User {
     }
 
     public String getFirstName() {
-        return firstName;
+        return firstname;
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstname = firstName;
     }
 
     public String getLastName() {
-        return lastName;
+        return lastname;
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastname = lastName;
     }
 
     public String getPhone() {

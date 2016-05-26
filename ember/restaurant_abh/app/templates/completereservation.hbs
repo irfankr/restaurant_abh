@@ -1,0 +1,79 @@
+{{#navigation-bar styleClass='navigation_black'}}{{/navigation-bar}}
+
+<div class="container">
+  <h1 class="complete_reservation_title">Complete your reservation</h1>
+
+  <div class="box_shadow restaurant_data_container" style="margin-bottom:65px;">
+    <h1 class="title">Reservation details
+      <div class="complete_reservation_remaining_time">You have {{remainingTime}} minutes to complete reservation</div>
+    </h1>
+
+    <div class="row">
+      <div class="col-md-2">
+        <div class="complete_reservation_restaurant_image" style="background-image:url('assets/images/restaurant_thumb.png');"></div>
+      </div>
+      <div class="col-md-10 complete_reservation_restaurant_details">
+        <div class="title">RESTAURANT</div>
+        <div class="name">Restaurant name</div>
+
+        <div class="row">
+          <div class="col-md-2">
+            <div class="title">GUESTS</div>
+            <div class="details">2 People</div>
+          </div>
+          <div class="col-md-3">
+            <div class="title">DATE</div>
+            <div class="details">Apr 29, 2016</div>
+          </div>
+          <div class="col-md-2">
+            <div class="title">TIME</div>
+            <div class="details">8:00 PM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="login_register_container" style="margin-bottom:10px; text-align:left !important;">
+    <h1 class="title complete_reservation_title_already_member">Already a member? {{#link-to 'login' class="register complete_reservation_signin_left"}}Sign in{{/link-to}}</h1>
+  </div>
+
+  <form>
+    <div class="row">
+      <div class="col-md-6 login_register_container complete_reservation" style="margin-bottom:60px;">
+        <div class="form-group">
+          {{input type="text" class="form-control input_fields" value=user.firstName placeholder="First Name"}}
+        </div>
+
+        <div class="form-group">
+          {{input type="text" class="form-control input_fields" value=user.lastName placeholder="Last Name"}}
+        </div>
+
+        <div class="form-group">
+          {{input type="text" class="form-control input_fields" value=user.email placeholder="Email"}}
+        </div>
+
+      </div>
+
+      <div class="col-md-6 login_register_container" style="margin-bottom:60px;">
+        <div class="form-group">
+          {{input type="text" class="form-control input_fields" value=user.phone placeholder="Phone Number"}}
+        </div>
+
+        <div class="form-group">
+          {{input type="password" class="form-control input_fields" value=user.password placeholder="Password"}}
+        </div>
+
+        <div class="form-group">
+          {{input type="password" class="form-control input_fields" value=user.confirmpassword placeholder="Confirm Password"}}
+        </div>
+      </div>
+
+     </div>
+
+    <div class="complete_reservation_button_container">
+      <button {{action 'register'}} class="btn button">Create Account</button>
+      <div class="description">By clicking “Complete Reservation” you agree to the <a href="#">RestaurantABH</a> Terms of use and <a href="#">Privacy Policy</a>.</div>
+    </div>
+  </form>
+</div>

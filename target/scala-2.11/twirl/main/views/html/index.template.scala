@@ -41,11 +41,11 @@ Seq[Any](format.raw/*1.1*/("""<!DOCTYPE html>
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,300italic,200italic,400italic,600,700,600italic,900,700italic,900italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
     <base href="/" />
-<meta name="restaurant-abh/config/environment" content="%7B%22modulePrefix%22%3A%22restaurant-abh%22%2C%22environment%22%3A%22production%22%2C%22baseURL%22%3A%22/%22%2C%22locationType%22%3A%22auto%22%2C%22EmberENV%22%3A%7B%22FEATURES%22%3A%7B%7D%7D%2C%22APP%22%3A%7B%22name%22%3A%22restaurant-abh%22%2C%22version%22%3A%220.0.0+80267554%22%7D%2C%22exportApplicationGlobal%22%3Afalse%2C%22g-map%22%3A%7B%22libraries%22%3A%5B%22places%22%5D%7D%7D" />
+<meta name="restaurant-abh/config/environment" content="%7B%22modulePrefix%22%3A%22restaurant-abh%22%2C%22environment%22%3A%22production%22%2C%22baseURL%22%3A%22/%22%2C%22locationType%22%3A%22auto%22%2C%22EmberENV%22%3A%7B%22FEATURES%22%3A%7B%7D%7D%2C%22APP%22%3A%7B%22name%22%3A%22restaurant-abh%22%2C%22version%22%3A%220.0.0+47888d80%22%7D%2C%22exportApplicationGlobal%22%3Afalse%2C%22g-map%22%3A%7B%22libraries%22%3A%5B%22places%22%5D%7D%7D" />
 <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?libraries=places"></script>
 
     <link rel="stylesheet" href="assets/vendor-98f2fc4d5359ba494421e878eccc38a7.css">
-    <link rel="stylesheet" href="assets/restaurant-abh-dce148f451bc2d8edbc522022b7520cf.css">
+    <link rel="stylesheet" href="assets/restaurant-abh-433376399510ffaa07e011318313cd0b.css">
 
     
   </head>
@@ -53,7 +53,7 @@ Seq[Any](format.raw/*1.1*/("""<!DOCTYPE html>
     
 
     <script src="assets/vendor-3aa08db74247bdd4e4809e3e0eea5115.js"></script>
-    <script src="assets/restaurant-abh-d754bc408e485af220b1ea87a9556a80.js"></script>
+    <script src="assets/restaurant-abh-80427c9f30eb9af3549be7b6ae7f9699.js"></script>
 
     
   </body>
@@ -78,9 +78,9 @@ Seq[Any](format.raw/*1.1*/("""<!DOCTYPE html>
 object index extends index_Scope0.index
               /*
                   -- GENERATED --
-                  DATE: Wed May 25 14:32:30 CEST 2016
+                  DATE: Fri May 27 18:19:50 CEST 2016
                   SOURCE: /home/irfank/Play_applications/restaurant_abh/app/views/index.scala.html
-                  HASH: ebae34487013946106fae7a2d2dac4338f543ee3
+                  HASH: 792f40f7460369d7fc9c980c98fb499b6c4a717c
                   MATRIX: 827->0
                   LINES: 32->1
                   -- GENERATED --

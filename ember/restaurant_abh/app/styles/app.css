@@ -35,6 +35,13 @@ a:link, a:visited {
     margin-right: auto;
 }
 
+.inline-stars {
+  display:inline;
+}
+.inline-dollars {
+  display:inline;
+}
+
 /* Navigation */
 .navigation_black {
   height:85px; line-height:85px; margin-bottom:85px; z-index:50; position: relative; background-color:#FFF;
@@ -142,7 +149,7 @@ footer nav.main {
 
 /* Homepage */
 .home_header_big {
-  height:680px; z-index:10; top:0px; left:0px; width:100%; margin-top:-170px;
+  height:680px; z-index:10; top:0px; left:0px; width:100%; margin-top:-190px;
 }
   .home_header_big .background {
     height:680px; background-size:cover; background-image:url('./images/home_header_big.jpeg'); background-position:center center; opacity: 0.9;
@@ -161,48 +168,49 @@ h1.homepage_title {
 .homepage_location {
   float:left; width:25%; margin-bottom:25px;
 }
-  .homepage_location a.location:link, .homepage_location a.location:visited {
+  .homepage_location a.location, .homepage_location a.location:link, .homepage_location a.location:visited {
     font-family:'Source Sans Pro'; font-weight: 400; font-size:20px; color:#131d24;
   }
     .homepage_location a.location:hover {
+      text-decoration:none;
     }
   .homepage_location .details {
     font-family:'Source Sans Pro'; font-weight: 400; font-size:18px; color:#A1A5A7;
   }
 
 /* Restaurant box */
-.restaurant_box {
+.restaurantbox {
   width:298px; margin-bottom:50px; float:left; margin-right:38px;
 }
-.restaurant_box:nth-child(3n) {
+.restaurantbox:nth-child(3n) {
   width:298px; margin-bottom:50px; float:left; margin-right:0px;
 }
-  .restaurant_box img.restaurant_thumb {
+  .restaurantbox img.restaurant_thumb {
   }
-  .restaurant_box a.restaurant_name:link, .restaurant_box a.restaurant_name:visited {
+  .restaurantbox a.restaurant_name:link, .restaurantbox a.restaurant_name:visited {
     display:block; font-family:'Source Sans Pro'; font-weight: 400; font-size:24px; color:#131d24; margin-top:20px;
   }
-    .restaurant_box a.restaurant_name:hover {
+    .restaurantbox a.restaurant_name:hover {
      }
-  .restaurant_box .restaurant_marks {
+  .restaurantbox .restaurant_marks {
     line-height:30px;
   }
-    .restaurant_box .restaurant_marks .votes {
+    .restaurantbox .restaurant_marks .votes {
       font-family:'Source Sans Pro'; font-weight: 400; font-size:16px; color:#A1A5A7; margin-left:10px; margin-right:10px;
     }
-    .restaurant_box .restaurant_marks .price_range {
-      color:#A1A5A7; letter-spacing: 2px;
+    .restaurantbox .restaurant_marks .price_range {
+      color:#A1A5A7; font-size:12px;
     }
-      .restaurant_box .restaurant_marks .price_range .active {
+      .restaurantbox .restaurant_marks .price_range .active {
         color:#000;
       }
-    .restaurant_box .restaurant_food {
+    .restaurantbox .restaurant_food {
       color:#A1A5A7; font-size:16px; margin-top:5px; padding-top:5px; border-top-style:solid; border-top-width:1px; border-top-color:#e5e5e5;
     }
-  .restaurant_box a.restaurant_reserve:link, .restaurant_box a.restaurant_reserve:visited {
+  .restaurantbox a.restaurant_reserve:link, .restaurantbox a.restaurant_reserve:visited {
     display:block; font-family:'Source Sans Pro'; font-weight: 600; font-size:18px; color:#131d24; background-color:#f9f9f9; height:36px; line-height:36px; border: solid 1px #e5e5e5; text-align:center; margin-top:30px;
   }
-    .restaurant_box a.restaurant_reserve:hover {
+    .restaurantbox a.restaurant_reserve:hover {
      }
 
 /* Restaurant */
@@ -239,22 +247,26 @@ ul.restaurant_left_menu {
     font-family:'Source Sans Pro'; font-weight: 400; font-size:30px; color:#FFF; letter-spacing: 1px;
   }
   .restaurant_details .stats {
-    color:#ADADAD; font-size:16px;
+    color:#AEA5A7; font-size:16px;
   }
-  .restaurant_details .stats .votes {
+  .restaurant_details .statslogged img:hover {
+    opacity:0.8; cursor: pointer; cursor: hand;
+  }
+
+  .restaurant_details .stats .votes, .restaurant_details .statslogged .votes {
     margin-left:10px; margin-right:5px;
   }
-  .restaurant_details .stats .price_range {
-    margin-right:15px; font-size:12px; letter-spacing: 2px;
+  .restaurant_details .stats .price_range, .restaurant_details .statslogged .price_range {
+    margin-right:15px; font-size:12px;
   }
-    .restaurant_details .stats .price_range .active {
+    .restaurant_details .stats .price_range .active, .restaurant_details .statslogged .price_range .active {
       color:#FFF;
     }
-    .restaurant_details .stats .restaurant_food {
+    .restaurant_details .stats .restaurant_food, .restaurant_details .statslogged .restaurant_food {
 
     }
 .restaurant_data_container {
-  padding:30px; margin-bottom:20px;
+  padding:30px; margin-bottom:20px; background-color:#FFF;
 }
   .restaurant_data_container .title {
     font-family:'Source Sans Pro'; font-weight: 400; color:rgba(19, 29, 36, 0.4); font-size:20px; margin:0px; padding:0px; margin-bottom:30px;
@@ -265,10 +277,83 @@ ul.restaurant_left_menu {
   .restaurant_data_container .description_text {
     font-family:'Source Sans Pro'; font-weight: 400; color:#1a1a1a; font-size:18px;
   }
-
+  .restaurant_data_container .reservation_column {
+    width:25%; float:left;
+  }
+    .restaurant_data_container .reservation_column .button {
+        background-color:#FD6F60; color:#FFF; width:100%; height:53px; line-height:53px; font-size:18px; font-weight: 600; padding:0px;
+    }
+    .restaurant_data_container .reservation_column .input_fields {
+      height:40px; line-height:40px; font-family:'Source Sans Pro'; font-weight: 600; font-size:16px; border-style:solid; border-width:1px; border-color:#E3E3E3;
+    }
+    .restaurant_data_container .reservation_column .select_fields {
+      height:54px; line-height:54px; font-family:'Source Sans Pro'; font-weight: 600; font-size:16px; border-style:solid; border-width:1px; border-color:#E3E3E3;
+    }
 
 .g-map-canvas {
   position:relative; width: 695px; height: 250px; margin-left:-30px;
 }
 
+/* Restaurant menu */
+.restaurant_menu_item_title {
+  margin-bottom:60px !important;
+}
+.restaurant_menu_item_title a:link, .restaurant_menu_item_title a:visited {
+  font-size:16px; padding-left:12px; padding-right:12px;
+}
+.restaurant_menu_item_title a.active:link, .restaurant_menu_item_title a.active:visited {
+  font-size:16px; padding-left:15px; padding-right:15px; background-color:#fd6f60; color:#FFF; line-height:30px; padding-top:10px; padding-bottom:10px; border-radius: 2px;
+}
+.restaurant_menu_item {
+  height:50px;
+}
+.restaurant_menu_item_title_price {
+  font-family:'Source Sans Pro'; font-width:400; color:#1a1a1a; font-size:18px; border-bottom-width:1px; border-bottom-color:#D8D8D8; border-bottom-style:dashed; height: 20px; line-height: 20px;
+}
+  .restaurant_menu_item_title_price .name {
+    float:left; background-color:#FFF; padding-right:10px;
+  }
+  .restaurant_menu_item_title_price .price {
+    float:right; background-color:#FFF; padding-left:10px;
+  }
+.restaurant_menu_item_description {
+  font-family:'Source Sans Pro'; font-width:400; color:#888888; font-size:14px;
+}
 
+/* Complete reservation */
+.complete_reservation_title {
+  font-size:36px; margin-bottom:50px; text-align:center;
+}
+.complete_reservation_title_already_member {
+  font-size:18px !important;
+}
+.complete_reservation_signin_left {
+  float:none !important;
+}
+.complete_reservation_remaining_time {
+  display:inline-block; float:right; font-family:'Source Sans Pro'; font-width:400; font-size:14px; color:#262626; border-radius: 2px; padding:10px; background-color:#FFC6C0;
+}
+.complete_reservation_restaurant_image {
+  display:block; width:130px; height:113px; background-size:cover;
+}
+.complete_reservation_restaurant_details {
+
+}
+  .complete_reservation_restaurant_details .title {
+    font-size:14px; margin-bottom:0px; font-weight:600;
+  }
+  .complete_reservation_restaurant_details .name {
+    font-size:20px; color:#fd6f60; margin-bottom:20px;
+   }
+   .complete_reservation_restaurant_details .details {
+      font-size:20px; color#:131d24;
+    }
+.complete_reservation_button_container {
+  text-align:center; margin-bottom:220px;
+}
+  .complete_reservation_button_container .button {
+    background-color:#FD6F60; color:#FFF; width:300px; margin-top:30px; height:53px; line-height:53px; font-size:18px; font-weight: 600; padding:0px;
+  }
+  .complete_reservation_button_container .description {
+    font-size:14px; color:#878787; margin-top:40px;
+  }

@@ -1,12 +1,14 @@
+{{#navigation-bar styleClass='navigation_white'}}{{/navigation-bar}}
+
 <div class="restaurant_header_big">
-  <div class="background" style="background-image:url('assets/images/restaurants/cover/{{model.imageFileName}}.jpg');"></div>
+  <div class="background" style="background-image:url('assets/images/restaurants/cover/{{model.restaurantDetails.imageFileName}}.jpg');"></div>
 </div>
 
 <div class="container restaurant_main_container">
   <div class="row">
     <div class="col-md-3">
       <div class="restaurant_thumb_container box_shadow">
-        <img src="assets/images/restaurants/thumbnails/{{model.imageFileName}}.jpg" width="210" />
+        <img src="assets/images/restaurants/thumbnails/{{model.restaurantDetails.imageFileName}}.jpg" width="210" />
       </div>
 
       <ul class="restaurant_left_menu">
@@ -16,28 +18,68 @@
     </div>
     <div class="col-md-9" style="padding-left:40px;">
       <div class="restaurant_details">
-        <h1 class="title">{{model.restaurantName}}</h1>
-        <div class="stats">
-          <img src="assets/images/star_active.png" />
-          <img src="assets/images/star_active.png" />
-          <img src="assets/images/star_active.png" />
-          <img src="assets/images/star_active.png" />
-          <img src="assets/images/star_inactive.png" />
-          <span class="votes">({{model.votes}})</span>
+        <h1 class="title">{{model.restaurantDetails.restaurantName}}</h1>
+        <div class="{{model.restaurantsStatsStyle}}">
+          {{#restaurant-star max=5 value=model.restaurantDetails.mark voteAllowed=true restaurantId=model.restaurantDetails.id}}{{/restaurant-star}}
+          <span class="votes">({{model.restaurantDetails.votes}})</span>
           <span class="price_range">
-            {{{model.priceRange}}}
+            {{#restaurant-price-range max=5 value=model.restaurantDetails.priceRange}}{{/restaurant-price-range}}
           </span>
-          <span class="restaurant_food">{{model.foodType}}</span>
+          <span class="restaurant_food">{{model.restaurantDetails.foodType}}</span>
+        </div>
+      </div>
+
+      <div class="box_shadow restaurant_data_container">
+        <h1 class="title">Make a free reservation</h1>
+        <div class="form-group" style="height:54px; overflow:visible;">
+          <div class="reservation_column">
+            {{ember-selectize
+              content=selectPeople
+              value=user.country
+              placeholder="2 people"
+             }}
+          </div>
+          <div class="reservation_column">
+            {{ember-selectize
+              content=selectDate
+              value=user.country
+              placeholder="Pick a date"
+             }}
+          </div>
+          <div class="reservation_column">
+            {{ember-selectize
+              content=selectHour
+              value=user.country
+              placeholder="7:00 PM"
+             }}
+          </div>
+          <div class="reservation_column"><button {{action 'findATable'}} class="btn button">Find a table</button></div>
         </div>
       </div>
 
       <div class="box_shadow restaurant_data_container">
         <h1 class="title">About Restaurant name</h1>
-        {{#g-map lat=model.latitude lng=model.longitude zoom=17 as |google_mapa|}}
-          {{g-map-marker google_mapa lat=model.latitude lng=model.longitude title="model.restaurantName"}}
+        {{#g-map lat=model.restaurantDetails.latitude lng=model.restaurantDetails.longitude zoom=17 as |google_mapa|}}
+          {{g-map-marker google_mapa lat=model.restaurantDetails.latitude lng=model.restaurantDetails.longitude title="model.restaurantName"}}
         {{/g-map}}
         <h2 class="description_title">Description</h2>
-        <div class="description_text">{{model.description}}</div>
+        <div class="description_text">{{model.restaurantDetails.description}}</div>
+      </div>
+
+      <div class="box_shadow restaurant_data_container" style="margin-bottom:300px;">
+        <h1 class="title restaurant_menu_item_title"><span style="margin-right:25px;">MENU:</span> <a href="">Breakfast</a><a href="" class="active">Breakfast</a><a href="">Dinner</a></h1>
+
+        <div class="restaurant_menu_item">
+          <div class="restaurant_menu_item_title_price">
+            <span class="name">Broccoli Rabe</span>
+            <span class="price">$8.95</span>
+          </div>
+          <div class="restaurant_menu_item_description">With grilled sausage, olive oil and garlic</div>
+        </div>
+
+
+
+        <div class="restaurant_menu_item"><div class="restaurant_menu_item_title_price"><span class="name">Broccoli Rabe</span><span class="price">$8.95</span></div><div class="restaurant_menu_item_description">With grilled sausage, olive oil and garlic</div></div><div class="restaurant_menu_item"><div class="restaurant_menu_item_title_price"><span class="name">Broccoli Rabe</span><span class="price">$8.95</span></div></div><div class="restaurant_menu_item"><div class="restaurant_menu_item_title_price"><span class="name">Broccoli Rabe</span><span class="price">$8.95</span></div><div class="restaurant_menu_item_description">With grilled sausage, olive oil and garlic</div></div><div class="restaurant_menu_item"><div class="restaurant_menu_item_title_price"><span class="name">Broccoli Rabe</span><span class="price">$8.95</span></div></div><div class="restaurant_menu_item"><div class="restaurant_menu_item_title_price"><span class="name">Broccoli Rabe</span><span class="price">$8.95</span></div><div class="restaurant_menu_item_description">With grilled sausage, olive oil and garlic</div></div>
 
       </div>
     </div>

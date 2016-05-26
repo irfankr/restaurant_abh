@@ -4,28 +4,18 @@ import Restaurant from '../models/restaurant';
 export default Ember.Route.extend({
   restaurantId: null,
   restaurant: Restaurant.create(),
+  currentUser: Ember.inject.service(),
+  restaurantDetails: null, //This is in return
+  restaurantsStatsStyle: null,
   model: function(param){
-    //OVO RADI I OVO POMOCU PARAM DOBIJEM ID RESTORANA
-    //console.log("ID iz URL:" + param.restaurantId);
-    //this.store.push(param.restaurantId);
-    //return param.id;
-
     var self = this;
 
-    //Function that creates string for pricerange (5max)
-    function priceRangeString(priceRange){
-      var priceRangeString = '<span class="active">';
-      for (var i = 1; i <= priceRange; i++) {
-          priceRangeString += '$';
-      }
-      priceRangeString += '</span>';
-
-      for (var i = 5; i > priceRange; i--) {
-          priceRangeString += '$';
-      }
-      return priceRangeString;
+    //If logged set style that enable hover on stars for vote
+    if(this.get('currentUser.userLoggedIn') == true){
+      this.set('restaurantsStatsStyle', 'statslogged')
+    } else {
+      this.set('restaurantsStatsStyle', 'stats')
     }
-
 
     //Put url id into restaurant object
     this.set('restaurant.id', param.restaurantId);
@@ -33,28 +23,40 @@ export default Ember.Route.extend({
     //Convert object in JSON
     var data = JSON.stringify(this.get('restaurant'));
 
+
     //Ajax call to get restaurant details
-    return $.ajax({
+    $.ajax({ //No return here
       url: "/api/v1/getRestaurantDetails",
       type: "POST",
       data: data,
       processData: false,
+      async:false, //Need to wait
       contentType: "application/json; charset=UTF-8",
     }).fail(function(data) {
       console.log(data);
     }).then(function(data) {
-      //console.log(data);
       self.set('restaurantDetails', data);
 
-      var restaurantDetails = self.get('restaurantDetails');
+      //Get menu for restaurant
+      $.ajax({ //No return here
+        url: "/api/v1/getRestaurantMenu",
+        type: "POST",
+        data: '{"id":"1"}',
+        processData: false,
+        async:false, //Need to wait
+        contentType: "application/json; charset=UTF-8",
+      }).fail(function(data) {
+        console.log(data);
+      }).then(function(data) {
+        console.log(data);
+      });
 
-      //String with price range string
-      restaurantDetails.priceRange = priceRangeString(restaurantDetails.priceRange);
-      //console.log("STRING" + restaurantDetails.priceRange);
-
-      return restaurantDetails;
-
-      //console.log("DETALJI RESTORANA: " + self.get('restaurantDetails.restaurantName'));
     });
+    //Return model to template
+    return Ember.RSVP.hash({
+      restaurantDetails: self.get('restaurantDetails'),
+      restaurantsStatsStyle: self.get('restaurantsStatsStyle'),
+    });
+
   }
 });
