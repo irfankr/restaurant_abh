@@ -24,12 +24,14 @@ POST    /api/v1/register                    controllers.UserController.register
 
 GET     /api/v1/getAllRestaurants           controllers.RestaurantController.getAllRestaurants
 POST    /api/v1/getRestaurantDetails        controllers.RestaurantController.getRestaurantDetails
-# POST    /api/v1/getRestaurantMenu           controllers.RestaurantController.getRestaurantMenu
+POST    /api/v1/getRestaurantMenu           controllers.RestaurantController.getRestaurantMenu
 GET     /api/v1/getRestaurantsLocations     controllers.RestaurantController.getRestaurantsLocations
 POST    /api/v1/makeReservation             controllers.RestaurantController.makeReservation
-# GET     /api/v1/allRestaurantsSortReservationsToday controllers.RestaurantController.getAllRestaurantsSortReservationsToday
+GET     /api/v1/allRestaurantsSortReservationsToday controllers.RestaurantController.getAllRestaurantsSortReservationsToday
+POST    /api/v1/restaurantVote              controllers.RestaurantController.restaurantVote
 
-# GET     /api/v1/checkReservationAvailability controllers.ReservationController.checkReservationAvailability
+POST    /api/v1/checkReservationAvailability controllers.ReservationController.checkReservationAvailability
+GET     /api/v1/getListOfReservationsForUser    controllers.ReservationController.getListOfReservationsForUser
 
 GET     /                                   controllers.HomeController.index(slug = "")
 GET     /*slug                              controllers.HomeController.index(slug)

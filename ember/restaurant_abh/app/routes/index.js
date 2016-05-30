@@ -8,7 +8,7 @@ export default Ember.Route.extend({
 
     //Get list of all restaurants from database
     $.ajax({ //No return here
-      url: "/api/v1/getAllRestaurants",
+      url: "/api/v1/allRestaurantsSortReservationsToday",
       type: "GET",
       processData: false,
       async:false, //Need to wait

@@ -1,0 +1,43 @@
+define('restaurant-abh/controllers/restaurant', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Controller.extend({
+    selectPeople: ['2 people', '3 people', '4 people', '5 people', '6 people', '7 people', '8 people', '9 people', '10 people', '11 people', '12 people'],
+    selectHour: ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM', '13:00 PM', '13:30 PM', '14:00 PM', '14:30 PM', '15:00 PM', '15:30 PM', '16:00 PM', '16:30 PM', '17:00 PM', '17:30 PM', '18:00 PM', '18:30 PM', '19:00 PM', '19:30 PM', '20:00 PM', '20:30 PM', '21:00 PM', '21:30 PM', '22:00 PM'],
+    selectDate: [],
+    init: function init() {
+      //Generate date select list
+      var date = new Date();
+      var month = new Array();month[0] = "Jan";month[1] = "Feb";month[2] = "Mar";month[3] = "Apr";month[4] = "May";month[5] = "Jun";month[6] = "Jul";month[7] = "Aug";month[8] = "Sep";month[9] = "Oct";month[10] = "Nov";month[11] = "Dec";
+      //tomorrow.setDate(tomorrow.getDate() + 1);
+
+      for (var i = 0; i <= 5; i++) {
+        date.setDate(date.getDate() + i);
+        //console.log(month[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear());
+        this.get('selectDate').push(month[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear());
+        var date = new Date();
+      }
+    },
+    actions: {
+      showMenu: function showMenu(post, restaurantId) {
+        var self = this;
+
+        //Change style of clicked element
+        $(".restaurant_menu_item_title a:link").removeClass("active");
+        $(".menu_title_" + post).addClass("active");
+
+        //Load new menu list
+        $.ajax({ //No return here
+          url: "/api/v1/getRestaurantMenu",
+          type: "POST",
+          data: '{"idRestaurant":"' + restaurantId + '", "type":"' + post + '"}',
+          processData: false,
+          async: false, //Need to wait
+          contentType: "application/json; charset=UTF-8"
+        }).fail(function (data) {
+          console.log(data);
+        }).then(function (data) {
+          self.set('model.restaurantMenu', data);
+        });
+      }
+    }
+  });
+});

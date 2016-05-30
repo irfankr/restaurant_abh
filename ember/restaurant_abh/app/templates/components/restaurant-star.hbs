@@ -1,7 +1,13 @@
-{{#each stars as |star|}}
-  {{#if star.isFilled}}
-    <img {{action 'voteRestaurant' restaurantId star.starNumber}} src="assets/images/star_active.png" />
-  {{else}}
-    <img {{action 'voteRestaurant' restaurantId star.starNumber}} src="assets/images/star_inactive.png" >
-  {{/if}}
-{{/each}}
+{{#if voted}}
+  <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" style="color:#2BC340; padding-right:5px;"></span><span style="padding-right:20px;">Thank you for your vote</span>
+{{else}}
+  {{#each stars as |star|}}
+    {{#if star.isFilled}}
+      <img {{action 'voteRestaurant' restaurantId star.starNumber}} src="assets/images/star_active.png" />
+    {{else}}
+      <img {{action 'voteRestaurant' restaurantId star.starNumber}} src="assets/images/star_inactive.png" >
+    {{/if}}
+  {{/each}}
+
+  <span class="votes">({{votes}})</span>
+{{/if}}

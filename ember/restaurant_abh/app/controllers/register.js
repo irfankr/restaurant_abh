@@ -3,7 +3,8 @@ import User from '../models/user';
 
 export default Ember.Controller.extend({
   countries: ['Bosnia and Herzegovina', 'Serbia', 'Croatia'],
-  cities: ['Sarajevo', 'Belgrade', 'Zagreb'],
+  currentUser: Ember.inject.service(),
+  cities: [],
   user: User.create(),
   actions: {
         register: function(){
@@ -45,15 +46,6 @@ export default Ember.Controller.extend({
             var data = JSON.stringify(this.get('user'));
             console.log(data);
 
-            //Display successfull notification
-            $(".registerNotifications").show();
-            //Change alert class
-            $(".alert").addClass('alert-success').removeClass('alert-danger');
-            //Set alert text
-            $(".alertText").html('<strong>Success!</strong> User is registered. You will be redirected to login page in 2s');
-
-            setTimeout(function(){ self.transitionToRoute('login'); }, 3000);
-
             //Sent POST to Play route
             return $.ajax({
               url: "/api/v1/register",
@@ -62,14 +54,52 @@ export default Ember.Controller.extend({
               processData: false,
               contentType: "application/json; charset=UTF-8",
             }).fail(function(data) {
-              console.log(data);
+              //Display successfull notification
+              $(".registerNotifications").show();
+              //Change alert class
+              $(".alert").addClass('alert-danger').removeClass('alert-success');
+              //Set alert text
+console.log(data.responseText);
+              var json = JSON.parse(data.responseText);
+
+              $(".alertText").html(json["error"]);
+
+
             }).then(function(data) {
               console.log(data);
+
+              //Login created user
+              var newUser = User.create(data);
+
+              //Set current user data from response
+              self.get('currentUser').setUser(newUser);
+
+              //Display successfull notification
+              $(".registerNotifications").show();
+              //Change alert class
+              $(".alert").addClass('alert-success').removeClass('alert-danger');
+              //Set alert text
+              $(".alertText").html('<strong>Success!</strong> User is registered. You will be redirected to home page in 2s');
+
+              setTimeout(function(){ self.transitionToRoute('index'); }, 3000);
+
               return User.create(data);
             });
 
           }
 
+
+        },
+
+        //When change value in select list call this function
+        changeCity: function(){
+          if(this.get('user.country') == "Bosnia and Herzegovina"){
+            this.set('cities', ['Sarajevo', 'Zenica', 'Banja Luka'])
+          } else if(this.get('user.country') == "Serbia"){
+            this.set('cities', ['Belgrade', 'Novi Sad', 'Kragujevac'])
+          } else if(this.get('user.country') == "Croatia"){
+           this.set('cities', ['Zagreb', 'Split', 'Zadar'])
+         }
 
         }
       }

@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/home/irfank/Play_applications/restaurant_abh/conf/routes
-// @DATE:Fri May 27 16:42:48 CEST 2016
+// @DATE:Mon May 30 10:20:14 CEST 2016
 
 import play.api.routing.JavaScriptReverseRoute
 import play.api.mvc.{ QueryStringBindable, PathBindable, Call, JavascriptLiteral }
@@ -23,12 +23,32 @@ package controllers.javascript {
     }
 
   
-    // @LINE:26
-    def getRestaurantDetails: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.RestaurantController.getRestaurantDetails",
+    // @LINE:31
+    def restaurantVote: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.RestaurantController.restaurantVote",
       """
         function() {
-          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "api/v1/getRestaurantDetails"})
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "api/v1/restaurantVote"})
+        }
+      """
+    )
+  
+    // @LINE:30
+    def getAllRestaurantsSortReservationsToday: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.RestaurantController.getAllRestaurantsSortReservationsToday",
+      """
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "api/v1/allRestaurantsSortReservationsToday"})
+        }
+      """
+    )
+  
+    // @LINE:27
+    def getRestaurantMenu: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.RestaurantController.getRestaurantMenu",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "api/v1/getRestaurantMenu"})
         }
       """
     )
@@ -49,6 +69,16 @@ package controllers.javascript {
       """
         function() {
           return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "api/v1/getAllRestaurants"})
+        }
+      """
+    )
+  
+    // @LINE:26
+    def getRestaurantDetails: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.RestaurantController.getRestaurantDetails",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "api/v1/getRestaurantDetails"})
         }
       """
     )
@@ -105,6 +135,36 @@ package controllers.javascript {
   
   }
 
+  // @LINE:33
+  class ReverseReservationController(_prefix: => String) {
+
+    def _defaultPrefix: String = {
+      if (_prefix.endsWith("/")) "" else "/"
+    }
+
+  
+    // @LINE:34
+    def getListOfReservationsForUser: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.ReservationController.getListOfReservationsForUser",
+      """
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "api/v1/getListOfReservationsForUser"})
+        }
+      """
+    )
+  
+    // @LINE:33
+    def checkReservationAvailability: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.ReservationController.checkReservationAvailability",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "api/v1/checkReservationAvailability"})
+        }
+      """
+    )
+  
+  }
+
   // @LINE:20
   class ReverseUserController(_prefix: => String) {
 
@@ -155,7 +215,7 @@ package controllers.javascript {
   
   }
 
-  // @LINE:34
+  // @LINE:36
   class ReverseHomeController(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -163,7 +223,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:34
+    // @LINE:36
     def index: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.HomeController.index",
       """

@@ -121,10 +121,28 @@ public class UserController extends Controller {
         user.setCity(RegisterForm.get().city);
         user.setCountry(RegisterForm.get().country);
 
-        //Store user in database
-        user.save();
+        User checkUser = new User();
 
-        return ok(Json.toJson(user));
+        //Check is there user with same email
+        if(checkUser.findByEmail(user.getEmail()) == null){
+            //Store user in database
+            user.save();
+
+            //Get information about created user (this info contains id of created user)
+            User createdUser = User.findByEmailAndPassword(user.getEmail(), user.getPassword());
+
+            //Set value to session that user is logged in
+            //Put user id in session
+            session().clear();
+            session("idUser", Long.toString(createdUser.getId()));
+
+            return ok(Json.toJson(createdUser));
+        } else {
+            return badRequest("{\"error\": \"User with entered mail exist!\"}");
+        }
+
+
+
     }
 
     public static class UserLoginDto {

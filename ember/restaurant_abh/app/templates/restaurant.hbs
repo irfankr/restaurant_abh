@@ -12,16 +12,16 @@
       </div>
 
       <ul class="restaurant_left_menu">
-        <li><a href="javascript:void(0);">About</a></li>
-        <li><a href="javascript:void(0);">Menu</a></li>
+        <li><a class="restaurant_left_menu_title" {{action 'moveToSegment' 'reservation'}} href="javascript:void(0);">Reservation</a></li>
+        <li><a class="restaurant_left_menu_title" {{action 'moveToSegment' 'about'}} href="javascript:void(0);">About</a></li>
+        <li><a class="restaurant_left_menu_title" {{action 'moveToSegment' 'menu'}}href="javascript:void(0);">Menu</a></li>
       </ul>
     </div>
     <div class="col-md-9" style="padding-left:40px;">
       <div class="restaurant_details">
         <h1 class="title">{{model.restaurantDetails.restaurantName}}</h1>
         <div class="{{model.restaurantsStatsStyle}}">
-          {{#restaurant-star max=5 value=model.restaurantDetails.mark voteAllowed=true restaurantId=model.restaurantDetails.id}}{{/restaurant-star}}
-          <span class="votes">({{model.restaurantDetails.votes}})</span>
+          {{#restaurant-star max=5 value=model.restaurantDetails.mark votes=model.restaurantDetails.votes voteAllowed=true restaurantId=model.restaurantDetails.id}}{{/restaurant-star}}
           <span class="price_range">
             {{#restaurant-price-range max=5 value=model.restaurantDetails.priceRange}}{{/restaurant-price-range}}
           </span>
@@ -29,36 +29,59 @@
         </div>
       </div>
 
-      <div class="box_shadow restaurant_data_container">
+      <div class="box_shadow restaurant_data_container" id="reservation">
         <h1 class="title">Make a free reservation</h1>
         <div class="form-group" style="height:54px; overflow:visible;">
           <div class="reservation_column">
             {{ember-selectize
               content=selectPeople
-              value=user.country
+              value=reservation.people
               placeholder="2 people"
              }}
           </div>
           <div class="reservation_column">
             {{ember-selectize
               content=selectDate
-              value=user.country
+              value=reservation.date
               placeholder="Pick a date"
              }}
           </div>
           <div class="reservation_column">
             {{ember-selectize
               content=selectHour
-              value=user.country
+              value=reservation.hour
               placeholder="7:00 PM"
              }}
           </div>
-          <div class="reservation_column"><button {{action 'findATable'}} class="btn button">Find a table</button></div>
+          <div class="reservation_column"><button {{action 'findATable' model.restaurantDetails.id}} class="btn button">Find a table</button></div>
+        </div>
+
+        {{#if tablesAvailable}}
+            <div class="availability_text">
+              Availability on {{reservation.date}} around {{reservation.hour}} for {{reservation.people}}:
+            </div>
+
+            <div class="tables_left">
+              <span class="glyphicon glyphicon-info-sign" aria-hidden="true" style="padding-right:3px; color:#000;"></span> {{tablesAvailable}} tables left
+            </div>
+
+            <h4 class="select_time_best_fits">Select the best time that fits you:</h4>
+
+            <div class="reservation_choose_time">
+              {{#each bestTime as |time|}}
+                <a href="javascript:void(0);" {{action 'proceedToReservationComplete' time model.restaurantDetails.id model.restaurantDetails.restaurantName model.restaurantDetails.imageFileName}}>{{time}}</a>
+              {{/each}}
+            </div>
+        {{/if}}
+        <div class="form-group registerNotifications">
+          <div class="alert alert-danger" role="alert">
+            <div class="alertText">No available tables!</div>
+          </div>
         </div>
       </div>
 
-      <div class="box_shadow restaurant_data_container">
-        <h1 class="title">About Restaurant name</h1>
+      <div class="box_shadow restaurant_data_container" id="about">
+        <h1 class="title">About {{model.restaurantDetails.restaurantName}}</h1>
         {{#g-map lat=model.restaurantDetails.latitude lng=model.restaurantDetails.longitude zoom=17 as |google_mapa|}}
           {{g-map-marker google_mapa lat=model.restaurantDetails.latitude lng=model.restaurantDetails.longitude title="model.restaurantName"}}
         {{/g-map}}
@@ -66,20 +89,20 @@
         <div class="description_text">{{model.restaurantDetails.description}}</div>
       </div>
 
-      <div class="box_shadow restaurant_data_container" style="margin-bottom:300px;">
-        <h1 class="title restaurant_menu_item_title"><span style="margin-right:25px;">MENU:</span> <a href="">Breakfast</a><a href="" class="active">Breakfast</a><a href="">Dinner</a></h1>
+      <div class="box_shadow restaurant_data_container" style="margin-bottom:300px;" id="menu">
+        <h1 class="title restaurant_menu_item_title"><span style="margin-right:25px;">MENU:</span> <a class="menu_title_Breakfast active" href="javascript:void(0);" {{action 'showMenu' 'Breakfast' model.restaurantDetails.id}}>Breakfast</a><a class="menu_title_Lunch" {{action 'showMenu' 'Lunch' model.restaurantDetails.id}} href="javascript:void(0);">Lunch</a><a class="menu_title_Dinner" {{action 'showMenu' 'Dinner' model.restaurantDetails.id}} href="javascript:void(0);">Dinner</a></h1>
 
+      {{#each model.restaurantMenu as |restaurantMenuItem|}}
         <div class="restaurant_menu_item">
           <div class="restaurant_menu_item_title_price">
-            <span class="name">Broccoli Rabe</span>
-            <span class="price">$8.95</span>
+            <span class="name">{{restaurantMenuItem.name}}</span>
+            <span class="price">${{restaurantMenuItem.price}}</span>
           </div>
-          <div class="restaurant_menu_item_description">With grilled sausage, olive oil and garlic</div>
+          <div class="restaurant_menu_item_description">{{restaurantMenuItem.description}}</div>
         </div>
-
-
-
-        <div class="restaurant_menu_item"><div class="restaurant_menu_item_title_price"><span class="name">Broccoli Rabe</span><span class="price">$8.95</span></div><div class="restaurant_menu_item_description">With grilled sausage, olive oil and garlic</div></div><div class="restaurant_menu_item"><div class="restaurant_menu_item_title_price"><span class="name">Broccoli Rabe</span><span class="price">$8.95</span></div></div><div class="restaurant_menu_item"><div class="restaurant_menu_item_title_price"><span class="name">Broccoli Rabe</span><span class="price">$8.95</span></div><div class="restaurant_menu_item_description">With grilled sausage, olive oil and garlic</div></div><div class="restaurant_menu_item"><div class="restaurant_menu_item_title_price"><span class="name">Broccoli Rabe</span><span class="price">$8.95</span></div></div><div class="restaurant_menu_item"><div class="restaurant_menu_item_title_price"><span class="name">Broccoli Rabe</span><span class="price">$8.95</span></div><div class="restaurant_menu_item_description">With grilled sausage, olive oil and garlic</div></div>
+      {{else}}
+        Menu is not available
+      {{/each}}
 
       </div>
     </div>

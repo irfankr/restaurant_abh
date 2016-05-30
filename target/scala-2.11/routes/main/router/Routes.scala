@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/home/irfank/Play_applications/restaurant_abh/conf/routes
-// @DATE:Fri May 27 16:42:48 CEST 2016
+// @DATE:Mon May 30 10:20:14 CEST 2016
 
 package router
 
@@ -17,7 +17,7 @@ import _root_.play.libs.F
 class Routes(
   override val errorHandler: play.api.http.HttpErrorHandler, 
   // @LINE:6
-  Assets_5: controllers.Assets,
+  Assets_6: controllers.Assets,
   // @LINE:13
   CountController_0: controllers.CountController,
   // @LINE:15
@@ -26,7 +26,9 @@ class Routes(
   UserController_4: controllers.UserController,
   // @LINE:25
   RestaurantController_3: controllers.RestaurantController,
-  // @LINE:34
+  // @LINE:33
+  ReservationController_5: controllers.ReservationController,
+  // @LINE:36
   HomeController_1: controllers.HomeController,
   val prefix: String
 ) extends GeneratedRouter {
@@ -34,7 +36,7 @@ class Routes(
    @javax.inject.Inject()
    def this(errorHandler: play.api.http.HttpErrorHandler,
     // @LINE:6
-    Assets_5: controllers.Assets,
+    Assets_6: controllers.Assets,
     // @LINE:13
     CountController_0: controllers.CountController,
     // @LINE:15
@@ -43,15 +45,17 @@ class Routes(
     UserController_4: controllers.UserController,
     // @LINE:25
     RestaurantController_3: controllers.RestaurantController,
-    // @LINE:34
+    // @LINE:33
+    ReservationController_5: controllers.ReservationController,
+    // @LINE:36
     HomeController_1: controllers.HomeController
-  ) = this(errorHandler, Assets_5, CountController_0, AsyncController_2, UserController_4, RestaurantController_3, HomeController_1, "/")
+  ) = this(errorHandler, Assets_6, CountController_0, AsyncController_2, UserController_4, RestaurantController_3, ReservationController_5, HomeController_1, "/")
 
   import ReverseRouteContext.empty
 
   def withPrefix(prefix: String): Routes = {
     router.RoutesPrefix.setPrefix(prefix)
-    new Routes(errorHandler, Assets_5, CountController_0, AsyncController_2, UserController_4, RestaurantController_3, HomeController_1, prefix)
+    new Routes(errorHandler, Assets_6, CountController_0, AsyncController_2, UserController_4, RestaurantController_3, ReservationController_5, HomeController_1, prefix)
   }
 
   private[this] val defaultPrefix: String = {
@@ -68,8 +72,13 @@ class Routes(
     ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/v1/register""", """controllers.UserController.register"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/v1/getAllRestaurants""", """controllers.RestaurantController.getAllRestaurants"""),
     ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/v1/getRestaurantDetails""", """controllers.RestaurantController.getRestaurantDetails"""),
+    ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/v1/getRestaurantMenu""", """controllers.RestaurantController.getRestaurantMenu"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/v1/getRestaurantsLocations""", """controllers.RestaurantController.getRestaurantsLocations"""),
     ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/v1/makeReservation""", """controllers.RestaurantController.makeReservation"""),
+    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/v1/allRestaurantsSortReservationsToday""", """controllers.RestaurantController.getAllRestaurantsSortReservationsToday"""),
+    ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/v1/restaurantVote""", """controllers.RestaurantController.restaurantVote"""),
+    ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/v1/checkReservationAvailability""", """controllers.ReservationController.checkReservationAvailability"""),
+    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/v1/getListOfReservationsForUser""", """controllers.ReservationController.getListOfReservationsForUser"""),
     ("""GET""", this.prefix, """controllers.HomeController.index(slug:String = "")"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """""" + "$" + """slug<.+>""", """controllers.HomeController.index(slug:String)"""),
     Nil
@@ -84,7 +93,7 @@ class Routes(
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("assets/"), DynamicPart("file", """.+""",false)))
   )
   private[this] lazy val controllers_Assets_versioned0_invoker = createInvoker(
-    Assets_5.versioned(fakeValue[String], fakeValue[Asset]),
+    Assets_6.versioned(fakeValue[String], fakeValue[Asset]),
     HandlerDef(this.getClass.getClassLoader,
       "router",
       "controllers.Assets",
@@ -234,11 +243,28 @@ class Routes(
     )
   )
 
+  // @LINE:27
+  private[this] lazy val controllers_RestaurantController_getRestaurantMenu9_route = Route("POST",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("api/v1/getRestaurantMenu")))
+  )
+  private[this] lazy val controllers_RestaurantController_getRestaurantMenu9_invoker = createInvoker(
+    RestaurantController_3.getRestaurantMenu,
+    HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.RestaurantController",
+      "getRestaurantMenu",
+      Nil,
+      "POST",
+      """""",
+      this.prefix + """api/v1/getRestaurantMenu"""
+    )
+  )
+
   // @LINE:28
-  private[this] lazy val controllers_RestaurantController_getRestaurantsLocations9_route = Route("GET",
+  private[this] lazy val controllers_RestaurantController_getRestaurantsLocations10_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("api/v1/getRestaurantsLocations")))
   )
-  private[this] lazy val controllers_RestaurantController_getRestaurantsLocations9_invoker = createInvoker(
+  private[this] lazy val controllers_RestaurantController_getRestaurantsLocations10_invoker = createInvoker(
     RestaurantController_3.getRestaurantsLocations,
     HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -246,16 +272,16 @@ class Routes(
       "getRestaurantsLocations",
       Nil,
       "GET",
-      """ POST    /api/v1/getRestaurantMenu           controllers.RestaurantController.getRestaurantMenu""",
+      """""",
       this.prefix + """api/v1/getRestaurantsLocations"""
     )
   )
 
   // @LINE:29
-  private[this] lazy val controllers_RestaurantController_makeReservation10_route = Route("POST",
+  private[this] lazy val controllers_RestaurantController_makeReservation11_route = Route("POST",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("api/v1/makeReservation")))
   )
-  private[this] lazy val controllers_RestaurantController_makeReservation10_invoker = createInvoker(
+  private[this] lazy val controllers_RestaurantController_makeReservation11_invoker = createInvoker(
     RestaurantController_3.makeReservation,
     HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -268,11 +294,79 @@ class Routes(
     )
   )
 
+  // @LINE:30
+  private[this] lazy val controllers_RestaurantController_getAllRestaurantsSortReservationsToday12_route = Route("GET",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("api/v1/allRestaurantsSortReservationsToday")))
+  )
+  private[this] lazy val controllers_RestaurantController_getAllRestaurantsSortReservationsToday12_invoker = createInvoker(
+    RestaurantController_3.getAllRestaurantsSortReservationsToday,
+    HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.RestaurantController",
+      "getAllRestaurantsSortReservationsToday",
+      Nil,
+      "GET",
+      """""",
+      this.prefix + """api/v1/allRestaurantsSortReservationsToday"""
+    )
+  )
+
+  // @LINE:31
+  private[this] lazy val controllers_RestaurantController_restaurantVote13_route = Route("POST",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("api/v1/restaurantVote")))
+  )
+  private[this] lazy val controllers_RestaurantController_restaurantVote13_invoker = createInvoker(
+    RestaurantController_3.restaurantVote,
+    HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.RestaurantController",
+      "restaurantVote",
+      Nil,
+      "POST",
+      """""",
+      this.prefix + """api/v1/restaurantVote"""
+    )
+  )
+
+  // @LINE:33
+  private[this] lazy val controllers_ReservationController_checkReservationAvailability14_route = Route("POST",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("api/v1/checkReservationAvailability")))
+  )
+  private[this] lazy val controllers_ReservationController_checkReservationAvailability14_invoker = createInvoker(
+    ReservationController_5.checkReservationAvailability,
+    HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.ReservationController",
+      "checkReservationAvailability",
+      Nil,
+      "POST",
+      """""",
+      this.prefix + """api/v1/checkReservationAvailability"""
+    )
+  )
+
   // @LINE:34
-  private[this] lazy val controllers_HomeController_index11_route = Route("GET",
+  private[this] lazy val controllers_ReservationController_getListOfReservationsForUser15_route = Route("GET",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("api/v1/getListOfReservationsForUser")))
+  )
+  private[this] lazy val controllers_ReservationController_getListOfReservationsForUser15_invoker = createInvoker(
+    ReservationController_5.getListOfReservationsForUser,
+    HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.ReservationController",
+      "getListOfReservationsForUser",
+      Nil,
+      "GET",
+      """""",
+      this.prefix + """api/v1/getListOfReservationsForUser"""
+    )
+  )
+
+  // @LINE:36
+  private[this] lazy val controllers_HomeController_index16_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix)))
   )
-  private[this] lazy val controllers_HomeController_index11_invoker = createInvoker(
+  private[this] lazy val controllers_HomeController_index16_invoker = createInvoker(
     HomeController_1.index(fakeValue[String]),
     HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -285,11 +379,11 @@ class Routes(
     )
   )
 
-  // @LINE:35
-  private[this] lazy val controllers_HomeController_index12_route = Route("GET",
+  // @LINE:37
+  private[this] lazy val controllers_HomeController_index17_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), DynamicPart("slug", """.+""",false)))
   )
-  private[this] lazy val controllers_HomeController_index12_invoker = createInvoker(
+  private[this] lazy val controllers_HomeController_index17_invoker = createInvoker(
     HomeController_1.index(fakeValue[String]),
     HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -308,7 +402,7 @@ class Routes(
     // @LINE:6
     case controllers_Assets_versioned0_route(params) =>
       call(Param[String]("path", Right("/public/ember/assets")), params.fromPath[Asset]("file", None)) { (path, file) =>
-        controllers_Assets_versioned0_invoker.call(Assets_5.versioned(path, file))
+        controllers_Assets_versioned0_invoker.call(Assets_6.versioned(path, file))
       }
   
     // @LINE:13
@@ -359,28 +453,58 @@ class Routes(
         controllers_RestaurantController_getRestaurantDetails8_invoker.call(RestaurantController_3.getRestaurantDetails)
       }
   
-    // @LINE:28
-    case controllers_RestaurantController_getRestaurantsLocations9_route(params) =>
+    // @LINE:27
+    case controllers_RestaurantController_getRestaurantMenu9_route(params) =>
       call { 
-        controllers_RestaurantController_getRestaurantsLocations9_invoker.call(RestaurantController_3.getRestaurantsLocations)
+        controllers_RestaurantController_getRestaurantMenu9_invoker.call(RestaurantController_3.getRestaurantMenu)
+      }
+  
+    // @LINE:28
+    case controllers_RestaurantController_getRestaurantsLocations10_route(params) =>
+      call { 
+        controllers_RestaurantController_getRestaurantsLocations10_invoker.call(RestaurantController_3.getRestaurantsLocations)
       }
   
     // @LINE:29
-    case controllers_RestaurantController_makeReservation10_route(params) =>
+    case controllers_RestaurantController_makeReservation11_route(params) =>
       call { 
-        controllers_RestaurantController_makeReservation10_invoker.call(RestaurantController_3.makeReservation)
+        controllers_RestaurantController_makeReservation11_invoker.call(RestaurantController_3.makeReservation)
+      }
+  
+    // @LINE:30
+    case controllers_RestaurantController_getAllRestaurantsSortReservationsToday12_route(params) =>
+      call { 
+        controllers_RestaurantController_getAllRestaurantsSortReservationsToday12_invoker.call(RestaurantController_3.getAllRestaurantsSortReservationsToday)
+      }
+  
+    // @LINE:31
+    case controllers_RestaurantController_restaurantVote13_route(params) =>
+      call { 
+        controllers_RestaurantController_restaurantVote13_invoker.call(RestaurantController_3.restaurantVote)
+      }
+  
+    // @LINE:33
+    case controllers_ReservationController_checkReservationAvailability14_route(params) =>
+      call { 
+        controllers_ReservationController_checkReservationAvailability14_invoker.call(ReservationController_5.checkReservationAvailability)
       }
   
     // @LINE:34
-    case controllers_HomeController_index11_route(params) =>
-      call(Param[String]("slug", Right(""))) { (slug) =>
-        controllers_HomeController_index11_invoker.call(HomeController_1.index(slug))
+    case controllers_ReservationController_getListOfReservationsForUser15_route(params) =>
+      call { 
+        controllers_ReservationController_getListOfReservationsForUser15_invoker.call(ReservationController_5.getListOfReservationsForUser)
       }
   
-    // @LINE:35
-    case controllers_HomeController_index12_route(params) =>
+    // @LINE:36
+    case controllers_HomeController_index16_route(params) =>
+      call(Param[String]("slug", Right(""))) { (slug) =>
+        controllers_HomeController_index16_invoker.call(HomeController_1.index(slug))
+      }
+  
+    // @LINE:37
+    case controllers_HomeController_index17_route(params) =>
       call(params.fromPath[String]("slug", None)) { (slug) =>
-        controllers_HomeController_index12_invoker.call(HomeController_1.index(slug))
+        controllers_HomeController_index17_invoker.call(HomeController_1.index(slug))
       }
   }
 }

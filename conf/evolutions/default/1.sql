@@ -12,10 +12,7 @@ CREATE TABLE users(
 	PRIMARY KEY (id)
 );
 
-
-
-
-INSERT INTO users (id, email, password, firstName, lastname, phone, country, city) VALUES (1, 'irfankr91@gmail.com', '12345', 'Irfan', 'Krijestorac', '061506652', 'BiH', 'Sarajevo');
+INSERT INTO users (id, email, password, firstName, lastname, phone, country, city) VALUES (3000, 'irfankr91@gmail.com', '12345', 'Irfan', 'Krijestorac', '061506652', 'BiH', 'Sarajevo');
 
 CREATE TABLE restaurants(
 	id bigint,
@@ -32,17 +29,17 @@ CREATE TABLE restaurants(
 	PRIMARY KEY (id)
 );
 
-INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (1, 'Restoran MILKMAN', 'Posjetite Restoran Milkman na dvije lokacije, Milkman Grbavica adresa Grbavicka 8 i Milkman City, Branilaca Sarajeva 3. U bogatoj ponudi jela mozete pronaci sendvice, paste, kuhana jela, te specijalitete kuce kao sto su pileci zalogaji i kljukusice. Restoran Milkman pruza i usluge cateringa za razlicdjite prigode kao sto su rodjendani, prezentacije, seminari, vjencdjanja i slicdjne prilike. Posjetite nas i uvjerite se u kvalitet nase ponude - porucdjuju Vam iz Restorana Milkman! Jos jednostavnije, narucdjite online i nasa dostava ce u najkracem roku biti na Vasoj adresi!', 43.852931, 18.401458, 3, 356, 4, 'milkman', 'Sarajevo - Centar', 'Bosnian | Italian | French');
 
-INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (2, 'cevabdzinica VEZIR', 'U ugodnom ambijentu cevabdzinice Vezir na Bascdjarsiji mozete probati najbolje travnicdjke cevape, pripremljene po orginalnoj recepturi uz domaci kajmak ili travnicdjki sos. U ponudi su i drugi specijaliteti sa rostilja vrhunskog kvaliteta, sudzukice, raznjici, piletina, teletina, te ukusne salate. Ako zelite da osjetite miris dobrog rostilja  i u svom domu, sada smo i online tu za Vas, narucdjite i dostava je brzo na Vasoj adresi!', 43.853233, 18.392693, 4, 811, 4, 'cevabdzinicavezir', 'Sarajevo - Centar', 'Bosnian');
 
-INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (3, 'Pizzeria AGO', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus a pharetra justo. Nullam in urna ut neque aliquet tempor. Sed tempor, leo vel malesuada congue, purus augue iaculis massa, non laoreet ex augue nec lorem. Integer non lobortis sem, eget vestibulum ante. Etiam tempor ligula id placerat feugiat. Nulla in ante varius, posuere risus at, ullamcorper risus. Cras faucibus erat a lectus vulputate gravida. Sed neque ipsum, eleifend in auctor et, lobortis eu sapien. Donec a efficitur risus. Fusce in erat sem. Donec ut nunc iaculis, consequat nunc sit amet, vulputate urna. Donec condimentum dolor dui, nec placerat mauris faucibus sit amet. Nullam iaculis et dui sed mattis. Pellentesque mi nisl, malesuada id ipsum id, tempus maximus dui.', 43.850375, 18.376886, 2, 412, 1, 'pizzeriaago', 'Sarajevo - Stari Grad', 'Italian');
+INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (1, 'Baja Fresh', 'In August 1990, Baja Fresh Mexican Grill opened its first restaurant featuring all-fresh, traditional fire-grilled Mexican favorites. Like many who grew up on fast food, we realized that it was time for something else, something different and something FRESH. Baja Fresh continues to be passionate about serving the freshest and high quality food in bright, clean environments. We believe in the benefits of eating well, being active and making a contribution to the communities we serve. We call this philosophy  Live Fresh  and you ll find this attitude in everything we do. We choose handmade and farm fresh not tin-canned, freshly prepared over microwaves and freezers. Flavor and nutrition over fillers and fads. At Baja Fresh you ll find eating well is a way of life and a state of mind. We believe in real food made with passion, for real people. Food that s always prepared by hand from real recipes and real farm fresh ingredients. Life should be full of variety, zest and positive energy. Energized by good health and good nutrition. We invite you to Eat Well and Live Fresh by making Baja Fresh a part of your active daily lifestyle.', 33.758599, -84.388575, 18, 4, 4, 'baja', 'Atlanta', 'Mexican/Southwestern | Quick Service');
+INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (2, 'Wingz N Tingz', 'We believe in the benefits of eating well, being active and making a contribution to the communities we serve. We call this philosophy  Live Fresh  and you ll find this attitude in everything we do. We choose handmade and farm fresh not tin-canned, freshly prepared over microwaves and freezers. Flavor and nutrition over fillers and fads. At Baja Fresh you ll find eating well is a way of life and a state of mind. We believe in real food made with passion, for real people. Food that s always prepared by hand from real recipes and real farm fresh ingredients. Life should be full of variety, zest and positive energy.', 42.372756, -71.062121, 28, 6, 2, 'jerkwingz', 'Boston', 'American');
+INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (3, 'Tassili Raw', 'Tassilis Raw Reality is a fast casual restaurant located in Atlanta, Georgia. We specialize in raw vegan cuisines and provide an unique variety of raw vegan entrees like spicy kale salad, kale wraps, and more. Our story starts with our purpose to help people achieve optimal health and thrive. What does that look like. That looks like our vision, to create an employee-owned raw vegan restaurant franchise in every continent in the world. About 6 years ago, Tassili Maat passionately set out to make the best kale in Atlanta, super food that is delicious as healthy. Today, Her brand Tassils Raw Reality is recognized around the world for the best kale in Atlanta and its attractive Afrocentric ambiance. ', 41.896271, -87.726974, 70, 25, 5, 'tassilis', 'Chicago', 'Vegetarian | Vegan');
+INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (4, 'Sufis', 'Tassilis Raw Reality is a fast casual restaurant located in Atlanta, Georgia. We specialize in raw vegan cuisines and provide an unique variety of raw vegan entrees like spicy kale salad, kale wraps, and more. Our story starts with our purpose to help people achieve optimal health and thrive. What does that look like. That looks like our vision, to create an employee-owned raw vegan restaurant franchise in every continent in the world. About 6 years ago, Tassili Maat passionately set out to make the best kale in Atlanta, super food that is delicious as healthy. Today, Her brand Tassils Raw Reality is recognized around the world for the best kale in Atlanta and its attractive Afrocentric ambiance. ', 33.754960, -84.383693, 120, 25, 2, 'sufi', 'Atlanta', 'Middle Eastern');
+INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (5, 'All About BBQ', 'Tassilis Raw Reality is a fast casual restaurant located in Atlanta, Georgia. We specialize in raw vegan cuisines and provide an unique variety of raw vegan entrees like spicy kale salad, kale wraps, and more. Our story starts with our purpose to help people achieve optimal health and thrive. What does that look like. That looks like our vision, to create an employee-owned raw vegan restaurant franchise in every continent in the world. About 6 years ago, Tassili Maat passionately set out to make the best kale in Atlanta, super food that is delicious as healthy. Today, Her brand Tassils Raw Reality is recognized around the world for the best kale in Atlanta and its attractive Afrocentric ambiance. ', 40.770320, -73.956582, 10, 3, 3, 'allbbq', 'New York', 'Barbeque');
+INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (6, 'Pasta n Pizza', 'Fresh and bursting with flavor is what Pizza n Pasta at Westland Mall has to offer. Serving the Miami, FL area we provide great tasting food thats prepared. As a leading Italian Fast Food Restaurant, we take pride in offering the best Pasta dishes, Pizzas and Italian Dishes. We are dedicated to serving the needs of our customers each and every day.', 39.989825, -75.145061, 70, 25, 1, 'pastanpizza', 'Philadelphia', 'Pizza, Italian');
+INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (7, 'Mughlai Cuisine', 'Mughlai Indian Cuisine believes in mastering the art of fine, delicious and well prepared meals that route their way from the rich lands of India to serving our diverse New Yorkers and curious Tourists. Located in the heart of NYC, Experience the taste of Mughlai as it treats each individual with delightful, aromatic and handpicked cuisines prepared by our Royal Master Chefs. The team at Mughlai Indian Cuisine follows a simple motto, to prepare and to serve because that’s what you deserve, The Golden Taste of India.', 42.377560, -71.062976, 320, 75, 3, 'mughlai', 'Boston', 'Indian');
+INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (8, 'Suki Japanese', 'Mughlai Indian Cuisine believes in mastering the art of fine, delicious and well prepared meals that route their way from the rich lands of India to serving our diverse New Yorkers and curious Tourists. Located in the heart of NYC, Experience the taste of Mughlai as it treats each individual with delightful, aromatic and handpicked cuisines prepared by our Royal Master Chefs. The team at Mughlai Indian Cuisine follows a simple motto, to prepare and to serve because that’s what you deserve, The Golden Taste of India.', 25.778793, -80.217120, 60, 30, 5, 'suki', 'Miami', 'Indian');
 
-INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (4, 'Surf n Fries', 'Surf n Fries je inovativan koncept brze prehrane specijaliziran za proizvode od krumpira, iznad svega „pommes frittes“. zelja nam je bila stvoriti novu kategoriju u urbanoj brzoj prehrani, a mi je volimo zvati „Pomfree Bar“. Najkvalitetniji, najsvjeziji i najukusniji pomfrit u gradu, kako ga kupci vole jos nazvati jeste "KROMPIR KOJI DIsE" :)) Za sve nase specijalitete biramo najbolje moguce sirovine bez obzira na cijenu. Iz tog razloga koristimo A ili Premium klasu krumpira koja sadrzi maksimalno suhe tvari i minimalno vode u svome sastavu. Zato nasi krumpirici nisu masni kada ih posluzimo. Takodjer, nasi krumpirici ne prolaze nikakve kemijske obrade, te NISU GMO proizvod, vec su organskog, prirodnog podrijetla. Ulje za przenje koje koristimo ne sadrzi transmasne kiseline, te ima puno vecu otpornost na temperaturu nego na kojoj se koristi. Takodjer, ulje mijenjamo puno prije nego je to zakonom propisano, upravo zato da nasi proizvodi budu maksimalno zdravi i ukusni. Svi ostali proizvodi poput piletine prolaze najstroze kriterije u proizvodnji. Isto tako i ambalaza u kojoj posluzujemo ima sve certifikate kao npr. za direktan doticaj s masnom hranom, prehrambene sporomigracijske boje. Surf "n" Fries umaci pripravljeni su od strane profesionalnih kuhara upravo za krumpirice. Najcdjesce u ponudi imamo 15 umaka gdje mozete naci od blagih i laganih do jako zacdjinjenih umaka. Umaci su radjeni po principu dodavanja prirodnih sastojaka i zacdjina bez ikakvih kemijskih procesa. Za sebe birajte samo najbolje. Dodjite i uvjerite se u sve nase kvalitete.', 43.847605, 18.364752, 3, 145, 3, 'surfnfries', 'Sarajevo - Novo Sarajevo', 'American | English');
-
-INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (5, 'Ascdjinica MEJTAs', 'Buregdzinica i ascdjinica MEJTAs, pored ukusnih pita nudi Vam i veliki izbor tradicionalnih bosanskih jela. U ponudi cete tako naci i grah, sarmu, sitni cevap i druga jela na kasiku, a tu je i solidan izbor pasti, salata, sendvicdja i bosanskih kolacdja. Sve ovo mozete isprobati i na vasoj adresi, uz online narudzbu i besplatnu brzu dostavu.', 43.841888, 18.345127, 3, 548, 4, 'ascinicamejtas', 'Sarajevo - Novi Grad', 'Bosnian | Turkish | Arabian');
-
-INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (6, 'Chinese Restaraunt ONLY ONE', 'Kineski restoran ONLY ONE, koji se nalazi u sarajevskom naselju Dobrinja, na adresi zelimira Vidovica Kelija 19, nudi Vam veliki izbor jela pripremljenih po 100% originalnoj kineskoj recepturi. U predivnom ambijentu, i sa prostranom ljetnom bastom, uzivajte u kineskim specijalitetima koje za Vas vjesto piprema majstor Gao Liang, kuhar sa decenijskim kulinarskim iskustvom. Odaberite nesto od blizu 100 razlicdjitih kineskih jela koja obiluju raznovrsnim povrcem, razlicdjitim vrstama mesa, od piletine, teletine, jagnjetine pa do riba i skampi, i uzivajte u istancdjanim okusima istoka i na svojoj kucnoj adresi. Dostava je moguca na podrucdjju cijelog grada, uz minimalno porucdjenih 20KM. Takodje, izaberite laksi nacdjin, bez potrebe da nas zovete na telefon, nakon Vasih par klikova uskoro stizemo na Vasu adresu. Chinese restaraunt ONLY ONE, Sarajevo - Dobrinja!', 43.828285, 18.349714, 4, 65, 5, 'chinaonlyone', 'Sarajevo - Novi Grad', 'Chinese');
 
 
 
@@ -61,6 +58,7 @@ INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (4, 1, 2);
 INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (5, 1, 6);
 INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (6, 1, 6);
 INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (7, 1, 4);
+
 INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (8, 2, 4);
 INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (9, 2, 4);
 INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (10, 2, 2);
@@ -68,11 +66,45 @@ INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (11, 2, 2)
 INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (12, 2, 12);
 INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (13, 2, 8);
 INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (14, 2, 4);
+
 INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (15, 3, 4);
 INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (16, 3, 4);
 INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (17, 3, 4);
 INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (18, 3, 4);
 
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (19, 4, 4);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (20, 4, 4);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (21, 4, 6);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (22, 4, 4);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (23, 4, 10);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (24, 4, 8);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (25, 4, 4);
+
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (26, 5, 6);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (27, 5, 6);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (28, 5, 8);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (29, 5, 10);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (30, 5, 10);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (31, 5, 7);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (32, 5, 6);
+
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (33, 6, 2);
+
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (34, 6, 3);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (35, 6, 4);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (36, 6, 4);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (37, 6, 8);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (38, 6, 8);
+
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (39, 7, 10);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (40, 7, 6);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (41, 7, 6);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (42, 7, 6);
+
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (43, 8, 2);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (44, 8, 2);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (45, 8, 6);
+INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (46, 8, 8);
 
 CREATE TABLE reservations(
 	id bigint,
@@ -83,7 +115,88 @@ CREATE TABLE reservations(
 	PRIMARY KEY (id)
 );
 
+CREATE TABLE restaurantmenuitem(
+    id bigint,
+    idRestaurant bigint NOT NULL,
+    type varchar(255) NOT NULL,
+    name varchar(255) NOT NULL,
+    price float NOT NULL,
+    description varchar(1000) NOT NULL,
+    PRIMARY KEY (id)
+);
 
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (1, 1, 'Breakfast', 'Pronto Guacamole', 8, '3 oz of fresh ripe Avocados, Garlic, lime Juice, Salsa and Roma Tomatoes.');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (2, 1, 'Breakfast', 'Smoky Queso Fundido', 4, '8 oz spicy, three pepper, cheese dip mixed with our own freshly made Salsa Roja');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (3, 2, 'Breakfast', 'Guacamole & Chips', 4, '8 oz. of fresh ripe Avocados, Garlic, lime Juice, Salsa and Roma Tomatoes.');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (4, 1, 'Breakfast', 'Chips & Salsa', 3, 'Fresh tortilla chips with full salsa bar hosting 6 salsas made fresh everyday.');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (5, 1, 'Breakfast', 'Cheese Calzone', 8, 'Baked or Fried');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (6, 1, 'Lunch', 'Tostada', 8, '8 oz. of fresh ripe Avocados, Garlic');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (7, 1, 'Lunch', 'Baja BBQ Chicken Salad', 5, 'Cheese dip mixed with our own freshly made Salsa Roja');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (8, 1, 'Lunch', 'Baja Ensalada', 12, '3 oz of fresh ripe Avocados, Garlic, lime Juice, Salsa and Roma Tomatoes');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (9, 1, 'Lunch', 'Nachos', 11, '8 oz spicy, three pepper');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (10, 1, 'Lunch', 'Quesadilla', 14, 'Served with freshly made tortilla chips.');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (11, 1, 'Dinner', 'Fajitas', 8, '3 oz of fresh ripe Avocados, Garlic, lime Juice, Salsa and Roma Tomatoes');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (12, 1, 'Dinner', 'Baja BBQ Chicken Salad', 5, '8 oz. of fresh ripe Avocados, Garlic');
+
+
+
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (13, 2, 'Breakfast', 'Jamaican Patties', 2, '');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (14, 2, 'Breakfast', 'French Fries', 3, '');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (15, 2, 'Breakfast', 'Argentine Empanadas', 2, '');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (16, 2, 'Lunch', 'Grilled Chicken', 13, 'Italian House Salad or Caesar');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (17, 2, 'Lunch', 'Homemade Chicken Salad', 7, 'Italian House or Caesar Salad');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (18, 2, 'Lunch', 'Pasta Carbonaro', 14, 'With onion & Prosciutto in a cream sauce');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (19, 2, 'Lunch', 'Mochi', 4, 'Two pieces');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (20, 2, 'Lunch', 'King Crab', 5, 'One piece');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (21, 2, 'Dinner', 'Tuna Salad', 9, 'Italian House or Caesar Salad');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (22, 2, 'Dinner', 'Rainbow Naruto Roll', 12, 'Tuna, salmon, white fish, kani, avocado and tobiko');
+
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (23, 3, 'Breakfast', 'Meat Stromboli', 12, 'Pepperoni, Ham, Bacon, Sausage, Meatball');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (24, 3, 'Breakfast', 'Cheese Calzone', 8, 'Baked or Fried');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (25, 3, 'Breakfast', 'Fettuccini Alfredos', 13, '');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (26, 3, 'Lunch', 'Shrimp Fra Diavolo', 19, 'Spicy Shrimp');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (27, 3, 'Lunch', 'Veal Parmigiana', 14, 'Italian House or Caesar Salad');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (28, 3, 'Lunch', 'Cheese Ravioli', 10, '');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (29, 3, 'Lunch', 'Margherita', 4, 'Two pieces');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (30, 3, 'Lunch', 'Vegetable Delight', 18, '');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (31, 3, 'Dinner', 'Christians Special', 19, 'Marinara Sauce, Fresh Mozzarella, Pepperoni, Ham');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (32, 3, 'Dinner', 'Meatlovers', 20, '5 Meats -Pepperoni, Meatball, Ham, Bacon, Sausage');
+
+
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (33, 5, 'Breakfast', 'White Pizza', 12, 'Pepperoni, Ham, Bacon, Sausage, Meatball');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (34, 5, 'Breakfast', 'Penne alla Vodka Pie', 8, 'Baked or Fried');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (35, 5, 'Breakfast', 'Eggplant Marinara Pie', 13, '');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (36, 5, 'Lunch', 'Siciliana', 19, 'Spicy Shrimp');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (37, 5, 'Lunch', 'Lasagna Pizza', 14, 'Italian House or Caesar Salad');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (38, 5, 'Lunch', 'Delicious Pie', 10, '');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (39, 5, 'Lunch', 'Lasagna', 4, 'Two pieces');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (40, 5, 'Lunch', 'Philly Cheese Steak', 18, '');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (41, 5, 'Dinner', 'Chicken Salad', 19, 'Marinara Sauce, Fresh Mozzarella, Pepperoni, Ham');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (42, 3, 'Dinner', 'Grilled Marinated Chicken Sub', 20, '5 Meats -Pepperoni, Meatball, Ham, Bacon, Sausage');
+
+
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (43, 7, 'Breakfast', 'Meat Stromboli', 12, 'Pepperoni, Ham, Bacon, Sausage, Meatball');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (44, 7, 'Breakfast', 'Cheese Calzone', 8, 'Baked or Fried');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (45, 7, 'Breakfast', 'Fettuccini Alfredos', 13, '');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (46, 7, 'Lunch', 'Buffalo Chicken Wrap', 19, 'Spicy Shrimp');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (47, 7, 'Lunch', 'Veal Parmigiana', 14, 'Italian House or Caesar Salad');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (48, 7, 'Lunch', 'Caesar Salad with Chicken', 10, '');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (49, 7, 'Lunch', 'Margherita', 4, 'Two pieces');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (50, 7, 'Lunch', 'Vegetable Delight', 18, '');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (51, 7, 'Dinner', 'Cheese Steak Sub', 19, 'Marinara Sauce, Fresh Mozzarella, Pepperoni, Ham');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (52, 3, 'Dinner', 'The New York Salad', 20, '5 Meats -Pepperoni, Meatball, Ham, Bacon, Sausage');
+
+
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (53, 8, 'Breakfast', 'Crazy Roll', 13, 'Spicy tuna, spicy salmon, tempura flake, tobiko and tuna');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (54, 8, 'Breakfast', 'Red Dragon Roll', 13, 'Spicy tuna and crunch topped with pepper tuna, avocado and tobiko');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (55, 8, 'Breakfast', 'Donkey Kong Roll', 10, 'Shrimp tempura topped with banana tempura');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (56, 8, 'Lunch', 'Chicken Teriyaki Bento Box', 18, 'Served with tempura, shumai, a California roll, rice and soup or salad');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (57, 8, 'Lunch', 'Negimaki Bento Box', 18, 'Served with tempura, shumai, a California roll, rice and soup or salad');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (58, 8, 'Lunch', 'Sashimi Bento Box', 18, 'Seven pieces. Served with tempura, shumai, a California roll, rice and soup or salad');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (59, 8, 'Lunch', 'Mochi', 4, 'Two pieces');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (60, 8, 'Lunch', 'King Crab', 5, 'One piece');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (61, 8, 'Dinner', 'Samurai Naruto Roll', 9, 'Black pepper tuna, avocado and scallion');
+INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (62, 8, 'Dinner', 'Rainbow Naruto Roll', 12, 'Tuna, salmon, white fish, kani, avocado and tobiko');
 
 
 CREATE SEQUENCE hibernate_sequence;
@@ -93,5 +206,6 @@ DROP TABLE users;
 DROP TABLE restaurants;
 DROP TABLE restauranttables;
 DROP TABLE reservations;
+DROP TABLE restaurantmenuitem;
 
 DROP SEQUENCE IF EXISTS hibernate_sequence;

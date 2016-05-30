@@ -10,6 +10,7 @@
         <class>models.Restaurant</class>
         <class>models.Reservation</class>
         <class>models.RestaurantTables</class>
+        <class>models.RestaurantMenuItem</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL82Dialect"/>
         </properties>

@@ -1,11 +1,10 @@
 <img class="restaurant_thumb" src="assets/images/restaurants/thumbnails/{{restaurantlist.imageFileName}}.jpg" />
 {{#link-to 'restaurant' restaurantlist.id class='restaurant_name'}}{{restaurantlist.restaurantName}}{{/link-to}}
 <div class="restaurant_marks">
-  {{#restaurant-star max=5 value=restaurantlist.mark voteAllowed=false}}{{/restaurant-star}}
-  <span class="votes">(1745)</span>
+  {{#restaurant-star max=5 value=restaurantlist.mark votes=restaurantlist.votes voteAllowed=false}}{{/restaurant-star}}
   <span class="price_range">
     {{#restaurant-price-range max=5 value=restaurantlist.priceRange}}{{/restaurant-price-range}}
   </span>
 </div>
 <div class="restaurant_food">{{restaurantlist.foodType}}</div>
-<a {{action 'reservenow'}} class="restaurant_reserve" href="#">Reserve now</a>
+{{#link-to 'restaurant' restaurantlist.id class='restaurant_reserve'}}Reserve now{{/link-to}}

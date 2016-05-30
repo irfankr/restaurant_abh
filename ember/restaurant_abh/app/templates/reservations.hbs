@@ -1,0 +1,35 @@
+{{#navigation-bar styleClass='navigation_black'}}{{/navigation-bar}}
+<div class="container">
+  {{#each model.listReservations as |reservation|}}
+      <div class="box_shadow restaurant_data_container" style="margin-bottom:65px;">
+          <h1 class="title">Reservation details</h1>
+
+          <div class="row">
+            <div class="col-md-2">
+              <div class="complete_reservation_restaurant_image" style="background-image:url('assets/images/restaurants/thumbnails/{{reservation.imageFileName}}.jpg');"></div>
+            </div>
+            <div class="col-md-10 complete_reservation_restaurant_details">
+              <div class="title">RESTAURANT</div>
+              <div class="name">{{reservation.restaurantName}}</div>
+
+              <div class="row">
+                <div class="col-md-2">
+                  <div class="title">GUESTS</div>
+                  <div class="details">{{reservation.guests}}</div>
+                </div>
+                <div class="col-md-3">
+                  <div class="title">DATE</div>
+                  <div class="details">{{reservation.reservationDate}}</div>
+                </div>
+                <div class="col-md-2">
+                  <div class="title">HOUR</div>
+                  <div class="details">{{reservation.reservationHour}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    {{else}}
+      No reservations
+    {{/each}}
+</div>

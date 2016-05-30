@@ -10,10 +10,8 @@
   <div class="container">
     <nav class="additional">
       <ul>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Terms of use</a></li>
-        <li><a href="#">Sitemap</a></li>
-        <li><a href="#">Mobile Site</a></li>
+        <li>{{#link-to 'privacypolicy'}}Privacy Policy{{/link-to}}</li>
+        <li>{{#link-to 'termsofuse'}}Terms of use{{/link-to}}</li>
       </ul>
     </nav>
 
@@ -21,7 +19,9 @@
       <ul>
         <li>{{#link-to 'index'}}Home{{/link-to}}</li>
         <li>{{#link-to 'restaurants'}}Restaurants{{/link-to}}</li>
-        <li>{{#link-to 'login'}}Login{{/link-to}}</li>
+        {{#unless currentUser.userLoggedIn}}
+          <li>{{#link-to 'login'}}Login{{/link-to}}</li>
+        {{/unless}}
       </ul>
     </nav>
 

@@ -8,6 +8,10 @@ import play.mvc.*;
 
 import models.Restaurant;
 import models.Reservation;
+import models.RestaurantMenuItem;
+import models.User;
+
+import controllers.UserController;
 
 import models.*;
 
@@ -56,6 +60,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class RestaurantController extends Controller {
     @Transactional
@@ -83,19 +88,55 @@ public class RestaurantController extends Controller {
         return ok(Json.toJson(restaurant.findById(x)));
     }
 
-    /*
+    @Transactional
+    public Result restaurantVote() {
+        //Create restaurantForm
+        Form<RestaurantVoteDto> restaurantForm = form(RestaurantVoteDto.class).bindFromRequest();
+        Restaurant restaurant = new Restaurant();
+
+        //Get sent id
+        long x = Long.parseLong(restaurantForm.get().id);
+        System.out.println("ID Restorana: " + x);
+
+        //Get restaurant id
+        restaurant = restaurant.findById(x);
+
+        //Convert mark string to float
+        float mark = Float.parseFloat(restaurantForm.get().mark);
+        System.out.println("Ocjena restorana: " + mark);
+
+        //Increase mark value in object
+        restaurant.setMark(restaurant.getMark() + mark);
+
+        //Increase votes value in object
+        restaurant.setVotes(restaurant.getVotes() + 1);
+
+        //Update restaurant in database
+        restaurant.update();
+
+        //Return JSON of all restaurants
+        return ok(Json.toJson(restaurant));
+    }
+
     @Transactional
     public Result getRestaurantMenu(){
         //Create restaurantForm
-        Form<RestaurantDetailsDto> restaurantForm = form(RestaurantDetailsDto.class).bindFromRequest();
+        Form<RestaurantMenuDto> restaurantForm = form(RestaurantMenuDto.class).bindFromRequest();
+
+        //Create restaurant object
         Restaurant restaurant = new Restaurant();
-        long x = Long.parseLong(restaurantForm.get().id);
 
-        String menuJson = "{\"Breakfast\":[{\"name\":\"Broccoli Rabe\", \"price\":\"8.95\", \"description\":\"With grilled sausage, olive oil and garlic\"}, {\"name\":\"Fried Mozzarella\", \"price\":\"8.95\"}]}";
+        //Convert String od restaurant id to long
+        long idRestaurant = Long.parseLong(restaurantForm.get().idRestaurant);
 
-        return ok(menuJson);
+        List<RestaurantMenuItem> restaurantMenu = new ArrayList<RestaurantMenuItem>();
+        restaurantMenu = restaurant.getMenuItems(idRestaurant, restaurantForm.get().type);
+
+        System.out.println(restaurantMenu);
+
+        //Call get menu items method and return result
+        return ok(Json.toJson(restaurantMenu));
     }
-    */
 
 
     @Transactional
@@ -131,31 +172,62 @@ public class RestaurantController extends Controller {
 
         //Create reservation object
         Reservation reservation = new Reservation();
-        reservation.setIdUser(Long.parseLong(reservationForm.get().idUser));
-        reservation.setPersons(Long.parseLong(reservationForm.get().persons));
-        reservation.setIdTable(Long.parseLong(reservationForm.get().idTable));
 
-        String dateString = reservationForm.get().reservationDateTime;
-        //System.out.println("Get from POST request: " + dateString);
-        SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy HH:mm");
+        //Set persons parameter
+        String[] parts = reservationForm.get().persons.split(" ");
+        String personsNumber = parts[0]; // 004
+        reservation.setPersons(Long.parseLong(personsNumber));
+
+        //Set User ID from session
+        long userId = Long.parseLong(session("idUser"));
+        reservation.setIdUser(userId);
+
+        //Time stamp
+        String reservationDateTimeFromEmber = reservationForm.get().reservationDate + " " + reservationForm.get().reservationHour;
+
+        String reservationDateTime = "";
+        SimpleDateFormat formatDateTimeFromEmber = new SimpleDateFormat("MMM d, yyyy hh:mm a");
+        SimpleDateFormat formatToCheckFunction = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            Date parsed = format.parse(dateString);
+            //Create date object to insert into database
+            Date parsedReservationDateTime = formatDateTimeFromEmber.parse(reservationDateTimeFromEmber);
 
-            //Insert into object
-            reservation.setReservationDateTime(parsed);
-            //System.out.println("Pretvoreno " + parsed.toString());
+            //Set date and time of reservation to reservation object
+            reservation.setReservationDateTime(parsedReservationDateTime);
+
+            //Create String from Date for checkReservationAvailability method
+            reservationDateTime = formatToCheckFunction.format(parsedReservationDateTime);
         }
         catch(ParseException pe) {
-            System.out.println("ERROR: Cannot parse date in RestaurantController.makeReservation \"" + dateString + "\"");
+            System.out.println("ERROR: Cannot parse date in RestaurantController.makeReservation \"" + reservationDateTime + "\"");
         }
 
-        //Save reservation to database
-        reservation.save();
+        //Get list of all tables for that id restaurant
+        long idRestaurant = Long.parseLong(reservationForm.get().idRestaurant);
+        //Create restaurant object
+        Restaurant restoran = new Restaurant();
+        List<RestaurantTables> freeTables = new ArrayList<RestaurantTables>();
 
-        return ok(Json.toJson(reservation));
+        freeTables = restoran.checkReservationAvailability(reservation.getPersons(), reservationDateTime, idRestaurant);
+
+        if(freeTables.size() == 0) { //If there is no available tables
+            return badRequest("{error: \"No available tables!\"}");
+        } else {
+            RestaurantTables firstFreeTable = new RestaurantTables();
+
+            //Get first available table
+            firstFreeTable = freeTables.get(0);
+
+            //Set id of table
+            reservation.setIdTable(firstFreeTable.getId());
+
+            //Save reservation to database
+            reservation.save();
+
+            return ok(Json.toJson(reservation));
+        }
     }
 
-    /*
     @Transactional
     public Result getAllRestaurantsSortReservationsToday() {
         //Declare list
@@ -166,7 +238,6 @@ public class RestaurantController extends Controller {
         //Return JSON of all restaurants
         return ok(Json.toJson(restaurants));
     }
-    */
 
 
 
@@ -196,11 +267,19 @@ public class RestaurantController extends Controller {
     public static class RestaurantDetailsDto {
         public String id;
     }
+    public static class RestaurantVoteDto {
+        public String id;
+        public String mark;
+    }
     public static class ReservationDto {
-        public String idTable;
-        public String idUser;
+        public String idRestaurant;
         public String persons;
-        public String reservationDateTime;
+        public String reservationDate;
+        public String reservationHour;
+    }
+    public static class RestaurantMenuDto {
+        public String idRestaurant;
+        public String type;
     }
     //Logger.info("SESSION ID: " + session("idUser"));
 }

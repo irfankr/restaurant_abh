@@ -1,7 +1,7 @@
 
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/home/irfank/Play_applications/restaurant_abh/conf/routes
-// @DATE:Fri May 27 16:42:48 CEST 2016
+// @DATE:Mon May 30 10:20:14 CEST 2016
 
 import play.api.mvc.{ QueryStringBindable, PathBindable, Call, JavascriptLiteral }
 import play.core.routing.{ HandlerDef, ReverseRouteContext, queryString, dynamicString }
@@ -20,10 +20,22 @@ package controllers {
     }
 
   
-    // @LINE:26
-    def getRestaurantDetails(): Call = {
+    // @LINE:31
+    def restaurantVote(): Call = {
       import ReverseRouteContext.empty
-      Call("POST", _prefix + { _defaultPrefix } + "api/v1/getRestaurantDetails")
+      Call("POST", _prefix + { _defaultPrefix } + "api/v1/restaurantVote")
+    }
+  
+    // @LINE:30
+    def getAllRestaurantsSortReservationsToday(): Call = {
+      import ReverseRouteContext.empty
+      Call("GET", _prefix + { _defaultPrefix } + "api/v1/allRestaurantsSortReservationsToday")
+    }
+  
+    // @LINE:27
+    def getRestaurantMenu(): Call = {
+      import ReverseRouteContext.empty
+      Call("POST", _prefix + { _defaultPrefix } + "api/v1/getRestaurantMenu")
     }
   
     // @LINE:29
@@ -36,6 +48,12 @@ package controllers {
     def getAllRestaurants(): Call = {
       import ReverseRouteContext.empty
       Call("GET", _prefix + { _defaultPrefix } + "api/v1/getAllRestaurants")
+    }
+  
+    // @LINE:26
+    def getRestaurantDetails(): Call = {
+      import ReverseRouteContext.empty
+      Call("POST", _prefix + { _defaultPrefix } + "api/v1/getRestaurantDetails")
     }
   
     // @LINE:28
@@ -76,6 +94,27 @@ package controllers {
   
   }
 
+  // @LINE:33
+  class ReverseReservationController(_prefix: => String) {
+    def _defaultPrefix: String = {
+      if (_prefix.endsWith("/")) "" else "/"
+    }
+
+  
+    // @LINE:34
+    def getListOfReservationsForUser(): Call = {
+      import ReverseRouteContext.empty
+      Call("GET", _prefix + { _defaultPrefix } + "api/v1/getListOfReservationsForUser")
+    }
+  
+    // @LINE:33
+    def checkReservationAvailability(): Call = {
+      import ReverseRouteContext.empty
+      Call("POST", _prefix + { _defaultPrefix } + "api/v1/checkReservationAvailability")
+    }
+  
+  }
+
   // @LINE:20
   class ReverseUserController(_prefix: => String) {
     def _defaultPrefix: String = {
@@ -109,24 +148,24 @@ package controllers {
   
   }
 
-  // @LINE:34
+  // @LINE:36
   class ReverseHomeController(_prefix: => String) {
     def _defaultPrefix: String = {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
   
-    // @LINE:34
+    // @LINE:36
     def index(slug:String): Call = {
     
       (slug: @unchecked) match {
       
-        // @LINE:34
+        // @LINE:36
         case (slug) if slug == "" =>
           implicit val _rrc = new ReverseRouteContext(Map(("slug", "")))
           Call("GET", _prefix)
       
-        // @LINE:35
+        // @LINE:37
         case (slug)  =>
           import ReverseRouteContext.empty
           Call("GET", _prefix + { _defaultPrefix } + implicitly[PathBindable[String]].unbind("slug", slug))

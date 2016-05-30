@@ -121,6 +121,13 @@ public class User {
         this.city = city;
     }
 
+    public void save() { JPA.em().persist(this); }
+
+    public void update() { JPA.em().merge(this); }
+
+    public void delete() {
+        JPA.em().remove(this);
+    }
 
     @Transactional
     public static User findById(long id){
@@ -131,20 +138,25 @@ public class User {
         }
     }
 
-    public void save() { JPA.em().persist(this); }
-
-    public void update() { JPA.em().merge(this); }
-
-    public void delete() {
-        JPA.em().remove(this);
-    }
-
     @Transactional
     public static User findByEmailAndPassword(String email, String password){
         try {
             TypedQuery<User> query = JPA.em().createQuery("SELECT u FROM User u WHERE email = ? AND password = ?", User.class);
             query.setParameter(1, email);
             query.setParameter(2, password);
+            User user = query.getSingleResult();
+
+            return user;
+        } catch(NoResultException noresult) { //If there is no user with
+            return null;
+        }
+    }
+
+    @Transactional
+    public static User findByEmail(String email){
+        try {
+            TypedQuery<User> query = JPA.em().createQuery("SELECT u FROM User u WHERE email = ?", User.class);
+            query.setParameter(1, email);
             User user = query.getSingleResult();
 
             return user;

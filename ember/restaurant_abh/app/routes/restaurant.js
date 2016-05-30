@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import Restaurant from '../models/restaurant';
+import RestaurantMenu from '../models/restaurantmenu';
 
 export default Ember.Route.extend({
   restaurantId: null,
@@ -7,6 +8,14 @@ export default Ember.Route.extend({
   currentUser: Ember.inject.service(),
   restaurantDetails: null, //This is in return
   restaurantsStatsStyle: null,
+  restaurantMenu: RestaurantMenu.create(),
+  currentReservation: Ember.inject.service(),
+
+  setupController: function(controller, model){
+    this._super(controller, model);
+
+    controller.set('tablesAvailable', null);
+  },
   model: function(param){
     var self = this;
 
@@ -18,11 +27,11 @@ export default Ember.Route.extend({
     }
 
     //Put url id into restaurant object
+    this.set('restaurantId', param.restaurantId)
     this.set('restaurant.id', param.restaurantId);
 
     //Convert object in JSON
     var data = JSON.stringify(this.get('restaurant'));
-
 
     //Ajax call to get restaurant details
     $.ajax({ //No return here
@@ -41,14 +50,14 @@ export default Ember.Route.extend({
       $.ajax({ //No return here
         url: "/api/v1/getRestaurantMenu",
         type: "POST",
-        data: '{"id":"1"}',
+        data: '{"idRestaurant":"'+param.restaurantId+'", "type":"Breakfast"}',
         processData: false,
         async:false, //Need to wait
         contentType: "application/json; charset=UTF-8",
       }).fail(function(data) {
         console.log(data);
       }).then(function(data) {
-        console.log(data);
+        self.set('restaurantMenu', data);
       });
 
     });
@@ -56,6 +65,7 @@ export default Ember.Route.extend({
     return Ember.RSVP.hash({
       restaurantDetails: self.get('restaurantDetails'),
       restaurantsStatsStyle: self.get('restaurantsStatsStyle'),
+      restaurantMenu: self.get('restaurantMenu'),
     });
 
   }

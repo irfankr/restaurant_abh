@@ -52,6 +52,7 @@ a:link, a:visited {
   .navigation_black a:hover {
 
   }
+
   .navigation_black .app_name {
     font-size:20px !important;
   }
@@ -61,6 +62,21 @@ a:link, a:visited {
     .navigation_black ul li {
       float:left; padding-left:40px;
      }
+      .navigation_black ul li ul.userdropdown {
+        position:absolute; top:0px; left:0px; padding:0px; margin:0px; margin-top:20px; display:none; width:200px; padding-top:10px;
+      }
+        .navigation_black ul li ul.userdropdown li {
+          padding:0px; margin:0px;
+        }
+          .navigation_black ul li ul.userdropdown li a:link, .navigation_black ul li ul.userdropdown li a:visited {
+            color: #000; display:block; line-height:30px; height:30px; padding-left:10px; padding-right:10px;
+          }
+          .navigation_black ul li ul.userdropdown li a:hover {
+
+          }
+          .navigation_black a:hover .userdropdown {
+            display:block;
+          }
 
 .navigation_white {
   height:85px; line-height:85px; margin-bottom:85px; z-index:50; position: relative;
@@ -79,7 +95,24 @@ a:link, a:visited {
   }
     .navigation_white ul li {
       float:left; padding-left:40px;
-     }
+    }
+      .navigation_white ul li ul.userdropdown {
+        position:absolute; top:0px; left:0px; padding:0px; margin:0px; margin-top:20px; display:none; width:200px; padding-top:10px;
+      }
+        .navigation_white ul li ul.userdropdown li {
+          padding:0px; margin:0px;
+        }
+          .navigation_white ul li ul.userdropdown li a:link, .navigation_white ul li ul.userdropdown li a:visited {
+            color: #FFF; display:block; line-height:30px; height:30px; padding-left:10px; padding-right:10px;
+          }
+          .navigation_white ul li ul.userdropdown li a:hover {
+
+          }
+
+          .navigation_white a:hover .userdropdown {
+            display:block;
+          }
+
 
 /* Login and Register */
 .login_register_container {
@@ -155,7 +188,7 @@ footer nav.main {
     height:680px; background-size:cover; background-image:url('./images/home_header_big.jpeg'); background-position:center center; opacity: 0.9;
   }
   .home_header_big h1 {
-    font-family:'Source Sans Pro'; font-weight: 300; font-size:48px; padding-top:230px; color:#FFF; text-align:center;
+    font-family:'Source Sans Pro'; font-weight: 300; font-size:48px; padding-top:280px; color:#FFF; text-align:center;
   }
   .home_header_big h2 {
     font-family:'Source Sans Pro'; font-weight: 600; font-size:20px; color:#FFF; text-align:center;
@@ -238,6 +271,7 @@ ul.restaurant_left_menu {
       font-family:'Source Sans Pro'; font-weight: 600; color:rgba(19, 29, 36, 0.4); font-size:18px;
     }
     ul.restaurant_left_menu li a:hover {
+      color:#000;
     }
 
 .restaurant_details {
@@ -246,7 +280,7 @@ ul.restaurant_left_menu {
   .restaurant_details .title {
     font-family:'Source Sans Pro'; font-weight: 400; font-size:30px; color:#FFF; letter-spacing: 1px;
   }
-  .restaurant_details .stats {
+  .restaurant_details .stats, .restaurant_details .statslogged {
     color:#AEA5A7; font-size:16px;
   }
   .restaurant_details .statslogged img:hover {
@@ -294,12 +328,29 @@ ul.restaurant_left_menu {
   position:relative; width: 695px; height: 250px; margin-left:-30px;
 }
 
+.availability_text {
+  font-family:'Source Sans Pro'; font-weight: 400; color:#131d24; font-size:20px; margin-top:30px; margin-bottom:5px;
+}
+.tables_left {
+  font-family:'Source Sans Pro'; font-weight: 400; color:#A2A6A8; font-size:14px;
+}
+.select_time_best_fits {
+  font-family:'Source Sans Pro'; font-weight: 400; color:#131d24; font-size:18px; margin-top:30px; margin-bottom:10px;
+}
+.reservation_choose_time{
+}
+  .reservation_choose_time a:link, .reservation_choose_time a:visited {
+    display:inline-block; height:34px; line-height:34px; color:#FFF; background-color:#FD6F60; font-family:'Source Sans Pro'; font-weight: 600; font-size:16px; padding-left:15px; padding-right:15px; border-radius: 2px; margin-right:10px;
+  }
+  .reservation_choose_time a:hover {
+  }
+
 /* Restaurant menu */
 .restaurant_menu_item_title {
   margin-bottom:60px !important;
 }
 .restaurant_menu_item_title a:link, .restaurant_menu_item_title a:visited {
-  font-size:16px; padding-left:12px; padding-right:12px;
+  font-size:16px; padding-left:12px; padding-right:12px; line-height:30px; padding-top:10px; padding-bottom:10px;
 }
 .restaurant_menu_item_title a.active:link, .restaurant_menu_item_title a.active:visited {
   font-size:16px; padding-left:15px; padding-right:15px; background-color:#fd6f60; color:#FFF; line-height:30px; padding-top:10px; padding-bottom:10px; border-radius: 2px;
