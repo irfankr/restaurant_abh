@@ -65,7 +65,11 @@ export default Ember.Controller.extend({
               async:false, //Need to wait
               contentType: "application/json; charset=UTF-8",
           }).fail(function(data) {
-              console.log(data);
+              $(".registrationsuccessfull").show();
+              //Change alert class
+              $(".alert").addClass('alert-danger').removeClass('alert-success');
+              //Set alert text
+              $(".alertText").html('<strong>Error!</strong> Sorry, available table is reserved meanwhile');
           }).then(function(data) {
               //Display notification that reservation is created
               $(".registrationsuccessfull").show();
@@ -80,9 +84,6 @@ export default Ember.Controller.extend({
 
           //Stop countdown timer
           clearTimeout(self.get('t'));
-
-          //Redirect to restaurants page
-          setTimeout(function(){ self.transitionToRoute('restaurants'); }, 3000);
 
       } else { //if not, registration is required
 
@@ -159,8 +160,6 @@ export default Ember.Controller.extend({
 
                   //Stop countdown timer
                   clearTimeout(self.get('t'));
-
-                  setTimeout(function(){ self.transitionToRoute('restaurants'); }, 3000);
 
               });
 

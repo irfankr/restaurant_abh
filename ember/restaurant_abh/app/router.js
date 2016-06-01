@@ -14,6 +14,8 @@ Router.map(function() {
   this.route('reservations');
   this.route('termsofuse');
   this.route('privacypolicy');
+  this.route('resetpassword');
+  this.route('forgotpassword');
 });
 
 export default Router;

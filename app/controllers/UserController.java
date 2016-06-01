@@ -125,6 +125,20 @@ public class UserController extends Controller {
 
         //Check is there user with same email
         if(checkUser.findByEmail(user.getEmail()) == null){
+
+            //Validation
+            if(!user.getFirstName().matches("[A-Z][a-zA-Z]*")){ //First name
+                return badRequest("{\"error\": \"First name is not valid!\"}");
+            }
+
+            if(!user.getFirstName().matches("[a-zA-z]+([ '-][a-zA-Z]+)*")){ //Last name
+                return badRequest("{\"error\": \"Last name is not valid!\"}");
+            }
+
+            if(!user.getPhone().matches("[0-9-()\\/ ]*[1-9][0-9-() ]*")){ //Phone number
+                return badRequest("{\"error\": \"Phone number is not valid!\"}");
+            }
+
             //Store user in database
             user.save();
 
@@ -140,8 +154,6 @@ public class UserController extends Controller {
         } else {
             return badRequest("{\"error\": \"User with entered mail exist!\"}");
         }
-
-
 
     }
 
