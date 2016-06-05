@@ -1,0 +1,894 @@
+[1mdiff --git a/.gitignore b/.gitignore[m
+[1mindex 1573897..6b0d6b3 100644[m
+[1m--- a/.gitignore[m
+[1m+++ b/.gitignore[m
+[36m@@ -3,7 +3,3 @@[m [mbower_components/[m
+ target/[m
+ .idea/[m
+ *.log[m
+[31m-ember/restaurant_abh/tmp/[m
+[31m-ember/restaurant_abh/dist/[m
+[31m-project/target/streams/[m
+[31m-target/streams/[m
+[1mdiff --git a/.gitignore~ b/.gitignore~[m
+[1mdeleted file mode 100644[m
+[1mindex b09b4cb..0000000[m
+[1m--- a/.gitignore~[m
+[1m+++ /dev/null[m
+[36m@@ -1,10 +0,0 @@[m
+[31m-node_modules/[m
+[31m-bower_components/[m
+[31m-target/[m
+[31m-.idea/[m
+[31m-*.log[m
+[31m-ember/restaurant_abh/tmp/[m
+[31m-ember/restaurant_abh/dist/[m
+[31m-project/target/streams/[m
+[31m-target/streams/[m
+[31m-logs/*.[m
+[1mdiff --git a/app/controllers/UserController.java b/app/controllers/UserController.java[m
+[1mindex aaf2dbe..5eca93e 100644[m
+[1m--- a/app/controllers/UserController.java[m
+[1m+++ b/app/controllers/UserController.java[m
+[36m@@ -18,8 +18,6 @@[m [mimport static play.libs.Json.toJson;[m
+ import com.fasterxml.jackson.databind.JsonNode;[m
+ import com.fasterxml.jackson.databind.node.ObjectNode;[m
+ [m
+[31m-import java.text.ParseException;[m
+[31m-import java.text.SimpleDateFormat;[m
+ import java.util.ArrayList;[m
+ import java.util.Iterator;[m
+ import java.util.List;[m
+[36m@@ -30,7 +28,6 @@[m [mimport javax.persistence.*;[m
+ import java.io.Serializable;[m
+ import java.math.BigDecimal;[m
+ import java.util.Date;[m
+[31m-import java.util.concurrent.TimeUnit;[m
+ import javax.persistence.Column;[m
+ import javax.persistence.EmbeddedId;[m
+ import javax.persistence.Entity;[m
+[36m@@ -56,30 +53,15 @@[m [mpublic class UserController extends Controller {[m
+ [m
+         if (loginForm.hasErrors()) {[m
+             return badRequest("Some error happend!");[m
+[31m-[m
+[31m-            //Create session that stores wrong attempts[m
+         } else {[m
+             User user = User.findByEmailAndPassword(loginForm.get().email, loginForm.get().password);[m
+             if(user == null) {[m
+                 return badRequest("{error: \"User data is not valid!\"}");[m
+             } else {[m
+                 //Put user id in session[m
+[31m-                //session().clear();[m
+[32m+[m[32m                session().clear();[m
+                 session("idUser", Long.toString(user.getId()));[m
+ [m
+[31m-                //If user didn't check remember me option[m
+[31m-                if(Boolean.valueOf(loginForm.get().rememberMe) == false){[m
+[31m-                    //Add 20 minutes to current[m
+[31m-                    Date currentTime = new Date();[m
+[31m-                    Date newDate = new Date(currentTime.getTime() + TimeUnit.MINUTES.toMillis(20));[m
+[31m-[m
+[31m-                    session("userLogInExpiration", newDate.toString());[m
+[31m-[m
+[31m-                    System.out.println(session("userLogInExpiration"));[m
+[31m-                } else {[m
+[31m-                    session("userLogInExpiration", "");[m
+[31m-                }[m
+[31m-[m
+                 return ok(Json.toJson(user));[m
+             }[m
+         }[m
+[36m@@ -111,30 +93,13 @@[m [mpublic class UserController extends Controller {[m
+         if(session("idUser") == null){[m
+             return null;[m
+         } else {[m
+[31m-            //Get current time[m
+[31m-            Date currentTime = new Date();[m
+[31m-            Date userLogInExpiration = null;[m
+[31m-[m
+[31m-            try {[m
+[31m-                SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd kk:mm:ss z yyyy");[m
+[31m-                userLogInExpiration = format.parse(session("userLogInExpiration"));[m
+[31m-            } catch(ParseException pe) {[m
+[31m-                System.out.println("ERROR: Cannot parse date in UserController.getCurrentUser");[m
+[31m-            }[m
+[32m+[m[32m            long userId = Long.parseLong(session("idUser"));[m
+[32m+[m[32m            //Logger.info("SESSION ID: " + session("idUser"));[m
+ [m
+[31m-            //Check is user remembered[m
+[31m-            if(session("userLogInExpiration") != null && userLogInExpiration.after(currentTime)){[m
+[31m-                long userId = Long.parseLong(session("idUser"));[m
+[31m-                //Logger.info("SESSION ID: " + session("idUser"));[m
+[31m-[m
+[31m-                //Find user with that id[m
+[31m-                user = user.findById(userId);[m
+[31m-[m
+[31m-                return user;[m
+[31m-            } else {[m
+[31m-                return null;[m
+[31m-            }[m
+[32m+[m[32m            //Find user with that id[m
+[32m+[m[32m            user = user.findById(userId);[m
+ [m
+[32m+[m[32m            return user;[m
+         }[m
+ [m
+     }[m
+[36m@@ -160,20 +125,6 @@[m [mpublic class UserController extends Controller {[m
+ [m
+         //Check is there user with same email[m
+         if(checkUser.findByEmail(user.getEmail()) == null){[m
+[31m-[m
+[31m-            //Validation[m
+[31m-            if(!user.getFirstName().matches("[A-Z][a-zA-Z]*")){ //First name[m
+[31m-                return badRequest("{\"error\": \"First name is not valid!\"}");[m
+[31m-            }[m
+[31m-[m
+[31m-            if(!user.getFirstName().matches("[a-zA-z]+([ '-][a-zA-Z]+)*")){ //Last name[m
+[31m-                return badRequest("{\"error\": \"Last name is not valid!\"}");[m
+[31m-            }[m
+[31m-[m
+[31m-            if(!user.getPhone().matches("[0-9-()\\/ ]*[1-9][0-9-() ]*")){ //Phone number[m
+[31m-                return badRequest("{\"error\": \"Phone number is not valid!\"}");[m
+[31m-            }[m
+[31m-[m
+             //Store user in database[m
+             user.save();[m
+ [m
+[36m@@ -190,12 +141,13 @@[m [mpublic class UserController extends Controller {[m
+             return badRequest("{\"error\": \"User with entered mail exist!\"}");[m
+         }[m
+ [m
+[32m+[m
+[32m+[m
+     }[m
+ [m
+     public static class UserLoginDto {[m
+         public String email;[m
+         public String password;[m
+[31m-        public String rememberMe;[m
+     }[m
+ [m
+     public static class UserRegisterDto {[m
+[1mdiff --git a/app/views/index.scala.html b/app/views/index.scala.html[m
+[1mindex dc8c201..9ba7188 100644[m
+[1m--- a/app/views/index.scala.html[m
+[1m+++ b/app/views/index.scala.html[m
+[36m@@ -8,14 +8,13 @@[m
+     <meta name="viewport" content="width=device-width, initial-scale=1">[m
+ [m
+     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,300italic,200italic,400italic,600,700,600italic,900,700italic,900italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>[m
+[31m-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">[m
+ [m
+     <base href="/" />[m
+[31m-<meta name="restaurant-abh/config/environment" content="%7B%22modulePrefix%22%3A%22restaurant-abh%22%2C%22environment%22%3A%22production%22%2C%22baseURL%22%3A%22/%22%2C%22locationType%22%3A%22auto%22%2C%22EmberENV%22%3A%7B%22FEATURES%22%3A%7B%7D%7D%2C%22APP%22%3A%7B%22name%22%3A%22restaurant-abh%22%2C%22version%22%3A%220.0.0+1df29127%22%7D%2C%22exportApplicationGlobal%22%3Afalse%2C%22g-map%22%3A%7B%22libraries%22%3A%5B%22places%22%5D%7D%7D" />[m
+[32m+[m[32m<meta name="restaurant-abh/config/environment" content="%7B%22modulePrefix%22%3A%22restaurant-abh%22%2C%22environment%22%3A%22production%22%2C%22baseURL%22%3A%22/%22%2C%22locationType%22%3A%22auto%22%2C%22EmberENV%22%3A%7B%22FEATURES%22%3A%7B%7D%7D%2C%22APP%22%3A%7B%22name%22%3A%22restaurant-abh%22%2C%22version%22%3A%220.0.0+e234a700%22%7D%2C%22exportApplicationGlobal%22%3Afalse%2C%22g-map%22%3A%7B%22libraries%22%3A%5B%22places%22%5D%7D%7D" />[m
+ <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?libraries=places"></script>[m
+ [m
+     <link rel="stylesheet" href="assets/vendor-98f2fc4d5359ba494421e878eccc38a7.css">[m
+[31m-    <link rel="stylesheet" href="assets/restaurant-abh-78959c748703f12b1babdaa0286851a1.css">[m
+[32m+[m[32m    <link rel="stylesheet" href="assets/restaurant-abh-cbc6736aee602f4f7778434e191a1dbc.css">[m
+ [m
+     [m
+   </head>[m
+[36m@@ -23,7 +22,7 @@[m
+     [m
+ [m
+     <script src="assets/vendor-3aa08db74247bdd4e4809e3e0eea5115.js"></script>[m
+[31m-    <script src="assets/restaurant-abh-604b012661d29e19b8133ede73fc0dbd.js"></script>[m
+[32m+[m[32m    <script src="assets/restaurant-abh-dab766877cbe6485b7f742bf84a3b36d.js"></script>[m
+ [m
+     [m
+   </body>[m
+[1mdiff --git a/conf/application.conf b/conf/application.conf[m
+[1mindex 3fba2d5..3a6195b 100644[m
+[1m--- a/conf/application.conf[m
+[1m+++ b/conf/application.conf[m
+[36m@@ -369,5 +369,3 @@[m [mjpa.default=defaultPersistenceUnit[m
+ [m
+ #jpa.dialect=org.hibernate.dialect.PostgreSQLDialect[m
+ #jpa.ddl=update[m
+[31m-[m
+[31m-session.maxAge=77760000000[m
+[1mdiff --git a/conf/evolutions/default/1.sql b/conf/evolutions/default/1.sql[m
+[1mindex 6aad02a..609d288 100644[m
+[1m--- a/conf/evolutions/default/1.sql[m
+[1m+++ b/conf/evolutions/default/1.sql[m
+[36m@@ -29,20 +29,12 @@[m [mCREATE TABLE restaurants([m
+ 	PRIMARY KEY (id)[m
+ );[m
+ [m
+[31m-[m
+[31m-[m
+[31m-INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (1, 'Baja Fresh', 'In August 1990, Baja Fresh Mexican Grill opened its first restaurant featuring all-fresh, traditional fire-grilled Mexican favorites. Like many who grew up on fast food, we realized that it was time for something else, something different and something FRESH. Baja Fresh continues to be passionate about serving the freshest and high quality food in bright, clean environments. We believe in the benefits of eating well, being active and making a contribution to the communities we serve. We call this philosophy  Live Fresh  and you ll find this attitude in everything we do. We choose handmade and farm fresh not tin-canned, freshly prepared over microwaves and freezers. Flavor and nutrition over fillers and fads. At Baja Fresh you ll find eating well is a way of life and a state of mind. We believe in real food made with passion, for real people. Food that s always prepared by hand from real recipes and real farm fresh ingredients. Life should be full of variety, zest and positive energy. Energized by good health and good nutrition. We invite you to Eat Well and Live Fresh by making Baja Fresh a part of your active daily lifestyle.', 33.758599, -84.388575, 18, 4, 4, 'baja', 'Atlanta', 'Mexican/Southwestern | Quick Service');[m
+[31m-INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (2, 'Wingz N Tingz', 'We believe in the benefits of eating well, being active and making a contribution to the communities we serve. We call this philosophy  Live Fresh  and you ll find this attitude in everything we do. We choose handmade and farm fresh not tin-canned, freshly prepared over microwaves and freezers. Flavor and nutrition over fillers and fads. At Baja Fresh you ll find eating well is a way of life and a state of mind. We believe in real food made with passion, for real people. Food that s always prepared by hand from real recipes and real farm fresh ingredients. Life should be full of variety, zest and positive energy.', 42.372756, -71.062121, 28, 6, 2, 'jerkwingz', 'Boston', 'American');[m
+[31m-INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (3, 'Tassili Raw', 'Tassilis Raw Reality is a fast casual restaurant located in Atlanta, Georgia. We specialize in raw vegan cuisines and provide an unique variety of raw vegan entrees like spicy kale salad, kale wraps, and more. Our story starts with our purpose to help people achieve optimal health and thrive. What does that look like. That looks like our vision, to create an employee-owned raw vegan restaurant franchise in every continent in the world. About 6 years ago, Tassili Maat passionately set out to make the best kale in Atlanta, super food that is delicious as healthy. Today, Her brand Tassils Raw Reality is recognized around the world for the best kale in Atlanta and its attractive Afrocentric ambiance. ', 41.896271, -87.726974, 70, 25, 5, 'tassilis', 'Chicago', 'Vegetarian | Vegan');[m
+[31m-INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (4, 'Sufis', 'Tassilis Raw Reality is a fast casual restaurant located in Atlanta, Georgia. We specialize in raw vegan cuisines and provide an unique variety of raw vegan entrees like spicy kale salad, kale wraps, and more. Our story starts with our purpose to help people achieve optimal health and thrive. What does that look like. That looks like our vision, to create an employee-owned raw vegan restaurant franchise in every continent in the world. About 6 years ago, Tassili Maat passionately set out to make the best kale in Atlanta, super food that is delicious as healthy. Today, Her brand Tassils Raw Reality is recognized around the world for the best kale in Atlanta and its attractive Afrocentric ambiance. ', 33.754960, -84.383693, 120, 25, 2, 'sufi', 'Atlanta', 'Middle Eastern');[m
+[31m-INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (5, 'All About BBQ', 'Tassilis Raw Reality is a fast casual restaurant located in Atlanta, Georgia. We specialize in raw vegan cuisines and provide an unique variety of raw vegan entrees like spicy kale salad, kale wraps, and more. Our story starts with our purpose to help people achieve optimal health and thrive. What does that look like. That looks like our vision, to create an employee-owned raw vegan restaurant franchise in every continent in the world. About 6 years ago, Tassili Maat passionately set out to make the best kale in Atlanta, super food that is delicious as healthy. Today, Her brand Tassils Raw Reality is recognized around the world for the best kale in Atlanta and its attractive Afrocentric ambiance. ', 40.770320, -73.956582, 10, 3, 3, 'allbbq', 'New York', 'Barbeque');[m
+[31m-INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (6, 'Pasta n Pizza', 'Fresh and bursting with flavor is what Pizza n Pasta at Westland Mall has to offer. Serving the Miami, FL area we provide great tasting food thats prepared. As a leading Italian Fast Food Restaurant, we take pride in offering the best Pasta dishes, Pizzas and Italian Dishes. We are dedicated to serving the needs of our customers each and every day.', 39.989825, -75.145061, 70, 25, 1, 'pastanpizza', 'Philadelphia', 'Pizza, Italian');[m
+[31m-INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (7, 'Mughlai Cuisine', 'Mughlai Indian Cuisine believes in mastering the art of fine, delicious and well prepared meals that route their way from the rich lands of India to serving our diverse New Yorkers and curious Tourists. Located in the heart of NYC, Experience the taste of Mughlai as it treats each individual with delightful, aromatic and handpicked cuisines prepared by our Royal Master Chefs. The team at Mughlai Indian Cuisine follows a simple motto, to prepare and to serve because that’s what you deserve, The Golden Taste of India.', 42.377560, -71.062976, 320, 75, 3, 'mughlai', 'Boston', 'Indian');[m
+[31m-INSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (8, 'Suki Japanese', 'Mughlai Indian Cuisine believes in mastering the art of fine, delicious and well prepared meals that route their way from the rich lands of India to serving our diverse New Yorkers and curious Tourists. Located in the heart of NYC, Experience the taste of Mughlai as it treats each individual with delightful, aromatic and handpicked cuisines prepared by our Royal Master Chefs. The team at Mughlai Indian Cuisine follows a simple motto, to prepare and to serve because that’s what you deserve, The Golden Taste of India.', 25.778793, -80.217120, 60, 30, 5, 'suki', 'Miami', 'Indian');[m
+[31m-[m
+[31m-[m
+[31m-[m
+[31m-[m
+[32m+[m[32mINSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (1, 'Restoran MILKMAN', 'Posjetite Restoran Milkman na dvije lokacije, Milkman Grbavica adresa Grbavicka 8 i Milkman City, Branilaca Sarajeva 3. U bogatoj ponudi jela mozete pronaci sendvice, paste, kuhana jela, te specijalitete kuce kao sto su pileci zalogaji i kljukusice. Restoran Milkman pruza i usluge cateringa za razlicdjite prigode kao sto su rodjendani, prezentacije, seminari, vjencdjanja i slicdjne prilike. Posjetite nas i uvjerite se u kvalitet nase ponude - porucdjuju Vam iz Restorana Milkman! Jos jednostavnije, narucdjite online i nasa dostava ce u najkracem roku biti na Vasoj adresi!', 43.852931, 18.401458, 18, 4, 4, 'milkman', 'Sarajevo - Centar', 'Bosnian | Italian | French');[m
+[32m+[m[32mINSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (2, 'cevabdzinica VEZIR', 'U ugodnom ambijentu cevabdzinice Vezir na Bascdjarsiji mozete probati najbolje travnicdjke cevape, pripremljene po orginalnoj recepturi uz domaci kajmak ili travnicdjki sos. U ponudi su i drugi specijaliteti sa rostilja vrhunskog kvaliteta, sudzukice, raznjici, piletina, teletina, te ukusne salate. Ako zelite da osjetite miris dobrog rostilja  i u svom domu, sada smo i online tu za Vas, narucdjite i dostava je brzo na Vasoj adresi!', 43.853233, 18.392693, 13, 4, 4, 'cevabdzinicavezir', 'Sarajevo - Centar', 'Bosnian');[m
+[32m+[m[32mINSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (3, 'Pizzeria AGO', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus a pharetra justo. Nullam in urna ut neque aliquet tempor. Sed tempor, leo vel malesuada congue, purus augue iaculis massa, non laoreet ex augue nec lorem. Integer non lobortis sem, eget vestibulum ante. Etiam tempor ligula id placerat feugiat. Nulla in ante varius, posuere risus at, ullamcorper risus. Cras faucibus erat a lectus vulputate gravida. Sed neque ipsum, eleifend in auctor et, lobortis eu sapien. Donec a efficitur risus. Fusce in erat sem. Donec ut nunc iaculis, consequat nunc sit amet, vulputate urna. Donec condimentum dolor dui, nec placerat mauris faucibus sit amet. Nullam iaculis et dui sed mattis. Pellentesque mi nisl, malesuada id ipsum id, tempus maximus dui.', 43.850375, 18.376886, 5, 2, 1, 'pizzeriaago', 'Sarajevo - Stari Grad', 'Italian');[m
+[32m+[m[32mINSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (4, 'Surf n Fries', 'Surf n Fries je inovativan koncept brze prehrane specijaliziran za proizvode od krumpira, iznad svega „pommes frittes“. zelja nam je bila stvoriti novu kategoriju u urbanoj brzoj prehrani, a mi je volimo zvati „Pomfree Bar“. Najkvalitetniji, najsvjeziji i najukusniji pomfrit u gradu, kako ga kupci vole jos nazvati jeste "KROMPIR KOJI DIsE" :)) Za sve nase specijalitete biramo najbolje moguce sirovine bez obzira na cijenu. Iz tog razloga koristimo A ili Premium klasu krumpira koja sadrzi maksimalno suhe tvari i minimalno vode u svome sastavu. Zato nasi krumpirici nisu masni kada ih posluzimo. Takodjer, nasi krumpirici ne prolaze nikakve kemijske obrade, te NISU GMO proizvod, vec su organskog, prirodnog podrijetla. Ulje za przenje koje koristimo ne sadrzi transmasne kiseline, te ima puno vecu otpornost na temperaturu nego na kojoj se koristi. Takodjer, ulje mijenjamo puno prije nego je to zakonom propisano, upravo zato da nasi proizvodi budu maksimalno zdravi i ukusni. Svi ostali proizvodi poput piletine prolaze najstroze kriterije u proizvodnji. Isto tako i ambalaza u kojoj posluzujemo ima sve certifikate kao npr. za direktan doticaj s masnom hranom, prehrambene sporomigracijske boje. Surf "n" Fries umaci pripravljeni su od strane profesionalnih kuhara upravo za krumpirice. Najcdjesce u ponudi imamo 15 umaka gdje mozete naci od blagih i laganih do jako zacdjinjenih umaka. Umaci su radjeni po principu dodavanja prirodnih sastojaka i zacdjina bez ikakvih kemijskih procesa. Za sebe birajte samo najbolje. Dodjite i uvjerite se u sve nase kvalitete.', 43.847605, 18.364752, 25, 8, 3, 'surfnfries', 'Sarajevo - Novo Sarajevo', 'American | English');[m
+[32m+[m[32mINSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (5, 'Ascdjinica MEJTAs', 'Buregdzinica i ascdjinica MEJTAs, pored ukusnih pita nudi Vam i veliki izbor tradicionalnih bosanskih jela. U ponudi cete tako naci i grah, sarmu, sitni cevap i druga jela na kasiku, a tu je i solidan izbor pasti, salata, sendvicdja i bosanskih kolacdja. Sve ovo mozete isprobati i na vasoj adresi, uz online narudzbu i besplatnu brzu dostavu.', 43.841888, 18.345127, 9, 3, 4, 'ascinicamejtas', 'Sarajevo - Novi Grad', 'Bosnian | Turkish | Arabian');[m
+[32m+[m[32mINSERT INTO restaurants (id, restaurantName, description, latitude, longitude, mark, votes, priceRange, imageFileName, locationName, foodType) VALUES (6, 'Chinese Restaraunt', 'Kineski restoran ONLY ONE, koji se nalazi u sarajevskom naselju Dobrinja, na adresi zelimira Vidovica Kelija 19, nudi Vam veliki izbor jela pripremljenih po 100% originalnoj kineskoj recepturi. U predivnom ambijentu, i sa prostranom ljetnom bastom, uzivajte u kineskim specijalitetima koje za Vas vjesto piprema majstor Gao Liang, kuhar sa decenijskim kulinarskim iskustvom. Odaberite nesto od blizu 100 razlicdjitih kineskih jela koja obiluju raznovrsnim povrcem, razlicdjitim vrstama mesa, od piletine, teletine, jagnjetine pa do riba i skampi, i uzivajte u istancdjanim okusima istoka i na svojoj kucnoj adresi. Dostava je moguca na podrucdjju cijelog grada, uz minimalno porucdjenih 20KM. Takodje, izaberite laksi nacdjin, bez potrebe da nas zovete na telefon, nakon Vasih par klikova uskoro stizemo na Vasu adresu. Chinese restaraunt ONLY ONE, Sarajevo - Dobrinja!', 43.828285, 18.349714, 21, 5, 5, 'chinaonlyone', 'Sarajevo - Novi Grad', 'Chinese');[m
+ [m
+ CREATE TABLE restauranttables([m
+ 	id bigint,[m
+[36m@@ -58,7 +50,6 @@[m [mINSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (4, 1, 2);[m
+ INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (5, 1, 6);[m
+ INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (6, 1, 6);[m
+ INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (7, 1, 4);[m
+[31m-[m
+ INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (8, 2, 4);[m
+ INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (9, 2, 4);[m
+ INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (10, 2, 2);[m
+[36m@@ -66,46 +57,11 @@[m [mINSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (11, 2, 2)[m
+ INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (12, 2, 12);[m
+ INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (13, 2, 8);[m
+ INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (14, 2, 4);[m
+[31m-[m
+ INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (15, 3, 4);[m
+ INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (16, 3, 4);[m
+ INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (17, 3, 4);[m
+ INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (18, 3, 4);[m
+ [m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (19, 4, 4);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (20, 4, 4);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (21, 4, 6);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (22, 4, 4);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (23, 4, 10);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (24, 4, 8);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (25, 4, 4);[m
+[31m-[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (26, 5, 6);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (27, 5, 6);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (28, 5, 8);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (29, 5, 10);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (30, 5, 10);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (31, 5, 7);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (32, 5, 6);[m
+[31m-[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (33, 6, 2);[m
+[31m-[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (34, 6, 3);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (35, 6, 4);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (36, 6, 4);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (37, 6, 8);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (38, 6, 8);[m
+[31m-[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (39, 7, 10);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (40, 7, 6);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (41, 7, 6);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (42, 7, 6);[m
+[31m-[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (43, 8, 2);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (44, 8, 2);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (45, 8, 6);[m
+[31m-INSERT INTO restauranttables (id, idRestaurant, sittingPlaces) VALUES (46, 8, 8);[m
+[31m-[m
+ CREATE TABLE reservations([m
+ 	id bigint,[m
+ 	idTable bigint NOT NULL,[m
+[36m@@ -125,78 +81,14 @@[m [mCREATE TABLE restaurantmenuitem([m
+     PRIMARY KEY (id)[m
+ );[m
+ [m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (1, 1, 'Breakfast', 'Pronto Guacamole', 8, '3 oz of fresh ripe Avocados, Garlic, lime Juice, Salsa and Roma Tomatoes.');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (2, 1, 'Breakfast', 'Smoky Queso Fundido', 4, '8 oz spicy, three pepper, cheese dip mixed with our own freshly made Salsa Roja');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (3, 2, 'Breakfast', 'Guacamole & Chips', 4, '8 oz. of fresh ripe Avocados, Garlic, lime Juice, Salsa and Roma Tomatoes.');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (4, 1, 'Breakfast', 'Chips & Salsa', 3, 'Fresh tortilla chips with full salsa bar hosting 6 salsas made fresh everyday.');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (5, 1, 'Breakfast', 'Cheese Calzone', 8, 'Baked or Fried');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (6, 1, 'Lunch', 'Tostada', 8, '8 oz. of fresh ripe Avocados, Garlic');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (7, 1, 'Lunch', 'Baja BBQ Chicken Salad', 5, 'Cheese dip mixed with our own freshly made Salsa Roja');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (8, 1, 'Lunch', 'Baja Ensalada', 12, '3 oz of fresh ripe Avocados, Garlic, lime Juice, Salsa and Roma Tomatoes');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (9, 1, 'Lunch', 'Nachos', 11, '8 oz spicy, three pepper');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (10, 1, 'Lunch', 'Quesadilla', 14, 'Served with freshly made tortilla chips.');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (11, 1, 'Dinner', 'Fajitas', 8, '3 oz of fresh ripe Avocados, Garlic, lime Juice, Salsa and Roma Tomatoes');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (12, 1, 'Dinner', 'Baja BBQ Chicken Salad', 5, '8 oz. of fresh ripe Avocados, Garlic');[m
+[31m-[m
+[31m-[m
+[31m-[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (13, 2, 'Breakfast', 'Jamaican Patties', 2, '');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (14, 2, 'Breakfast', 'French Fries', 3, '');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (15, 2, 'Breakfast', 'Argentine Empanadas', 2, '');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (16, 2, 'Lunch', 'Grilled Chicken', 13, 'Italian House Salad or Caesar');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (17, 2, 'Lunch', 'Homemade Chicken Salad', 7, 'Italian House or Caesar Salad');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (18, 2, 'Lunch', 'Pasta Carbonaro', 14, 'With onion & Prosciutto in a cream sauce');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (19, 2, 'Lunch', 'Mochi', 4, 'Two pieces');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (20, 2, 'Lunch', 'King Crab', 5, 'One piece');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (21, 2, 'Dinner', 'Tuna Salad', 9, 'Italian House or Caesar Salad');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (22, 2, 'Dinner', 'Rainbow Naruto Roll', 12, 'Tuna, salmon, white fish, kani, avocado and tobiko');[m
+[31m-[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (23, 3, 'Breakfast', 'Meat Stromboli', 12, 'Pepperoni, Ham, Bacon, Sausage, Meatball');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (24, 3, 'Breakfast', 'Cheese Calzone', 8, 'Baked or Fried');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (25, 3, 'Breakfast', 'Fettuccini Alfredos', 13, '');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (26, 3, 'Lunch', 'Shrimp Fra Diavolo', 19, 'Spicy Shrimp');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (27, 3, 'Lunch', 'Veal Parmigiana', 14, 'Italian House or Caesar Salad');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (28, 3, 'Lunch', 'Cheese Ravioli', 10, '');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (29, 3, 'Lunch', 'Margherita', 4, 'Two pieces');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (30, 3, 'Lunch', 'Vegetable Delight', 18, '');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (31, 3, 'Dinner', 'Christians Special', 19, 'Marinara Sauce, Fresh Mozzarella, Pepperoni, Ham');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (32, 3, 'Dinner', 'Meatlovers', 20, '5 Meats -Pepperoni, Meatball, Ham, Bacon, Sausage');[m
+[31m-[m
+[31m-[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (33, 5, 'Breakfast', 'White Pizza', 12, 'Pepperoni, Ham, Bacon, Sausage, Meatball');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (34, 5, 'Breakfast', 'Penne alla Vodka Pie', 8, 'Baked or Fried');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (35, 5, 'Breakfast', 'Eggplant Marinara Pie', 13, '');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (36, 5, 'Lunch', 'Siciliana', 19, 'Spicy Shrimp');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (37, 5, 'Lunch', 'Lasagna Pizza', 14, 'Italian House or Caesar Salad');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (38, 5, 'Lunch', 'Delicious Pie', 10, '');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (39, 5, 'Lunch', 'Lasagna', 4, 'Two pieces');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (40, 5, 'Lunch', 'Philly Cheese Steak', 18, '');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (41, 5, 'Dinner', 'Chicken Salad', 19, 'Marinara Sauce, Fresh Mozzarella, Pepperoni, Ham');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (42, 3, 'Dinner', 'Grilled Marinated Chicken Sub', 20, '5 Meats -Pepperoni, Meatball, Ham, Bacon, Sausage');[m
+[31m-[m
+[31m-[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (43, 7, 'Breakfast', 'Meat Stromboli', 12, 'Pepperoni, Ham, Bacon, Sausage, Meatball');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (44, 7, 'Breakfast', 'Cheese Calzone', 8, 'Baked or Fried');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (45, 7, 'Breakfast', 'Fettuccini Alfredos', 13, '');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (46, 7, 'Lunch', 'Buffalo Chicken Wrap', 19, 'Spicy Shrimp');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (47, 7, 'Lunch', 'Veal Parmigiana', 14, 'Italian House or Caesar Salad');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (48, 7, 'Lunch', 'Caesar Salad with Chicken', 10, '');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (49, 7, 'Lunch', 'Margherita', 4, 'Two pieces');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (50, 7, 'Lunch', 'Vegetable Delight', 18, '');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (51, 7, 'Dinner', 'Cheese Steak Sub', 19, 'Marinara Sauce, Fresh Mozzarella, Pepperoni, Ham');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (52, 3, 'Dinner', 'The New York Salad', 20, '5 Meats -Pepperoni, Meatball, Ham, Bacon, Sausage');[m
+[31m-[m
+[31m-[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (53, 8, 'Breakfast', 'Crazy Roll', 13, 'Spicy tuna, spicy salmon, tempura flake, tobiko and tuna');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (54, 8, 'Breakfast', 'Red Dragon Roll', 13, 'Spicy tuna and crunch topped with pepper tuna, avocado and tobiko');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (55, 8, 'Breakfast', 'Donkey Kong Roll', 10, 'Shrimp tempura topped with banana tempura');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (56, 8, 'Lunch', 'Chicken Teriyaki Bento Box', 18, 'Served with tempura, shumai, a California roll, rice and soup or salad');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (57, 8, 'Lunch', 'Negimaki Bento Box', 18, 'Served with tempura, shumai, a California roll, rice and soup or salad');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (58, 8, 'Lunch', 'Sashimi Bento Box', 18, 'Seven pieces. Served with tempura, shumai, a California roll, rice and soup or salad');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (59, 8, 'Lunch', 'Mochi', 4, 'Two pieces');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (60, 8, 'Lunch', 'King Crab', 5, 'One piece');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (61, 8, 'Dinner', 'Samurai Naruto Roll', 9, 'Black pepper tuna, avocado and scallion');[m
+[31m-INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (62, 8, 'Dinner', 'Rainbow Naruto Roll', 12, 'Tuna, salmon, white fish, kani, avocado and tobiko');[m
+[32m+[m[32mINSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (1, 1, 'Breakfast', 'Broccoli Rabe', 8, 'With grilled sausage, olive oil and garlic');[m
+[32m+[m[32mINSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (2, 1, 'Breakfast', 'Proljetno Rolovano Meso', 4, 'Porcija (2kom), junetina');[m
+[32m+[m[32mINSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (3, 2, 'Breakfast', 'Proljetno Rolovano Povrce', 4, 'Porcija (2 kom), kupus, mrkva, prasa, djumbir, jaja');[m
+[32m+[m[32mINSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (4, 1, 'Breakfast', 'Kineske Klepe Sa Mesom', 4, 'Porcija (8 kom), junetina, kupus, djumbir, jaja, zacini');[m
+[32m+[m[32mINSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (5, 1, 'Lunch', 'Sanpjer Sa Kineskim Zacinom', 8, 'Riblji pohovani file');[m
+[32m+[m[32mINSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (6, 2, 'Lunch', 'Krastavac Salata Na Kineski Nacin', 5, 'Krastavac, bijeli luk, susamovo ulje');[m
+[32m+[m[32mINSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (7, 1, 'Lunch', 'Teleca Supa Sa Jajima', 3, 'Teletina sjeckana, kukuruz, grasak, tikvica, mrkva, sampinjoni, jaja, susam ulje');[m
+[32m+[m[32mINSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (8, 1, 'Dinner', 'Dinstani Skampi Na Kineski Nacin', 10, '500 grama skampa. Servirano na tanko isjecenom pomfritu');[m
+ [m
+ [m
+ CREATE SEQUENCE hibernate_sequence;[m
+[1mdiff --git a/ember/restaurant_abh/app/controllers/completereservation.js b/ember/restaurant_abh/app/controllers/completereservation.js[m
+[1mindex bd25dce..09240aa 100644[m
+[1m--- a/ember/restaurant_abh/app/controllers/completereservation.js[m
+[1m+++ b/ember/restaurant_abh/app/controllers/completereservation.js[m
+[36m@@ -65,11 +65,7 @@[m [mexport default Ember.Controller.extend({[m
+               async:false, //Need to wait[m
+               contentType: "application/json; charset=UTF-8",[m
+           }).fail(function(data) {[m
+[31m-              $(".registrationsuccessfull").show();[m
+[31m-              //Change alert class[m
+[31m-              $(".alert").addClass('alert-danger').removeClass('alert-success');[m
+[31m-              //Set alert text[m
+[31m-              $(".alertText").html('<strong>Error!</strong> Sorry, available table is reserved meanwhile');[m
+[32m+[m[32m              console.log(data);[m
+           }).then(function(data) {[m
+               //Display notification that reservation is created[m
+               $(".registrationsuccessfull").show();[m
+[36m@@ -85,6 +81,9 @@[m [mexport default Ember.Controller.extend({[m
+           //Stop countdown timer[m
+           clearTimeout(self.get('t'));[m
+ [m
+[32m+[m[32m          //Redirect to restaurants page[m
+[32m+[m[32m          setTimeout(function(){ self.transitionToRoute('restaurants'); }, 3000);[m
+[32m+[m
+       } else { //if not, registration is required[m
+ [m
+           function isValidEmailAddress(emailAddress) {[m
+[36m@@ -161,6 +160,8 @@[m [mexport default Ember.Controller.extend({[m
+                   //Stop countdown timer[m
+                   clearTimeout(self.get('t'));[m
+ [m
+[32m+[m[32m                  setTimeout(function(){ self.transitionToRoute('restaurants'); }, 3000);[m
+[32m+[m
+               });[m
+ [m
+           }[m
+[1mdiff --git a/ember/restaurant_abh/app/controllers/login.js b/ember/restaurant_abh/app/controllers/login.js[m
+[1mindex 6139667..e0505c0 100644[m
+[1m--- a/ember/restaurant_abh/app/controllers/login.js[m
+[1m+++ b/ember/restaurant_abh/app/controllers/login.js[m
+[36m@@ -11,9 +11,7 @@[m [mexport default Ember.Controller.extend({[m
+         //Get values from form[m
+         var email = this.get('email');[m
+         var password = this.get('password');[m
+[31m-        var rememberMe = this.get('rememberMe');[m
+ [m
+[31m-        //Function for email validation[m
+         function isValidEmailAddress(emailAddress) {[m
+             var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;[m
+             return pattern.test(emailAddress);[m
+[36m@@ -23,18 +21,16 @@[m [mexport default Ember.Controller.extend({[m
+         if(email == null || password == null){[m
+           //Display alert[m
+           $(".loginNotifications").show();[m
+[31m-[m
+           //Set alert text[m
+           $(".alertText").html('<strong>Warning!</strong> All fields are required.');[m
+         } else if(!isValidEmailAddress(email)){[m
+           //Display alert[m
+           $(".loginNotifications").show();[m
+[31m-[m
+           //Set alert text[m
+           $(".alertText").html('<strong>Warning!</strong> Email is not valid.');[m
+         } else {[m
+           //Call login service[m
+[31m-          this.get("loginservice").checkUser(email, password, rememberMe)[m
+[32m+[m[32m          this.get("loginservice").checkUser(email, password)[m
+             .done(function(data) {[m
+               var user = User.create(data);[m
+ [m
+[1mdiff --git a/ember/restaurant_abh/app/controllers/restaurant.js b/ember/restaurant_abh/app/controllers/restaurant.js[m
+[1mindex d561319..4da9493 100644[m
+[1m--- a/ember/restaurant_abh/app/controllers/restaurant.js[m
+[1m+++ b/ember/restaurant_abh/app/controllers/restaurant.js[m
+[36m@@ -25,7 +25,6 @@[m [mexport default Ember.Controller.extend({[m
+ [m
+     //Unset all reservations[m
+     this.get('currentReservation').removeReservation();[m
+[31m-[m
+   },[m
+    actions: {[m
+      showMenu: function(post, restaurantId){[m
+[36m@@ -90,75 +89,6 @@[m [mexport default Ember.Controller.extend({[m
+ [m
+       //Transition to route[m
+       this.transitionToRoute('completereservation');[m
+[31m-     },[m
+[31m-     //Scrool to segment[m
+[31m-     moveToSegment(idDiv){[m
+[31m-        $('html, body').animate({[m
+[31m-            scrollTop: $("#" + idDiv).offset().top[m
+[31m-        }, 2000);[m
+[31m-     },[m
+[31m-     //When date is changed set check is today do remove previous hours[m
+[31m-     changeDate: function(){[m
+[31m-[m
+[31m-        var self = this;[m
+[31m-[m
+[31m-        var month = new Array(); month[0] = "Jan"; month[1] = "Feb"; month[2] = "Mar"; month[3] = "Apr"; month[4] = "May"; month[5] = "Jun"; month[6] = "Jul"; month[7] = "Aug"; month[8] = "Sep"; month[9] = "Oct"; month[10] = "Nov"; month[11] = "Dec";[m
+[31m-[m
+[31m-        var currentDate = new Date();[m
+[31m-        var hoursArray = this.get('selectHour');[m
+[31m-[m
+[31m-        function convertFrom24HtoAMPM(Time){[m
+[31m-          var hour = Time.getHours();[m
+[31m-          var minute = Time.getMinutes();[m
+[31m-          var amPmString = "";[m
+[31m-[m
+[31m-          if(hour >= 12){[m
+[31m-            amPmString = "PM";[m
+[31m-[m
+[31m-            if(hour > 12) hour = hour*1 - 12;[m
+[31m-          } else {[m
+[31m-            amPmString = "AM";[m
+[31m-          }[m
+[31m-[m
+[31m-          //Format string for output[m
+[31m-          if(hour >= 1 && hour <= 9) hour = "0" + hour;[m
+[31m-          if(minute == 0) minute = "0" + minute;[m
+[31m-[m
+[31m-          return hour + ":" + minute + " " + amPmString;[m
+[31m-        }[m
+[31m-[m
+[31m-        if(this.get('reservation.date') == month[currentDate.getMonth()] + " " + currentDate.getDate() + ", " + currentDate.getFullYear()){[m
+[31m-[m
+[31m-            //User current selectHour array[m
+[31m-            this.set('selectHour', []);[m
+[31m-[m
+[31m-            for(var i=0; i<hoursArray.length; i++){[m
+[31m-[m
+[31m-                var firstSplit = hoursArray[i].split(" ");[m
+[31m-                var hourMinutePart = firstSplit[0].split(":");[m
+[31m-[m
+[31m-                if(firstSplit[1] == "PM" && hourMinutePart[0] != "12"){[m
+[31m-                  hourMinutePart[0] = hourMinutePart[0]*1 + 12;[m
+[31m-                }[m
+[31m-[m
+[31m-                //console.log(hourMinutePart[0]+" "+hourMinutePart[1]);[m
+[31m-                var checkDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), hourMinutePart[0], hourMinutePart[1]);[m
+[31m-[m
+[31m-                //Create list of hours that are later than current for today[m
+[31m-                if(checkDate > currentDate){[m
+[31m-                  //console.log(convertFrom24HtoAMPM(checkDate));[m
+[31m-[m
+[31m-                  //Add new dates[m
+[31m-                  self.get('selectHour').push(convertFrom24HtoAMPM(checkDate));[m
+[31m-                }[m
+[31m-            }[m
+[31m-        } else {[m
+[31m-[m
+[31m-            self.set('selectHour', ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM', '01:00 PM', '01:30 PM', '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM', '04:00 PM', '04:30 PM', '05:00 PM', '05:30 PM', '06:00 PM', '06:30 PM', '07:00 PM', '07:30 PM', '08:00 PM', '08:30 PM', '09:00 PM', '09:30 PM', '10:00 PM']);[m
+[31m-[m
+[31m-        }[m
+[31m-[m
+      }[m
+[31m-[m
+    }[m
+ });[m
+[1mdiff --git a/ember/restaurant_abh/app/index.html b/ember/restaurant_abh/app/index.html[m
+[1mindex da3088d..d41af3c 100644[m
+[1m--- a/ember/restaurant_abh/app/index.html[m
+[1m+++ b/ember/restaurant_abh/app/index.html[m
+[36m@@ -8,7 +8,6 @@[m
+     <meta name="viewport" content="width=device-width, initial-scale=1">[m
+ [m
+     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,300italic,200italic,400italic,600,700,600italic,900,700italic,900italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>[m
+[31m-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">[m
+ [m
+     {{content-for "head"}}[m
+ [m
+[1mdiff --git a/ember/restaurant_abh/app/initializers/current-user.js b/ember/restaurant_abh/app/initializers/current-user.js[m
+[1mindex 71fde22..a38d166 100644[m
+[1m--- a/ember/restaurant_abh/app/initializers/current-user.js[m
+[1m+++ b/ember/restaurant_abh/app/initializers/current-user.js[m
+[36m@@ -8,10 +8,6 @@[m [mexport function initialize(application) {[m
+   //Start waiting for response from Play[m
+   application.deferReadiness();[m
+ [m
+[31m-  //Inject cookies to controller and routes[m
+[31m-  application.inject('controller', 'cookie', 'cookie:main');[m
+[31m-  application.inject('route', 'cookie', 'cookie:main');[m
+[31m-[m
+   return $.ajax({[m
+     url: "/api/v1/currentUser",[m
+     type: "GET",[m
+[36m@@ -52,6 +48,5 @@[m [mexport function initialize(application) {[m
+ }[m
+ [m
+ export default {[m
+[31m-  after: ['cookie'],[m
+   initialize[m
+ };[m
+[1mdiff --git a/ember/restaurant_abh/app/router.js b/ember/restaurant_abh/app/router.js[m
+[1mindex 800d105..40783b9 100644[m
+[1m--- a/ember/restaurant_abh/app/router.js[m
+[1m+++ b/ember/restaurant_abh/app/router.js[m
+[36m@@ -12,11 +12,6 @@[m [mRouter.map(function() {[m
+   this.route('restaurant', {path: '/restaurant/:restaurantId'});[m
+   this.route('completereservation');[m
+   this.route('reservations');[m
+[31m-  this.route('termsofuse');[m
+[31m-  this.route('privacypolicy');[m
+[31m-  this.route('resetpassword');[m
+[31m-  this.route('resetpassword', {path: '/resetpassword/:userCode'});[m
+[31m-  this.route('forgotpassword');[m
+ });[m
+ [m
+ export default Router;[m
+[1mdiff --git a/ember/restaurant_abh/app/routes/forgotpassword.js b/ember/restaurant_abh/app/routes/forgotpassword.js[m
+[1mdeleted file mode 100644[m
+[1mindex 26d9f31..0000000[m
+[1m--- a/ember/restaurant_abh/app/routes/forgotpassword.js[m
+[1m+++ /dev/null[m
+[36m@@ -1,4 +0,0 @@[m
+[31m-import Ember from 'ember';[m
+[31m-[m
+[31m-export default Ember.Route.extend({[m
+[31m-});[m
+[1mdiff --git a/ember/restaurant_abh/app/routes/privacypolicy.js b/ember/restaurant_abh/app/routes/privacypolicy.js[m
+[1mdeleted file mode 100644[m
+[1mindex 26d9f31..0000000[m
+[1m--- a/ember/restaurant_abh/app/routes/privacypolicy.js[m
+[1m+++ /dev/null[m
+[36m@@ -1,4 +0,0 @@[m
+[31m-import Ember from 'ember';[m
+[31m-[m
+[31m-export default Ember.Route.extend({[m
+[31m-});[m
+[1mdiff --git a/ember/restaurant_abh/app/routes/resetpassword.js b/ember/restaurant_abh/app/routes/resetpassword.js[m
+[1mdeleted file mode 100644[m
+[1mindex d071ff1..0000000[m
+[1m--- a/ember/restaurant_abh/app/routes/resetpassword.js[m
+[1m+++ /dev/null[m
+[36m@@ -1,8 +0,0 @@[m
+[31m-import Ember from 'ember';[m
+[31m-[m
+[31m-export default Ember.Route.extend({[m
+[31m-  userCode: null,[m
+[31m-  model: function(param){[m
+[31m-    alert(param.userCode);[m
+[31m-  }[m
+[31m-});[m
+[1mdiff --git a/ember/restaurant_abh/app/routes/termsofuse.js b/ember/restaurant_abh/app/routes/termsofuse.js[m
+[1mdeleted file mode 100644[m
+[1mindex 26d9f31..0000000[m
+[1m--- a/ember/restaurant_abh/app/routes/termsofuse.js[m
+[1m+++ /dev/null[m
+[36m@@ -1,4 +0,0 @@[m
+[31m-import Ember from 'ember';[m
+[31m-[m
+[31m-export default Ember.Route.extend({[m
+[31m-});[m
+[1mdiff --git a/ember/restaurant_abh/app/services/loginservice.js b/ember/restaurant_abh/app/services/loginservice.js[m
+[1mindex 87c8813..25c0670 100644[m
+[1m--- a/ember/restaurant_abh/app/services/loginservice.js[m
+[1m+++ b/ember/restaurant_abh/app/services/loginservice.js[m
+[36m@@ -2,13 +2,13 @@[m [mimport Ember from 'ember';[m
+ import User from '../models/user';[m
+ [m
+ export default Ember.Service.extend({[m
+[31m-  checkUser(email, password, rememberMe){[m
+[32m+[m[32m  checkUser(email, password){[m
+ [m
+     //Sent POST to Play route[m
+     return $.ajax({[m
+       url: "/api/v1/login",[m
+       type: "POST",[m
+[31m-      data: '{"email":"'+email+'","password":"'+password+'","rememberMe":"'+rememberMe+'"}',[m
+[32m+[m[32m      data: '{"email":"'+email+'","password":"'+password+'"}',[m
+       processData: false,[m
+       contentType: "application/json; charset=UTF-8",[m
+     }).fail(function(data) {[m
+[1mdiff --git a/ember/restaurant_abh/app/styles/app.css b/ember/restaurant_abh/app/styles/app.css[m
+[1mindex c14d98f..5f30050 100644[m
+[1m--- a/ember/restaurant_abh/app/styles/app.css[m
+[1m+++ b/ember/restaurant_abh/app/styles/app.css[m
+[36m@@ -133,15 +133,6 @@[m [ma:link, a:visited {[m
+ .login_register_container .select_fields {[m
+   height:54px; line-height:54px; font-family:'Source Sans Pro'; font-weight: 600; font-size:16px;[m
+ }[m
+[31m-.login_register_container input[type="radio"], input[type="checkbox"] {[m
+[31m-  height:15px !important; width:15px !important;[m
+[31m-}[m
+[31m-.login_register_container .remember_me {[m
+[31m-  position: relative; top: -2px; margin-left:5px;[m
+[31m-}[m
+[31m-.login_register_container .register {[m
+[31m-  float:right;[m
+[31m-}[m
+ .register_select_list_country_container {[m
+   float:left; width:50%;[m
+ }[m
+[36m@@ -197,7 +188,7 @@[m [mfooter nav.main {[m
+     height:680px; background-size:cover; background-image:url('./images/home_header_big.jpeg'); background-position:center center; opacity: 0.9;[m
+   }[m
+   .home_header_big h1 {[m
+[31m-    font-family:'Source Sans Pro'; font-weight: 300; font-size:48px; padding-top:280px; color:#FFF; text-align:center;[m
+[32m+[m[32m    font-family:'Source Sans Pro'; font-weight: 300; font-size:48px; padding-top:230px; color:#FFF; text-align:center;[m
+   }[m
+   .home_header_big h2 {[m
+     font-family:'Source Sans Pro'; font-weight: 600; font-size:20px; color:#FFF; text-align:center;[m
+[36m@@ -280,7 +271,6 @@[m [mul.restaurant_left_menu {[m
+       font-family:'Source Sans Pro'; font-weight: 600; color:rgba(19, 29, 36, 0.4); font-size:18px;[m
+     }[m
+     ul.restaurant_left_menu li a:hover {[m
+[31m-      color:#000;[m
+     }[m
+ [m
+ .restaurant_details {[m
+[1mdiff --git a/ember/restaurant_abh/app/templates/application.hbs b/ember/restaurant_abh/app/templates/application.hbs[m
+[1mindex 652f185..5408fb7 100644[m
+[1m--- a/ember/restaurant_abh/app/templates/application.hbs[m
+[1m+++ b/ember/restaurant_abh/app/templates/application.hbs[m
+[36m@@ -10,8 +10,10 @@[m
+   <div class="container">[m
+     <nav class="additional">[m
+       <ul>[m
+[31m-        <li>{{#link-to 'privacypolicy'}}Privacy Policy{{/link-to}}</li>[m
+[31m-        <li>{{#link-to 'termsofuse'}}Terms of use{{/link-to}}</li>[m
+[32m+[m[32m        <li><a href="#">Privacy Policy</a></li>[m
+[32m+[m[32m        <li><a href="#">Terms of use</a></li>[m
+[32m+[m[32m        <li><a href="#">Sitemap</a></li>[m
+[32m+[m[32m        <li><a href="#">Mobile Site</a></li>[m
+       </ul>[m
+     </nav>[m
+ [m
+[1mdiff --git a/ember/restaurant_abh/app/templates/completereservation.hbs b/ember/restaurant_abh/app/templates/completereservation.hbs[m
+[1mindex 629e7dd..a6f6b7c 100644[m
+[1m--- a/ember/restaurant_abh/app/templates/completereservation.hbs[m
+[1m+++ b/ember/restaurant_abh/app/templates/completereservation.hbs[m
+[36m@@ -36,7 +36,7 @@[m
+ [m
+   <div class="form-group registrationsuccessfull" style="display:none;">[m
+        <div class="alert alert-success" role="alert">[m
+[31m-           <div class="alertText">Reservation is successfull!</div>[m
+[32m+[m[32m           <div class="alertText">Registration is successfull! You will be redirected to restaurants page in 2s</div>[m
+        </div>[m
+   </div>[m
+ [m
+[36m@@ -104,6 +104,6 @@[m
+ [m
+   <div class="complete_reservation_button_container">[m
+       <button {{action 'completeReservation'}} class="btn button">Complete reservation</button>[m
+[31m-      <div class="description">By clicking “Complete Reservation” you agree to the {{#link-to 'termsofuse'}}Terms of use{{/link-to}} and {{#link-to 'privacypolicy'}}Privacy Policy{{/link-to}}.</div>[m
+[32m+[m[32m      <div class="description">By clicking “Complete Reservation” you agree to the <a href="#">RestaurantABH Terms of use</a> and <a href="#">Privacy Policy</a>.</div>[m
+   </div>[m
+ </div>[m
+\ No newline at end of file[m
+[1mdiff --git a/ember/restaurant_abh/app/templates/forgotpassword.hbs b/ember/restaurant_abh/app/templates/forgotpassword.hbs[m
+[1mdeleted file mode 100644[m
+[1mindex a4167ea..0000000[m
+[1m--- a/ember/restaurant_abh/app/templates/forgotpassword.hbs[m
+[1m+++ /dev/null[m
+[36m@@ -1,17 +0,0 @@[m
+[31m-{{#navigation-bar styleClass='navigation_black'}}{{/navigation-bar}}[m
+[31m-[m
+[31m-<div class="container">[m
+[31m-  <div class="row">[m
+[31m-    <div class="col-md-6 col-center-block login_register_container">[m
+[31m-      <h1 class="title">Forgot password</h1>[m
+[31m-[m
+[31m-      <form data-toggle="validator">[m
+[31m-        <div class="form-group">[m
+[31m-          {{input type="email" class="form-control input_fields" value=email placeholder="Email"}}[m
+[31m-        </div>[m
+[31m-[m
+[31m-        <button {{action 'sendEmail'}} class="btn button">Submit</button>[m
+[31m-      </form>[m
+[31m-     </div>[m
+[31m-  </div>[m
+[31m-</div>[m
+\ No newline at end of file[m
+[1mdiff --git a/ember/restaurant_abh/app/templates/index.hbs b/ember/restaurant_abh/app/templates/index.hbs[m
+[1mindex 1de2f3c..f94d604 100644[m
+[1m--- a/ember/restaurant_abh/app/templates/index.hbs[m
+[1m+++ b/ember/restaurant_abh/app/templates/index.hbs[m
+[36m@@ -3,7 +3,7 @@[m
+ <div class="home_header_big">[m
+   <div class="background">[m
+     <h1>Make a free reservation</h1>[m
+[31m-    <h2>Choose your table from restaurants near you</h2>[m
+[32m+[m[32m    <h2>Choose your table from 6 restaurants near you</h2>[m
+   </div>[m
+ </div>[m
+ [m
+[1mdiff --git a/ember/restaurant_abh/app/templates/login.hbs b/ember/restaurant_abh/app/templates/login.hbs[m
+[1mindex 8388dae..63f1e4c 100644[m
+[1m--- a/ember/restaurant_abh/app/templates/login.hbs[m
+[1m+++ b/ember/restaurant_abh/app/templates/login.hbs[m
+[36m@@ -20,8 +20,6 @@[m
+           </div>[m
+         </div>[m
+ [m
+[31m-        <div>{{input type="checkbox" id="rememberMe" checked=rememberMe}} <span for="rememberMe" class="remember_me">Remember Me</span> {{#link-to 'forgotpassword' class="register"}}Forgot password?{{/link-to}}</div>[m
+[31m-[m
+         <button {{action 'login'}} class="btn button">Login</button>[m
+       </form>[m
+      </div>[m
+[1mdiff --git a/ember/restaurant_abh/app/templates/privacypolicy.hbs b/ember/restaurant_abh/app/templates/privacypolicy.hbs[m
+[1mdeleted file mode 100644[m
+[1mindex fec6bb7..0000000[m
+[1m--- a/ember/restaurant_abh/app/templates/privacypolicy.hbs[m
+[1m+++ /dev/null[m
+[36m@@ -1,38 +0,0 @@[m
+[31m-{{#navigation-bar styleClass='navigation_black'}}{{/navigation-bar}}[m
+[31m-[m
+[31m-<div class="container">[m
+[31m-  <h1>Terms of use</h1>[m
+[31m-[m
+[31m-  <h2>Changes to Privacy Policy</h2>[m
+[31m-[m
+[31m-  <p>We may update this Privacy Policy from time to time without notice to you by among other ways, posting the revised Privacy Policy in the "Privacy Policy" section of the Site. The revised Privacy Policy is effective immediately when posted. It is your responsibility to review the Site and the Privacy Policy periodically to learn of any modifications. Your continued use of the Site, or any product or service offered through the Site, after the posting of any modifications will constitute your acknowledgment and acceptance of the terms of the modified Privacy Policy.</p>[m
+[31m-[m
+[31m-  <h2>Types of Information Collected and Uses of Collected Information</h2>[m
+[31m-[m
+[31m-  <p>We collect two types of information about our Site Users: Personally Identifiable Information and Non-Personally Identifiable Information.</p>[m
+[31m-[m
+[31m-  <p>Personally Identifiable Information. Personally Identifiable Information is information that identifies a specific End User. When you engage in certain activities on or off the Website, such as creating an account, signing in to your account, ordering a product or service from us or our partners, adding items to your shopping cart, submitting content and/or posting User Content, entering a contest or sweepstakes sponsored by us or our partners, filling out a survey, posting a review, sending us or our partners feedback, requesting information about our services, submitting an affiliate agreement, applying for a job or to be a consultant or supplier, posting a video or signing up for special offers from third parties through the Website (collectively, "Identification Activities"), we may ask you to provide certain information about yourself. It is optional for you to engage in an Identification Activity. If you elect to engage in an Identification Activity, however, we may ask you to provide us with certain personal information about yourself, such as your first and last name, mailing address (including zip code), email address, telephone number, date of birth and Restaurant.com account information. When you order products or services, we may also ask you to provide us with your credit card number, expiration date and authentication codes or related information. We may also know your location if you access the Site. Depending on the activity, some of the information we ask you to provide is identified as mandatory and some is identified as voluntary. If you do not provide the mandatory information for a particular activity that requires it, you will not be permitted to engage in that activity</p>[m
+[31m-[m
+[31m-  <p>We may collect, use and store Personally Identifiable Information, including credit card information, to provide products and services to you, make the log-in and checkout process easier, administer our Rewards Program, sweepstakes and contests, help you track your past purchases and orders, enhance the operation of the Site, improve our marketing and promotional efforts to your tastes and location, customize future shopping interests, analyze Site use, improve our product and service offerings, and to tailor your experience with third parties as provided in Item 3 of this Privacy Policy.</p>[m
+[31m-[m
+[31m-  <p>If you provide User Content, such as an email to our customer service or response to a restaurant survey, we may use your comments and feedback to tell others about our services, and may post your comment in our marketing materials or on our Website. In connection with such User Content and our Rewards Program, we may also display partial information such as first name, initial of last name, city and state. Such partial information is not considered Personally Identifiable Information.</p>[m
+[31m-[m
+[31m-  <p>In addition, if you use our Site to send information or a product to another person, we may store your personal information, and the personal information of any recipient. We may use that other person’s contact information to allow him or her to view and accept your gift or to allow the recipient to access the information you requested we send. As another example, if you put items in your shopping cart, we may save the items you have selected to make your checkout process easier in the future, or to remind you about the items you may have forgotten. We may also use Personally Identifiable Information to troubleshoot, resolve disputes, accomplish administrative tasks, contact you, enforce our agreements with you, including our Site Terms of Use and this Privacy Policy, comply with applicable law, and cooperate with law enforcement activities.</p>[m
+[31m-[m
+[31m-  <p>Non-Personally Identifiable Information. Non-Personally Identifiable Information is information that does not identify a specific End User. This type of information may include things like the Uniform Resource Locator ("URL") of the website you visited before coming to our Website, the URL of the website you visit after leaving our Website, the type of browser you are using and your Internet Protocol ("IP") address. We, and/or our authorized Third Party Service Providers and Advertisers, may automatically collect this information when you visit our Website through the use of electronic tools like Cookies and Web beacons or Pixel tags, as described in Items 4 and 8 of this Privacy Policy.</p>[m
+[31m-[m
+[31m-  <p>We use Non-Personally Identifiable Information to troubleshoot, administer the Website, analyze trends, gather demographic information, comply with applicable law, and cooperate with law enforcement activities. We may also share this information with our authorized Third Party Service Providers and Advertisers to measure the overall effectiveness of our online advertising, content, and programming..</p>[m
+[31m-[m
+[31m-  <h2>Security of Information</h2>[m
+[31m-[m
+[31m-  <p>We take security seriously and take numerous precautions to protect the security of Personally Identifiable Information. You can access your Personally Identifiable Information on our Website through a password and unique User ID selected by you, or, for restaurant partners, by us. This password is encrypted. We recommend that you do not share your password with anyone. In addition, your Personally Identifiable Information resides on a secure server that only selected personnel and contractors have access to. We encrypt certain sensitive information using Secure Socket Layer (SSL) technology to ensure that your Personally Identifiable Information is safe as it is transmitted to us.</p>[m
+[31m-[m
+[31m-  <p>Unfortunately, no data transmission over the Internet or any wireless network can be guaranteed to be 100% secure. As a result, while we employ commercially reasonable security measures to protect data and seek to partner with companies which do the same, we cannot guarantee the security of any information transmitted to or from the Website, and are not responsible for the actions of any third parties that may receive any such information.</p>[m
+[31m-[m
+[31m-  <h2>Data Tracking</h2>[m
+[31m-[m
+[31m-  <p>Cookies. To facilitate and customize your experience with the Website, we store cookies on your computer. A cookie is a small text file that is stored on a User’s computer for record-keeping purposes which contains information about that User. We use cookies and other browser analytics tools to save you time while using the Website, remind us who you are, administer our Rewards Program and track and target User interests in order to provide a customized experience. Cookies and web analytics tools also allow us to collect information about your experience, like which pages you visited, what links you clicked on, and, when combined with information you provide to us, we may be able to tell what kind of items you may be interested in to make your experience more enjoyable. Use of this information helps us to create a more user-friendly experience for all visitors. In addition, we may use Third Party Advertising Companies to display advertisements on our Website. As part of their service, they may place separate cookies on your computer. We have no access to or control over these cookies. This Privacy Policy covers the use of cookies by our Website only and does not cover the use of cookies by any Advertiser. Most browsers automatically accept cookies, but you may be able to modify your browser settings to decline cookies. Please note that if you decline or delete these cookies, some parts of the Website may not work properly.</p>[m
+[31m-[m
+[31m-  <p style="margin-bottom:50px;">Other Tracking Devices. We may use other industry standard technologies like pixel tags, web beacons and other tools to track your use of our Website pages and promotions, or we may allow our Third Party Service Providers to use these devices on our behalf. These tools are software code that allows us to determine what pages you visit, whether you have performed a specific action, etc. When you access these pages or open or click an email, these tools generate a notice of that action. These tools allow us to measure and improve our understanding of visitor traffic and behavior on our Website, as well as give us a way to measure our promotions and performance. We may also utilize pixel tags, web beacons and other tools provided by our Affiliates and/or Marketing Partners for the same purposes.</p>[m
+[31m-[m
+[31m-</div>[m
+[1mdiff --git a/ember/restaurant_abh/app/templates/resetpassword.hbs b/ember/restaurant_abh/app/templates/resetpassword.hbs[m
+[1mdeleted file mode 100644[m
+[1mindex bd85dac..0000000[m
+[1m--- a/ember/restaurant_abh/app/templates/resetpassword.hbs[m
+[1m+++ /dev/null[m
+[36m@@ -1,28 +0,0 @@[m
+[31m-{{#navigation-bar styleClass='navigation_black'}}{{/navigation-bar}}[m
+[31m-[m
+[31m-<div class="container">[m
+[31m-  <div class="row">[m
+[31m-    <div class="col-md-6 col-center-block login_register_container">[m
+[31m-      <h1 class="title">Reset password</h1>[m
+[31m-[m
+[31m-      <form data-toggle="validator">[m
+[31m-[m
+[31m-        <div class="form-group">[m
+[31m-          {{input type="password" class="form-control input_fields" value=user.password placeholder="Password"}}[m
+[31m-        </div>[m
+[31m-[m
+[31m-        <div class="form-group">[m
+[31m-          {{input type="password" class="form-control input_fields" value=user.confirmpassword placeholder="Confirm Password"}}[m
+[31m-        </div>[m
+[31m-[m
+[31m-        <div class="form-group loginNotifications">[m
+[31m-          <div class="alert alert-danger" role="alert">[m
+[31m-            <div class="alertText"></div>[m
+[31m-          </div>[m
+[31m-        </div>[m
+[31m-[m
+[31m-        <button {{action 'resetPassword'}} class="btn button">Reset password</button>[m
+[31m-      </form>[m
+[31m-     </div>[m
+[31m-  </div>[m
+[31m-</div>[m
+\ No newline at end of file[m
+[1mdiff --git a/ember/restaurant_abh/app/templates/restaurant.hbs b/ember/restaurant_abh/app/templates/restaurant.hbs[m
+[1mindex fd19c69..88f7815 100644[m
+[1m--- a/ember/restaurant_abh/app/templates/restaurant.hbs[m
+[1m+++ b/ember/restaurant_abh/app/templates/restaurant.hbs[m
+[36m@@ -12,9 +12,8 @@[m
+       </div>[m
+ [m
+       <ul class="restaurant_left_menu">[m
+[31m-        <li><a class="restaurant_left_menu_title" {{action 'moveToSegment' 'reservation'}} href="javascript:void(0);">Reservation</a></li>[m
+[31m-        <li><a class="restaurant_left_menu_title" {{action 'moveToSegment' 'about'}} href="javascript:void(0);">About</a></li>[m
+[31m-        <li><a class="restaurant_left_menu_title" {{action 'moveToSegment' 'menu'}}href="javascript:void(0);">Menu</a></li>[m
+[32m+[m[32m        <li><a href="javascript:void(0);">About</a></li>[m
+[32m+[m[32m        <li><a href="javascript:void(0);">Menu</a></li>[m
+       </ul>[m
+     </div>[m
+     <div class="col-md-9" style="padding-left:40px;">[m
+[36m@@ -29,7 +28,7 @@[m
+         </div>[m
+       </div>[m
+ [m
+[31m-      <div class="box_shadow restaurant_data_container" id="reservation">[m
+[32m+[m[32m      <div class="box_shadow restaurant_data_container">[m
+         <h1 class="title">Make a free reservation</h1>[m
+         <div class="form-group" style="height:54px; overflow:visible;">[m
+           <div class="reservation_column">[m
+[36m@@ -44,7 +43,6 @@[m
+               content=selectDate[m
+               value=reservation.date[m
+               placeholder="Pick a date"[m
+[31m-              select-item=(action 'changeDate')[m
+              }}[m
+           </div>[m
+           <div class="reservation_column">[m
+[36m@@ -81,8 +79,8 @@[m
+         </div>[m
+       </div>[m
+ [m
+[31m-      <div class="box_shadow restaurant_data_container" id="about">[m
+[31m-        <h1 class="title">About {{model.restaurantDetails.restaurantName}}</h1>[m
+[32m+[m[32m      <div class="box_shadow restaurant_data_container">[m
+[32m+[m[32m        <h1 class="title">About Restaurant name</h1>[m
+         {{#g-map lat=model.restaurantDetails.latitude lng=model.restaurantDetails.longitude zoom=17 as |google_mapa|}}[m
+           {{g-map-marker google_mapa lat=model.restaurantDetails.latitude lng=model.restaurantDetails.longitude title="model.restaurantName"}}[m
+         {{/g-map}}[m
+[36m@@ -90,7 +88,7 @@[m
+         <div class="description_text">{{model.restaurantDetails.description}}</div>[m
+       </div>[m
+ [m
+[31m-      <div class="box_shadow restaurant_data_container" style="margin-bottom:300px;" id="menu">[m
+[32m+[m[32m      <div class="box_shadow restaurant_data_container" style="margin-bottom:300px;">[m
+         <h1 class="title restaurant_menu_item_title"><span style="margin-right:25px;">MENU:</span> <a class="menu_title_Breakfast active" href="javascript:

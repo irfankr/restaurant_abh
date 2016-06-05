@@ -1,278 +1,39 @@
-2016-06-01 13:24:51,283 [INFO] from play.core.server.NettyServer in pool-6-thread-2 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
-2016-06-01 13:25:15,040 [WARN] from application in ForkJoinPool-1-worker-1 - application.conf @ file:/home/irfank/Play_applications/restaurant_abh/target/scala-2.11/classes/application.conf: 362: user is deprecated, use username instead
-2016-06-01 13:25:15,048 [INFO] from application in ForkJoinPool-1-worker-1 - Creating Pool for datasource 'default'
-2016-06-01 13:25:15,213 [INFO] from play.api.db.HikariCPConnectionPool in ForkJoinPool-1-worker-1 - datasource [default] bound to JNDI as DefaultDS
-2016-06-01 13:25:15,223 [INFO] from play.api.db.DefaultDBApi in ForkJoinPool-1-worker-1 - Database [default] connected at jdbc:postgresql://127.0.0.1:5432/restaurant_abh
-2016-06-01 13:25:15,477 [INFO] from application in ForkJoinPool-1-worker-1 - ApplicationTimer demo: Starting application at 2016-06-01T11:25:15.475Z
-2016-06-01 13:25:15,743 [INFO] from play.api.Play in ForkJoinPool-1-worker-1 - Application started (Dev)
-2016-06-01 13:25:18,023 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-2 - select user0_.id as id1_4_0_, user0_.city as city2_4_0_, user0_.country as country3_4_0_, user0_.email as email4_4_0_, user0_.firstname as firstnam5_4_0_, user0_.lastname as lastname6_4_0_, user0_.password as password7_4_0_, user0_.phone as phone8_4_0_ from users user0_ where user0_.id=?
-2016-06-01 13:25:18,246 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-2 - SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6
-2016-06-01 13:25:18,283 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-2 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
-2016-06-01 13:25:22,195 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-6 - select restaurant0_.id as id1_2_0_, restaurant0_.description as descript2_2_0_, restaurant0_.foodType as foodType3_2_0_, restaurant0_.imageFileName as imageFil4_2_0_, restaurant0_.latitude as latitude5_2_0_, restaurant0_.locationName as location6_2_0_, restaurant0_.longitude as longitud7_2_0_, restaurant0_.mark as mark8_2_0_, restaurant0_.priceRange as priceRan9_2_0_, restaurant0_.restaurantName as restaur10_2_0_, restaurant0_.votes as votes11_2_0_ from restaurants restaurant0_ where restaurant0_.id=?
-2016-06-01 13:25:22,348 [WARN] from org.hibernate.hql.internal.ast.HqlSqlWalker in application-akka.actor.default-dispatcher-3 - [DEPRECATION] Encountered positional parameter near line 1, column 64 in HQL: [SELECT u FROM models.RestaurantMenuItem u WHERE idRestaurant = ? AND type = ?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
-2016-06-01 13:25:22,350 [WARN] from org.hibernate.hql.internal.ast.HqlSqlWalker in application-akka.actor.default-dispatcher-3 - [DEPRECATION] Encountered positional parameter near line 1, column 77 in HQL: [SELECT u FROM models.RestaurantMenuItem u WHERE idRestaurant = ? AND type = ?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
-2016-06-01 13:25:22,393 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-3 - select restaurant0_.id as id1_1_, restaurant0_.description as descript2_1_, restaurant0_.idRestaurant as idRestau3_1_, restaurant0_.name as name4_1_, restaurant0_.price as price5_1_, restaurant0_.type as type6_1_ from restaurantmenuitem restaurant0_ where restaurant0_.idRestaurant=? and restaurant0_.type=?
-2016-06-01 13:25:24,269 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-6 - select restaurant0_.id as id1_1_, restaurant0_.description as descript2_1_, restaurant0_.idRestaurant as idRestau3_1_, restaurant0_.name as name4_1_, restaurant0_.price as price5_1_, restaurant0_.type as type6_1_ from restaurantmenuitem restaurant0_ where restaurant0_.idRestaurant=? and restaurant0_.type=?
-2016-06-01 13:25:24,738 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-6 - select restaurant0_.id as id1_1_, restaurant0_.description as descript2_1_, restaurant0_.idRestaurant as idRestau3_1_, restaurant0_.name as name4_1_, restaurant0_.price as price5_1_, restaurant0_.type as type6_1_ from restaurantmenuitem restaurant0_ where restaurant0_.idRestaurant=? and restaurant0_.type=?
-2016-06-01 13:25:25,078 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-4 - select restaurant0_.id as id1_1_, restaurant0_.description as descript2_1_, restaurant0_.idRestaurant as idRestau3_1_, restaurant0_.name as name4_1_, restaurant0_.price as price5_1_, restaurant0_.type as type6_1_ from restaurantmenuitem restaurant0_ where restaurant0_.idRestaurant=? and restaurant0_.type=?
-2016-06-01 13:25:26,769 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-2 - SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6
-2016-06-01 13:25:26,789 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-6 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
-2016-06-01 13:25:28,670 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-4 - select restaurant0_.id as id1_2_0_, restaurant0_.description as descript2_2_0_, restaurant0_.foodType as foodType3_2_0_, restaurant0_.imageFileName as imageFil4_2_0_, restaurant0_.latitude as latitude5_2_0_, restaurant0_.locationName as location6_2_0_, restaurant0_.longitude as longitud7_2_0_, restaurant0_.mark as mark8_2_0_, restaurant0_.priceRange as priceRan9_2_0_, restaurant0_.restaurantName as restaur10_2_0_, restaurant0_.votes as votes11_2_0_ from restaurants restaurant0_ where restaurant0_.id=?
-2016-06-01 13:25:28,700 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-4 - select restaurant0_.id as id1_1_, restaurant0_.description as descript2_1_, restaurant0_.idRestaurant as idRestau3_1_, restaurant0_.name as name4_1_, restaurant0_.price as price5_1_, restaurant0_.type as type6_1_ from restaurantmenuitem restaurant0_ where restaurant0_.idRestaurant=? and restaurant0_.type=?
-2016-06-01 13:25:31,628 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-4 - SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6
-2016-06-01 13:25:31,655 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-4 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
-2016-06-01 13:25:33,520 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-6 - select restaurant0_.id as id1_2_0_, restaurant0_.description as descript2_2_0_, restaurant0_.foodType as foodType3_2_0_, restaurant0_.imageFileName as imageFil4_2_0_, restaurant0_.latitude as latitude5_2_0_, restaurant0_.locationName as location6_2_0_, restaurant0_.longitude as longitud7_2_0_, restaurant0_.mark as mark8_2_0_, restaurant0_.priceRange as priceRan9_2_0_, restaurant0_.restaurantName as restaur10_2_0_, restaurant0_.votes as votes11_2_0_ from restaurants restaurant0_ where restaurant0_.id=?
-2016-06-01 13:25:33,546 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-4 - select restaurant0_.id as id1_1_, restaurant0_.description as descript2_1_, restaurant0_.idRestaurant as idRestau3_1_, restaurant0_.name as name4_1_, restaurant0_.price as price5_1_, restaurant0_.type as type6_1_ from restaurantmenuitem restaurant0_ where restaurant0_.idRestaurant=? and restaurant0_.type=?
-2016-06-01 13:25:35,046 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-4 - select restaurant0_.id as id1_1_, restaurant0_.description as descript2_1_, restaurant0_.idRestaurant as idRestau3_1_, restaurant0_.name as name4_1_, restaurant0_.price as price5_1_, restaurant0_.type as type6_1_ from restaurantmenuitem restaurant0_ where restaurant0_.idRestaurant=? and restaurant0_.type=?
-2016-06-01 13:25:35,550 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-6 - select restaurant0_.id as id1_1_, restaurant0_.description as descript2_1_, restaurant0_.idRestaurant as idRestau3_1_, restaurant0_.name as name4_1_, restaurant0_.price as price5_1_, restaurant0_.type as type6_1_ from restaurantmenuitem restaurant0_ where restaurant0_.idRestaurant=? and restaurant0_.type=?
-2016-06-01 13:25:35,932 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-3 - select restaurant0_.id as id1_1_, restaurant0_.description as descript2_1_, restaurant0_.idRestaurant as idRestau3_1_, restaurant0_.name as name4_1_, restaurant0_.price as price5_1_, restaurant0_.type as type6_1_ from restaurantmenuitem restaurant0_ where restaurant0_.idRestaurant=? and restaurant0_.type=?
-2016-06-01 13:25:38,059 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-3 - SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6
-2016-06-01 13:25:38,089 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-3 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
-2016-06-01 13:31:18,415 [ERROR] from application in netty-event-loop-1 - 
-
-! @709hji30m - Internal server error, for (GET) [/api/v1/currentUser] ->
- 
-play.sbt.PlayExceptions$CompilationException: Compilation error[')' expected]
-	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27)
-	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27)
-	at scala.Option.map(Option.scala:145)
-	at play.sbt.run.PlayReload$$anonfun$taskFailureHandler$1.apply(PlayReload.scala:49)
-	at play.sbt.run.PlayReload$$anonfun$taskFailureHandler$1.apply(PlayReload.scala:44)
-	at scala.Option.map(Option.scala:145)
-	at play.sbt.run.PlayReload$.taskFailureHandler(PlayReload.scala:44)
-	at play.sbt.run.PlayReload$.compileFailure(PlayReload.scala:40)
-	at play.sbt.run.PlayReload$$anonfun$compile$1.apply(PlayReload.scala:17)
-	at play.sbt.run.PlayReload$$anonfun$compile$1.apply(PlayReload.scala:17)
-	at scala.util.Either$LeftProjection.map(Either.scala:377)
-	at play.sbt.run.PlayReload$.compile(PlayReload.scala:17)
-	at play.sbt.run.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$2.apply(PlayRun.scala:61)
-	at play.sbt.run.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$2.apply(PlayRun.scala:61)
-	at play.runsupport.Reloader$$anonfun$reload$1.apply(Reloader.scala:338)
-	at play.runsupport.Reloader$$anon$3.run(Reloader.scala:43)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at play.runsupport.Reloader$.play$runsupport$Reloader$$withReloaderContextClassLoader(Reloader.scala:39)
-	at play.runsupport.Reloader.reload(Reloader.scala:336)
-	at play.core.server.DevServerStart$$anonfun$mainDev$1$$anon$1$$anonfun$get$1.apply(DevServerStart.scala:118)
-	at play.core.server.DevServerStart$$anonfun$mainDev$1$$anon$1$$anonfun$get$1.apply(DevServerStart.scala:116)
-	at scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24)
-	at scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24)
-	at akka.dispatch.TaskInvocation.run(AbstractDispatcher.scala:39)
-	at akka.dispatch.ForkJoinExecutorConfigurator$AkkaForkJoinTask.exec(AbstractDispatcher.scala:405)
-	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260)
-	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339)
-	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979)
-	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107)
-2016-06-01 13:31:18,562 [ERROR] from application in netty-event-loop-2 - 
-
-! @709hji386 - Internal server error, for (GET) [/favicon.ico] ->
- 
-play.sbt.PlayExceptions$CompilationException: Compilation error[')' expected]
-	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27)
-	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27)
-	at scala.Option.map(Option.scala:145)
-	at play.sbt.run.PlayReload$$anonfun$taskFailureHandler$1.apply(PlayReload.scala:49)
-	at play.sbt.run.PlayReload$$anonfun$taskFailureHandler$1.apply(PlayReload.scala:44)
-	at scala.Option.map(Option.scala:145)
-	at play.sbt.run.PlayReload$.taskFailureHandler(PlayReload.scala:44)
-	at play.sbt.run.PlayReload$.compileFailure(PlayReload.scala:40)
-	at play.sbt.run.PlayReload$$anonfun$compile$1.apply(PlayReload.scala:17)
-	at play.sbt.run.PlayReload$$anonfun$compile$1.apply(PlayReload.scala:17)
-	at scala.util.Either$LeftProjection.map(Either.scala:377)
-	at play.sbt.run.PlayReload$.compile(PlayReload.scala:17)
-	at play.sbt.run.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$2.apply(PlayRun.scala:61)
-	at play.sbt.run.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$2.apply(PlayRun.scala:61)
-	at play.runsupport.Reloader$$anonfun$reload$1.apply(Reloader.scala:338)
-	at play.runsupport.Reloader$$anon$3.run(Reloader.scala:43)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at play.runsupport.Reloader$.play$runsupport$Reloader$$withReloaderContextClassLoader(Reloader.scala:39)
-	at play.runsupport.Reloader.reload(Reloader.scala:336)
-	at play.core.server.DevServerStart$$anonfun$mainDev$1$$anon$1$$anonfun$get$1.apply(DevServerStart.scala:118)
-	at play.core.server.DevServerStart$$anonfun$mainDev$1$$anon$1$$anonfun$get$1.apply(DevServerStart.scala:116)
-	at scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24)
-	at scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24)
-	at akka.dispatch.TaskInvocation.run(AbstractDispatcher.scala:39)
-	at akka.dispatch.ForkJoinExecutorConfigurator$AkkaForkJoinTask.exec(AbstractDispatcher.scala:405)
-	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260)
-	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339)
-	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979)
-	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107)
-2016-06-01 13:31:18,937 [ERROR] from application in netty-event-loop-3 - 
-
-! @709hji3mi - Internal server error, for (GET) [/api/v1/allRestaurantsSortReservationsToday] ->
- 
-play.sbt.PlayExceptions$CompilationException: Compilation error[')' expected]
-	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27)
-	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27)
-	at scala.Option.map(Option.scala:145)
-	at play.sbt.run.PlayReload$$anonfun$taskFailureHandler$1.apply(PlayReload.scala:49)
-	at play.sbt.run.PlayReload$$anonfun$taskFailureHandler$1.apply(PlayReload.scala:44)
-	at scala.Option.map(Option.scala:145)
-	at play.sbt.run.PlayReload$.taskFailureHandler(PlayReload.scala:44)
-	at play.sbt.run.PlayReload$.compileFailure(PlayReload.scala:40)
-	at play.sbt.run.PlayReload$$anonfun$compile$1.apply(PlayReload.scala:17)
-	at play.sbt.run.PlayReload$$anonfun$compile$1.apply(PlayReload.scala:17)
-	at scala.util.Either$LeftProjection.map(Either.scala:377)
-	at play.sbt.run.PlayReload$.compile(PlayReload.scala:17)
-	at play.sbt.run.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$2.apply(PlayRun.scala:61)
-	at play.sbt.run.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$2.apply(PlayRun.scala:61)
-	at play.runsupport.Reloader$$anonfun$reload$1.apply(Reloader.scala:338)
-	at play.runsupport.Reloader$$anon$3.run(Reloader.scala:43)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at play.runsupport.Reloader$.play$runsupport$Reloader$$withReloaderContextClassLoader(Reloader.scala:39)
-	at play.runsupport.Reloader.reload(Reloader.scala:336)
-	at play.core.server.DevServerStart$$anonfun$mainDev$1$$anon$1$$anonfun$get$1.apply(DevServerStart.scala:118)
-	at play.core.server.DevServerStart$$anonfun$mainDev$1$$anon$1$$anonfun$get$1.apply(DevServerStart.scala:116)
-	at scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24)
-	at scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24)
-	at akka.dispatch.TaskInvocation.run(AbstractDispatcher.scala:39)
-	at akka.dispatch.ForkJoinExecutorConfigurator$AkkaForkJoinTask.exec(AbstractDispatcher.scala:405)
-	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260)
-	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339)
-	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979)
-	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107)
-2016-06-01 13:31:19,391 [ERROR] from application in netty-event-loop-4 - 
-
-! @709hji4e3 - Internal server error, for (GET) [/favicon.ico] ->
- 
-play.sbt.PlayExceptions$CompilationException: Compilation error[')' expected]
-	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27)
-	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27)
-	at scala.Option.map(Option.scala:145)
-	at play.sbt.run.PlayReload$$anonfun$taskFailureHandler$1.apply(PlayReload.scala:49)
-	at play.sbt.run.PlayReload$$anonfun$taskFailureHandler$1.apply(PlayReload.scala:44)
-	at scala.Option.map(Option.scala:145)
-	at play.sbt.run.PlayReload$.taskFailureHandler(PlayReload.scala:44)
-	at play.sbt.run.PlayReload$.compileFailure(PlayReload.scala:40)
-	at play.sbt.run.PlayReload$$anonfun$compile$1.apply(PlayReload.scala:17)
-	at play.sbt.run.PlayReload$$anonfun$compile$1.apply(PlayReload.scala:17)
-	at scala.util.Either$LeftProjection.map(Either.scala:377)
-	at play.sbt.run.PlayReload$.compile(PlayReload.scala:17)
-	at play.sbt.run.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$2.apply(PlayRun.scala:61)
-	at play.sbt.run.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$2.apply(PlayRun.scala:61)
-	at play.runsupport.Reloader$$anonfun$reload$1.apply(Reloader.scala:338)
-	at play.runsupport.Reloader$$anon$3.run(Reloader.scala:43)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at play.runsupport.Reloader$.play$runsupport$Reloader$$withReloaderContextClassLoader(Reloader.scala:39)
-	at play.runsupport.Reloader.reload(Reloader.scala:336)
-	at play.core.server.DevServerStart$$anonfun$mainDev$1$$anon$1$$anonfun$get$1.apply(DevServerStart.scala:118)
-	at play.core.server.DevServerStart$$anonfun$mainDev$1$$anon$1$$anonfun$get$1.apply(DevServerStart.scala:116)
-	at scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24)
-	at scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24)
-	at akka.dispatch.TaskInvocation.run(AbstractDispatcher.scala:39)
-	at akka.dispatch.ForkJoinExecutorConfigurator$AkkaForkJoinTask.exec(AbstractDispatcher.scala:405)
-	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260)
-	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339)
-	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979)
-	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107)
-2016-06-01 13:31:20,924 [ERROR] from application in netty-event-loop-5 - 
-
-! @709hji6km - Internal server error, for (GET) [/assets/bootstrap-theme.css.map] ->
- 
-play.sbt.PlayExceptions$CompilationException: Compilation error[')' expected]
-	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27)
-	at play.sbt.PlayExceptions$CompilationException$.apply(PlayExceptions.scala:27)
-	at scala.Option.map(Option.scala:145)
-	at play.sbt.run.PlayReload$$anonfun$taskFailureHandler$1.apply(PlayReload.scala:49)
-	at play.sbt.run.PlayReload$$anonfun$taskFailureHandler$1.apply(PlayReload.scala:44)
-	at scala.Option.map(Option.scala:145)
-	at play.sbt.run.PlayReload$.taskFailureHandler(PlayReload.scala:44)
-	at play.sbt.run.PlayReload$.compileFailure(PlayReload.scala:40)
-	at play.sbt.run.PlayReload$$anonfun$compile$1.apply(PlayReload.scala:17)
-	at play.sbt.run.PlayReload$$anonfun$compile$1.apply(PlayReload.scala:17)
-	at scala.util.Either$LeftProjection.map(Either.scala:377)
-	at play.sbt.run.PlayReload$.compile(PlayReload.scala:17)
-	at play.sbt.run.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$2.apply(PlayRun.scala:61)
-	at play.sbt.run.PlayRun$$anonfun$playRunTask$1$$anonfun$apply$2$$anonfun$apply$3$$anonfun$2.apply(PlayRun.scala:61)
-	at play.runsupport.Reloader$$anonfun$reload$1.apply(Reloader.scala:338)
-	at play.runsupport.Reloader$$anon$3.run(Reloader.scala:43)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at play.runsupport.Reloader$.play$runsupport$Reloader$$withReloaderContextClassLoader(Reloader.scala:39)
-	at play.runsupport.Reloader.reload(Reloader.scala:336)
-	at play.core.server.DevServerStart$$anonfun$mainDev$1$$anon$1$$anonfun$get$1.apply(DevServerStart.scala:118)
-	at play.core.server.DevServerStart$$anonfun$mainDev$1$$anon$1$$anonfun$get$1.apply(DevServerStart.scala:116)
-	at scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24)
-	at scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24)
-	at akka.dispatch.TaskInvocation.run(AbstractDispatcher.scala:39)
-	at akka.dispatch.ForkJoinExecutorConfigurator$AkkaForkJoinTask.exec(AbstractDispatcher.scala:405)
-	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260)
-	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339)
-	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979)
-	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107)
-2016-06-01 13:34:39,609 [INFO] from application in application-akka.actor.default-dispatcher-2 - ApplicationTimer demo: Stopping application at 2016-06-01T11:34:39.609Z after 564s.
-2016-06-01 13:34:39,613 [INFO] from application in application-akka.actor.default-dispatcher-2 - Shutting down connection pool.
-2016-06-01 13:34:39,862 [WARN] from application in application-akka.actor.default-dispatcher-2 - application.conf @ file:/home/irfank/Play_applications/restaurant_abh/target/scala-2.11/classes/application.conf: 362: user is deprecated, use username instead
-2016-06-01 13:34:39,862 [INFO] from application in application-akka.actor.default-dispatcher-2 - Creating Pool for datasource 'default'
-2016-06-01 13:34:39,881 [INFO] from play.api.db.HikariCPConnectionPool in application-akka.actor.default-dispatcher-2 - datasource [default] bound to JNDI as DefaultDS
-2016-06-01 13:34:39,881 [INFO] from play.api.db.DefaultDBApi in application-akka.actor.default-dispatcher-2 - Database [default] connected at jdbc:postgresql://127.0.0.1:5432/restaurant_abh
-2016-06-01 13:34:39,899 [INFO] from application in application-akka.actor.default-dispatcher-2 - ApplicationTimer demo: Starting application at 2016-06-01T11:34:39.899Z
-2016-06-01 13:34:40,050 [INFO] from play.api.Play in application-akka.actor.default-dispatcher-2 - Application started (Dev)
-2016-06-01 13:34:40,388 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-4 - select user0_.id as id1_4_0_, user0_.city as city2_4_0_, user0_.country as country3_4_0_, user0_.email as email4_4_0_, user0_.firstname as firstnam5_4_0_, user0_.lastname as lastname6_4_0_, user0_.password as password7_4_0_, user0_.phone as phone8_4_0_ from users user0_ where user0_.id=?
-2016-06-01 13:34:40,490 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-5 - SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6
-2016-06-01 13:34:40,536 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-5 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
-2016-06-01 13:35:00,258 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-8 - SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6
-2016-06-01 13:35:00,286 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-7 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
-2016-06-01 13:35:29,897 [WARN] from org.hibernate.hql.internal.ast.HqlSqlWalker in application-akka.actor.default-dispatcher-7 - [DEPRECATION] Encountered positional parameter near line 1, column 43 in HQL: [SELECT u FROM models.User u WHERE email = ?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
-2016-06-01 13:35:29,898 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-7 - select user0_.id as id1_4_, user0_.city as city2_4_, user0_.country as country3_4_, user0_.email as email4_4_, user0_.firstname as firstnam5_4_, user0_.lastname as lastname6_4_, user0_.password as password7_4_, user0_.phone as phone8_4_ from users user0_ where user0_.email=?
-2016-06-01 13:35:29,904 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-7 - select nextval ('hibernate_sequence')
-2016-06-01 13:35:29,922 [WARN] from org.hibernate.hql.internal.ast.HqlSqlWalker in application-akka.actor.default-dispatcher-7 - [DEPRECATION] Encountered positional parameter near line 1, column 43 in HQL: [SELECT u FROM models.User u WHERE email = ? AND password = ?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
-2016-06-01 13:35:29,923 [WARN] from org.hibernate.hql.internal.ast.HqlSqlWalker in application-akka.actor.default-dispatcher-7 - [DEPRECATION] Encountered positional parameter near line 1, column 60 in HQL: [SELECT u FROM models.User u WHERE email = ? AND password = ?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
-2016-06-01 13:35:29,944 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-7 - insert into users (city, country, email, firstname, lastname, password, phone, id) values (?, ?, ?, ?, ?, ?, ?, ?)
-2016-06-01 13:35:29,946 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-7 - select user0_.id as id1_4_, user0_.city as city2_4_, user0_.country as country3_4_, user0_.email as email4_4_, user0_.firstname as firstnam5_4_, user0_.lastname as lastname6_4_, user0_.password as password7_4_, user0_.phone as phone8_4_ from users user0_ where user0_.email=? and user0_.password=?
-2016-06-01 13:35:42,995 [INFO] from application in application-akka.actor.default-dispatcher-7 - ApplicationTimer demo: Stopping application at 2016-06-01T11:35:42.995Z after 63s.
-2016-06-01 13:35:42,995 [INFO] from application in application-akka.actor.default-dispatcher-7 - Shutting down connection pool.
-2016-06-01 13:35:43,168 [WARN] from application in application-akka.actor.default-dispatcher-7 - application.conf @ file:/home/irfank/Play_applications/restaurant_abh/target/scala-2.11/classes/application.conf: 362: user is deprecated, use username instead
-2016-06-01 13:35:43,169 [INFO] from application in application-akka.actor.default-dispatcher-7 - Creating Pool for datasource 'default'
-2016-06-01 13:35:43,177 [INFO] from play.api.db.HikariCPConnectionPool in application-akka.actor.default-dispatcher-7 - datasource [default] bound to JNDI as DefaultDS
-2016-06-01 13:35:43,178 [INFO] from play.api.db.DefaultDBApi in application-akka.actor.default-dispatcher-7 - Database [default] connected at jdbc:postgresql://127.0.0.1:5432/restaurant_abh
-2016-06-01 13:35:43,194 [INFO] from application in application-akka.actor.default-dispatcher-7 - ApplicationTimer demo: Starting application at 2016-06-01T11:35:43.194Z
-2016-06-01 13:35:43,292 [INFO] from play.api.Play in application-akka.actor.default-dispatcher-7 - Application started (Dev)
-2016-06-01 13:35:43,582 [WARN] from org.hibernate.hql.internal.ast.HqlSqlWalker in application-akka.actor.default-dispatcher-2 - [DEPRECATION] Encountered positional parameter near line 1, column 43 in HQL: [SELECT u FROM models.User u WHERE email = ?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
-2016-06-01 13:35:43,583 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-2 - select user0_.id as id1_4_, user0_.city as city2_4_, user0_.country as country3_4_, user0_.email as email4_4_, user0_.firstname as firstnam5_4_, user0_.lastname as lastname6_4_, user0_.password as password7_4_, user0_.phone as phone8_4_ from users user0_ where user0_.email=?
-2016-06-01 13:36:51,895 [INFO] from application in application-akka.actor.default-dispatcher-3 - ApplicationTimer demo: Stopping application at 2016-06-01T11:36:51.895Z after 68s.
-2016-06-01 13:36:51,895 [INFO] from application in application-akka.actor.default-dispatcher-3 - Shutting down connection pool.
-2016-06-01 13:36:52,016 [WARN] from application in application-akka.actor.default-dispatcher-3 - application.conf @ file:/home/irfank/Play_applications/restaurant_abh/target/scala-2.11/classes/application.conf: 362: user is deprecated, use username instead
-2016-06-01 13:36:52,016 [INFO] from application in application-akka.actor.default-dispatcher-3 - Creating Pool for datasource 'default'
-2016-06-01 13:36:52,033 [INFO] from play.api.db.HikariCPConnectionPool in application-akka.actor.default-dispatcher-3 - datasource [default] bound to JNDI as DefaultDS
-2016-06-01 13:36:52,033 [INFO] from play.api.db.DefaultDBApi in application-akka.actor.default-dispatcher-3 - Database [default] connected at jdbc:postgresql://127.0.0.1:5432/restaurant_abh
-2016-06-01 13:36:52,055 [INFO] from application in application-akka.actor.default-dispatcher-3 - ApplicationTimer demo: Starting application at 2016-06-01T11:36:52.055Z
-2016-06-01 13:36:52,152 [INFO] from play.api.Play in application-akka.actor.default-dispatcher-3 - Application started (Dev)
-2016-06-01 13:36:52,419 [WARN] from org.hibernate.hql.internal.ast.HqlSqlWalker in application-akka.actor.default-dispatcher-4 - [DEPRECATION] Encountered positional parameter near line 1, column 43 in HQL: [SELECT u FROM models.User u WHERE email = ?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
-2016-06-01 13:36:52,420 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-4 - select user0_.id as id1_4_, user0_.city as city2_4_, user0_.country as country3_4_, user0_.email as email4_4_, user0_.firstname as firstnam5_4_, user0_.lastname as lastname6_4_, user0_.password as password7_4_, user0_.phone as phone8_4_ from users user0_ where user0_.email=?
-2016-06-01 13:36:52,422 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-4 - select nextval ('hibernate_sequence')
-2016-06-01 13:36:52,425 [WARN] from org.hibernate.hql.internal.ast.HqlSqlWalker in application-akka.actor.default-dispatcher-4 - [DEPRECATION] Encountered positional parameter near line 1, column 43 in HQL: [SELECT u FROM models.User u WHERE email = ? AND password = ?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
-2016-06-01 13:36:52,426 [WARN] from org.hibernate.hql.internal.ast.HqlSqlWalker in application-akka.actor.default-dispatcher-4 - [DEPRECATION] Encountered positional parameter near line 1, column 60 in HQL: [SELECT u FROM models.User u WHERE email = ? AND password = ?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
-2016-06-01 13:36:52,427 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-4 - insert into users (city, country, email, firstname, lastname, password, phone, id) values (?, ?, ?, ?, ?, ?, ?, ?)
-2016-06-01 13:36:52,428 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-4 - select user0_.id as id1_4_, user0_.city as city2_4_, user0_.country as country3_4_, user0_.email as email4_4_, user0_.firstname as firstnam5_4_, user0_.lastname as lastname6_4_, user0_.password as password7_4_, user0_.phone as phone8_4_ from users user0_ where user0_.email=? and user0_.password=?
-2016-06-01 13:36:55,500 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-4 - SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6
-2016-06-01 13:36:55,539 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-2 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
-2016-06-01 13:37:04,813 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-6 - SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6
-2016-06-01 13:37:04,863 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-6 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
-2016-06-01 13:37:41,991 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-7 - select user0_.id as id1_4_, user0_.city as city2_4_, user0_.country as country3_4_, user0_.email as email4_4_, user0_.firstname as firstnam5_4_, user0_.lastname as lastname6_4_, user0_.password as password7_4_, user0_.phone as phone8_4_ from users user0_ where user0_.email=?
-2016-06-01 13:38:04,015 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-8 - select user0_.id as id1_4_, user0_.city as city2_4_, user0_.country as country3_4_, user0_.email as email4_4_, user0_.firstname as firstnam5_4_, user0_.lastname as lastname6_4_, user0_.password as password7_4_, user0_.phone as phone8_4_ from users user0_ where user0_.email=?
-2016-06-01 13:52:02,117 [INFO] from application in application-akka.actor.default-dispatcher-10 - ApplicationTimer demo: Stopping application at 2016-06-01T11:52:02.117Z after 910s.
-2016-06-01 13:52:02,117 [INFO] from application in application-akka.actor.default-dispatcher-10 - Shutting down connection pool.
-2016-06-01 13:52:02,230 [WARN] from application in application-akka.actor.default-dispatcher-10 - application.conf @ file:/home/irfank/Play_applications/restaurant_abh/target/scala-2.11/classes/application.conf: 362: user is deprecated, use username instead
-2016-06-01 13:52:02,230 [INFO] from application in application-akka.actor.default-dispatcher-10 - Creating Pool for datasource 'default'
-2016-06-01 13:52:02,239 [INFO] from play.api.db.HikariCPConnectionPool in application-akka.actor.default-dispatcher-10 - datasource [default] bound to JNDI as DefaultDS
-2016-06-01 13:52:02,239 [INFO] from play.api.db.DefaultDBApi in application-akka.actor.default-dispatcher-10 - Database [default] connected at jdbc:postgresql://127.0.0.1:5432/restaurant_abh
-2016-06-01 13:52:02,282 [INFO] from application in application-akka.actor.default-dispatcher-10 - ApplicationTimer demo: Starting application at 2016-06-01T11:52:02.281Z
-2016-06-01 13:52:02,369 [INFO] from play.api.Play in application-akka.actor.default-dispatcher-10 - Application started (Dev)
-2016-06-01 13:52:02,604 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-6 - SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6
-2016-06-01 13:52:02,630 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-6 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
-2016-06-01 13:52:39,726 [WARN] from org.hibernate.hql.internal.ast.HqlSqlWalker in application-akka.actor.default-dispatcher-2 - [DEPRECATION] Encountered positional parameter near line 1, column 43 in HQL: [SELECT u FROM models.User u WHERE email = ?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
-2016-06-01 13:52:39,727 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-2 - select user0_.id as id1_4_, user0_.city as city2_4_, user0_.country as country3_4_, user0_.email as email4_4_, user0_.firstname as firstnam5_4_, user0_.lastname as lastname6_4_, user0_.password as password7_4_, user0_.phone as phone8_4_ from users user0_ where user0_.email=?
-2016-06-01 13:52:58,366 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-4 - select user0_.id as id1_4_, user0_.city as city2_4_, user0_.country as country3_4_, user0_.email as email4_4_, user0_.firstname as firstnam5_4_, user0_.lastname as lastname6_4_, user0_.password as password7_4_, user0_.phone as phone8_4_ from users user0_ where user0_.email=?
-2016-06-01 13:52:58,368 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-4 - select nextval ('hibernate_sequence')
-2016-06-01 13:52:58,370 [WARN] from org.hibernate.hql.internal.ast.HqlSqlWalker in application-akka.actor.default-dispatcher-4 - [DEPRECATION] Encountered positional parameter near line 1, column 43 in HQL: [SELECT u FROM models.User u WHERE email = ? AND password = ?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
-2016-06-01 13:52:58,370 [WARN] from org.hibernate.hql.internal.ast.HqlSqlWalker in application-akka.actor.default-dispatcher-4 - [DEPRECATION] Encountered positional parameter near line 1, column 60 in HQL: [SELECT u FROM models.User u WHERE email = ? AND password = ?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
-2016-06-01 13:52:58,371 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-4 - insert into users (city, country, email, firstname, lastname, password, phone, id) values (?, ?, ?, ?, ?, ?, ?, ?)
-2016-06-01 13:52:58,372 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-4 - select user0_.id as id1_4_, user0_.city as city2_4_, user0_.country as country3_4_, user0_.email as email4_4_, user0_.firstname as firstnam5_4_, user0_.lastname as lastname6_4_, user0_.password as password7_4_, user0_.phone as phone8_4_ from users user0_ where user0_.email=? and user0_.password=?
-2016-06-01 13:53:01,423 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-9 - SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6
-2016-06-01 13:53:01,454 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-7 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
-2016-06-01 14:11:21,071 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-4 - select user0_.id as id1_4_0_, user0_.city as city2_4_0_, user0_.country as country3_4_0_, user0_.email as email4_4_0_, user0_.firstname as firstnam5_4_0_, user0_.lastname as lastname6_4_0_, user0_.password as password7_4_0_, user0_.phone as phone8_4_0_ from users user0_ where user0_.id=?
-2016-06-01 14:11:21,173 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-10 - SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6
-2016-06-01 14:11:21,195 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-10 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
-2016-06-01 14:11:26,458 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-12 - SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6
-2016-06-01 14:11:26,478 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-13 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
-2016-06-01 14:16:49,093 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-40 - SELECT * FROM restaurants ORDER BY id ASC
-2016-06-01 14:16:49,114 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-20 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
+2016-06-05 19:09:41,242 [INFO] from play.core.server.NettyServer in pool-6-thread-1 - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+2016-06-05 19:09:49,727 [WARN] from application in ForkJoinPool-1-worker-1 - application.conf @ file:/home/irfank/Play_applications/restaurant_abh/target/scala-2.11/classes/application.conf: 362: user is deprecated, use username instead
+2016-06-05 19:09:49,742 [INFO] from application in ForkJoinPool-1-worker-1 - Creating Pool for datasource 'default'
+2016-06-05 19:09:49,934 [INFO] from play.api.db.HikariCPConnectionPool in ForkJoinPool-1-worker-1 - datasource [default] bound to JNDI as DefaultDS
+2016-06-05 19:09:49,948 [INFO] from play.api.db.DefaultDBApi in ForkJoinPool-1-worker-1 - Database [default] connected at jdbc:postgresql://127.0.0.1:5432/restaurant_abh
+2016-06-05 19:09:50,341 [INFO] from application in ForkJoinPool-1-worker-1 - ApplicationTimer demo: Starting application at 2016-06-05T17:09:50.340Z
+2016-06-05 19:09:50,350 [WARN] from application in ForkJoinPool-1-worker-1 - application.conf @ file:/home/irfank/Play_applications/restaurant_abh/target/scala-2.11/classes/application.conf: 373: session.maxAge is deprecated, use play.http.session.maxAge instead
+2016-06-05 19:09:50,640 [INFO] from play.api.Play in ForkJoinPool-1-worker-1 - Application started (Dev)
+2016-06-05 19:10:03,904 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-6 - SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6
+2016-06-05 19:10:04,031 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-6 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
+2016-06-05 19:10:18,124 [WARN] from org.hibernate.hql.internal.ast.HqlSqlWalker in application-akka.actor.default-dispatcher-2 - [DEPRECATION] Encountered positional parameter near line 1, column 43 in HQL: [SELECT u FROM models.User u WHERE email = ? AND password = ?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2016-06-05 19:10:18,126 [WARN] from org.hibernate.hql.internal.ast.HqlSqlWalker in application-akka.actor.default-dispatcher-2 - [DEPRECATION] Encountered positional parameter near line 1, column 60 in HQL: [SELECT u FROM models.User u WHERE email = ? AND password = ?].  Positional parameter are considered deprecated; use named parameters or JPA-style positional parameters instead.
+2016-06-05 19:10:18,155 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-2 - select user0_.id as id1_4_, user0_.city as city2_4_, user0_.country as country3_4_, user0_.email as email4_4_, user0_.firstname as firstnam5_4_, user0_.lastname as lastname6_4_, user0_.password as password7_4_, user0_.phone as phone8_4_ from users user0_ where user0_.email=? and user0_.password=?
+2016-06-05 19:10:20,449 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-6 - SELECT * FROM restaurants ORDER BY id ASC
+2016-06-05 19:10:20,473 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-6 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
+2016-06-05 19:10:22,233 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-5 - select user0_.id as id1_4_0_, user0_.city as city2_4_0_, user0_.country as country3_4_0_, user0_.email as email4_4_0_, user0_.firstname as firstnam5_4_0_, user0_.lastname as lastname6_4_0_, user0_.password as password7_4_0_, user0_.phone as phone8_4_0_ from users user0_ where user0_.id=?
+2016-06-05 19:11:19,195 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-8 - SELECT * FROM restaurants ORDER BY id ASC
+2016-06-05 19:11:19,219 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-10 - SELECT * FROM restaurants ORDER BY id ASC
+2016-06-05 19:11:19,243 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-8 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
+2016-06-05 19:11:19,339 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-8 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
+2016-06-05 19:11:23,993 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-9 - select user0_.id as id1_4_0_, user0_.city as city2_4_0_, user0_.country as country3_4_0_, user0_.email as email4_4_0_, user0_.firstname as firstnam5_4_0_, user0_.lastname as lastname6_4_0_, user0_.password as password7_4_0_, user0_.phone as phone8_4_0_ from users user0_ where user0_.id=?
+2016-06-05 19:11:24,122 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-9 - SELECT * FROM restaurants ORDER BY id ASC
+2016-06-05 19:11:24,143 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-9 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
+2016-06-05 19:11:43,970 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-11 - select user0_.id as id1_4_0_, user0_.city as city2_4_0_, user0_.country as country3_4_0_, user0_.email as email4_4_0_, user0_.firstname as firstnam5_4_0_, user0_.lastname as lastname6_4_0_, user0_.password as password7_4_0_, user0_.phone as phone8_4_0_ from users user0_ where user0_.id=?
+2016-06-05 19:11:44,068 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-9 - SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6
+2016-06-05 19:11:44,089 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-11 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
+2016-06-05 19:11:46,838 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-12 - SELECT * FROM restaurants ORDER BY id ASC
+2016-06-05 19:11:46,866 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-12 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
+2016-06-05 19:11:56,595 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-8 - select user0_.id as id1_4_0_, user0_.city as city2_4_0_, user0_.country as country3_4_0_, user0_.email as email4_4_0_, user0_.firstname as firstnam5_4_0_, user0_.lastname as lastname6_4_0_, user0_.password as password7_4_0_, user0_.phone as phone8_4_0_ from users user0_ where user0_.id=?
+2016-06-05 19:11:56,701 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-8 - SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6
+2016-06-05 19:11:56,720 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-8 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
+2016-06-05 19:12:01,675 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-13 - SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6
+2016-06-05 19:12:01,691 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-13 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
+2016-06-05 19:12:11,657 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-12 - select user0_.id as id1_4_, user0_.city as city2_4_, user0_.country as country3_4_, user0_.email as email4_4_, user0_.firstname as firstnam5_4_, user0_.lastname as lastname6_4_, user0_.password as password7_4_, user0_.phone as phone8_4_ from users user0_ where user0_.email=? and user0_.password=?
+2016-06-05 19:12:13,708 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-11 - SELECT * FROM restaurants ORDER BY id ASC
+2016-06-05 19:12:13,737 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-8 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName
+2016-06-05 19:12:30,348 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-8 - select user0_.id as id1_4_0_, user0_.city as city2_4_0_, user0_.country as country3_4_0_, user0_.email as email4_4_0_, user0_.firstname as firstnam5_4_0_, user0_.lastname as lastname6_4_0_, user0_.password as password7_4_0_, user0_.phone as phone8_4_0_ from users user0_ where user0_.id=?
+2016-06-05 19:12:30,450 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-8 - SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6
+2016-06-05 19:12:30,474 [DEBUG] from org.hibernate.SQL in application-akka.actor.default-dispatcher-13 - SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName

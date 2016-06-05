@@ -18,6 +18,8 @@ import static play.libs.Json.toJson;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +30,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -53,14 +56,27 @@ public class UserController extends Controller {
 
         if (loginForm.hasErrors()) {
             return badRequest("Some error happend!");
+
+            //Create session that stores wrong attempts
         } else {
             User user = User.findByEmailAndPassword(loginForm.get().email, loginForm.get().password);
             if(user == null) {
                 return badRequest("{error: \"User data is not valid!\"}");
             } else {
                 //Put user id in session
-                session().clear();
+                //session().clear();
                 session("idUser", Long.toString(user.getId()));
+
+                //If user didn't check remember me option, then don't set session expiration
+                if(Boolean.valueOf(loginForm.get().rememberMe) == false){
+                    //Add 20 minutes to current
+                    Date currentTime = new Date();
+                    Date newDate = new Date(currentTime.getTime() + TimeUnit.MINUTES.toMillis(20));
+
+                    session("userLogInExpiration", newDate.toString()); //When will user session expire
+
+                    System.out.println(session("userLogInExpiration"));
+                }
 
                 return ok(Json.toJson(user));
             }
@@ -93,6 +109,25 @@ public class UserController extends Controller {
         if(session("idUser") == null){
             return null;
         } else {
+            //Get current time
+            Date currentTime = new Date();
+            Date userLogInExpiration = null;
+
+            if(session("userLogInExpiration") != null) { //If this var is !=null it means that user didn't check remember me
+
+                try {
+                    SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd kk:mm:ss z yyyy");
+                    userLogInExpiration = format.parse(session("userLogInExpiration"));
+                } catch (ParseException pe) {
+                    System.out.println("ERROR: Cannot parse date in UserController.getCurrentUser");
+                }
+
+                //Check is user remembered, and is session expired
+                if (session("userLogInExpiration") != null && currentTime.after(userLogInExpiration)) {
+                    return null;
+                }
+            }
+
             long userId = Long.parseLong(session("idUser"));
             //Logger.info("SESSION ID: " + session("idUser"));
 
@@ -100,6 +135,7 @@ public class UserController extends Controller {
             user = user.findById(userId);
 
             return user;
+
         }
 
     }
@@ -160,6 +196,7 @@ public class UserController extends Controller {
     public static class UserLoginDto {
         public String email;
         public String password;
+        public String rememberMe;
     }
 
     public static class UserRegisterDto {

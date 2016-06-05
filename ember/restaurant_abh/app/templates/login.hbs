@@ -20,7 +20,7 @@
           </div>
         </div>
 
-        <div>{{#link-to 'forgotpassword' class="register"}}Forgot password?{{/link-to}}</div>
+        <div>{{input type="checkbox" id="rememberMe" checked=rememberMe}} <span for="rememberMe" class="remember_me">Remember Me</span> {{#link-to 'forgotpassword' class="register"}}Forgot password?{{/link-to}}</div>
 
         <button {{action 'login'}} class="btn button">Login</button>
       </form>

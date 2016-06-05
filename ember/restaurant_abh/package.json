@@ -38,6 +38,7 @@
     "ember-g-map": "0.0.18",
     "ember-load-initializers": "^0.5.1",
     "ember-resolver": "^2.0.3",
-    "loader.js": "^4.0.1"
+    "loader.js": "^4.0.1",
+    "ember-cli-cookie": "~0.2.0"
   }
 }

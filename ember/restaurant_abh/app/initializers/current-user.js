@@ -8,6 +8,10 @@ export function initialize(application) {
   //Start waiting for response from Play
   application.deferReadiness();
 
+  //Inject cookies to controller and routes
+  application.inject('controller', 'cookie', 'cookie:main');
+  application.inject('route', 'cookie', 'cookie:main');
+
   return $.ajax({
     url: "/api/v1/currentUser",
     type: "GET",
@@ -48,5 +52,6 @@ export function initialize(application) {
 }
 
 export default {
+  after: ['cookie'],
   initialize
 };

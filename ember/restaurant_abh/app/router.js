@@ -15,6 +15,7 @@ Router.map(function() {
   this.route('termsofuse');
   this.route('privacypolicy');
   this.route('resetpassword');
+  this.route('resetpassword', {path: '/resetpassword/:userCode'});
   this.route('forgotpassword');
 });
 
