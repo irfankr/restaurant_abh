@@ -14,7 +14,8 @@ libraryDependencies ++= Seq(
   "org.postgresql" % "postgresql" % "9.4-1206-jdbc42",
   javaJpa,
   "org.hibernate" % "hibernate-entitymanager" % "5.1.0.Final",
-  evolutions
+  evolutions,
+  "com.typesafe.play" %% "play-mailer" % "5.0.0-M1"
 )
 
 

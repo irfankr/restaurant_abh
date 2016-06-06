@@ -33,5 +33,7 @@ POST    /api/v1/restaurantVote              controllers.RestaurantController.res
 POST    /api/v1/checkReservationAvailability controllers.ReservationController.checkReservationAvailability
 GET     /api/v1/getListOfReservationsForUser    controllers.ReservationController.getListOfReservationsForUser
 
+POST    /api/v1/createResetPasswordToken    controllers.UserController.createResetPasswordToken
+
 GET     /                                   controllers.HomeController.index(slug = "")
 GET     /*slug                              controllers.HomeController.index(slug)
