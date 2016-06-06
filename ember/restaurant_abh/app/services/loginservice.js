@@ -16,10 +16,12 @@ export default Ember.Service.extend({
       $(".loginNotifications").show();
       //Change alert class
       $(".alert").addClass('alert-danger').removeClass('alert-success');
-      //Set alert text
-      $(".alertText").html('<strong>Warning!</strong> Entered data is not valid.');
 
-      console.log(data);
+      //Set alert text
+      console.log(data.responseText);
+      var json = JSON.parse(data.responseText);
+      //Set alert text
+      $(".alertText").html(json["error"]);
     }).then(function(data) {
       return User.create(data);
     });

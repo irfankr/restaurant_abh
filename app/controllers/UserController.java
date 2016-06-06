@@ -53,24 +53,55 @@ public class UserController extends Controller {
     public Result login() {
         //Create loginForm
         Form<UserLoginDto> loginForm = form(UserLoginDto.class).bindFromRequest();
+        Date currentTime = new Date();
+        Date userLogInLockedUntil = new Date();
 
         if (loginForm.hasErrors()) {
-            return badRequest("Some error happend!");
+            return badRequest("{\"error\": \"Some error happend!\"}");
+        } else if(session("loginLockedUntil") != null) {
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd kk:mm:ss z yyyy");
+                userLogInLockedUntil = format.parse(session("loginLockedUntil"));
+            } catch (ParseException pe) {
+                System.out.println("ERROR: Cannot parse date in UserController.login");
+            }
 
-            //Create session that stores wrong attempts
+            if(session("numberOfInvalidInput").equals("5") && userLogInLockedUntil.after(currentTime)){
+                return badRequest("{\"error\": \"Your account is currently locked for 15 minutes!\"}");
+            } else {
+                session().clear();
+                return badRequest("{\"error\": \"Your account is now unlocked!\"}");
+            }
         } else {
             User user = User.findByEmailAndPassword(loginForm.get().email, loginForm.get().password);
             if(user == null) {
-                return badRequest("{error: \"User data is not valid!\"}");
+
+                //If entered data is wrong, check is there session variable with number of errors
+                if(session("numberOfInvalidInput") == null){
+                    session("numberOfInvalidInput", "1");
+                } else {
+                    //Get old value
+                    int foo = Integer.parseInt(session("numberOfInvalidInput"));
+                    foo += 1;
+                    //Insert new value
+                    String strNumber = Integer.toString(foo);
+                    session("numberOfInvalidInput", strNumber);
+
+                    if(foo == 5){
+                        Date newDate = new Date(currentTime.getTime() + TimeUnit.MINUTES.toMillis(15));
+                        session("loginLockedUntil", newDate.toString()); //Lock account for input for 15min
+                    }
+                }
+
+                return badRequest("{\"error\": \"Entered data is not valid! You have " + session("numberOfInvalidInput") + " of 5 attempts!\"}");
             } else {
                 //Put user id in session
-                //session().clear();
+                session().clear();
                 session("idUser", Long.toString(user.getId()));
 
                 //If user didn't check remember me option, then don't set session expiration
                 if(Boolean.valueOf(loginForm.get().rememberMe) == false){
                     //Add 20 minutes to current
-                    Date currentTime = new Date();
                     Date newDate = new Date(currentTime.getTime() + TimeUnit.MINUTES.toMillis(20));
 
                     session("userLogInExpiration", newDate.toString()); //When will user session expire
