@@ -175,6 +175,7 @@ public class Restaurant {
 
     @Transactional
     public static List<Restaurant> getAll() {
+        // LIMIT 6 OFFSET 6
         List<Restaurant> restaurants = JPA.em().createNativeQuery("SELECT * FROM restaurants ORDER BY id ASC", Restaurant.class).getResultList();
         return restaurants;
     }

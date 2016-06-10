@@ -132,7 +132,7 @@ public class UserController extends Controller {
     public Result currentUser(){
         User user = getCurrentUser();
         if(user == null){
-            return badRequest("{error: \"User doesn't exist!\"}");
+            return badRequest("{\"error\": \"User doesn't exist!\"}");
         } else {
             return ok(Json.toJson(user));
         }
@@ -251,7 +251,7 @@ public class UserController extends Controller {
             String cid = "1234";
             Email email = new Email()
             .setSubject("Resetovana sifra")
-            .setFrom("RestaurantABH <no-reply@restaurantabh.com>")
+            .setFrom("RestaurantABH <no-reply@restaurantbh.com>")
             .addTo("Irfan Krijestorac <irfankr91@gmail.com>")
                     // sends text, HTML or both...
             .setBodyHtml("<html><body><p>An <b>html</b> Podnijeli ste zahtjev za slanje emaila</p></body></html>");

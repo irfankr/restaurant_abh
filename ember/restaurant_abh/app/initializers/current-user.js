@@ -12,6 +12,9 @@ export function initialize(application) {
   application.inject('controller', 'cookie', 'cookie:main');
   application.inject('route', 'cookie', 'cookie:main');
 
+  //Inject router in all components
+  application.inject('component', 'router', 'router:main');
+
   return $.ajax({
     url: "/api/v1/currentUser",
     type: "GET",

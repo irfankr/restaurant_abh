@@ -49,6 +49,9 @@ a:link, a:visited {
   .navigation_black a:link, .navigation_black a:visited {
     color:#131d24; font-size:16px;
   }
+  .navigation_black a.active:link, .navigation_black a.active:visited {
+    color:#fd6f60; font-size:16px;
+  }
   .navigation_black a:hover {
 
   }
@@ -197,7 +200,7 @@ footer nav.main {
     height:680px; background-size:cover; background-image:url('./images/home_header_big.jpeg'); background-position:center center; opacity: 0.9;
   }
   .home_header_big h1 {
-    font-family:'Source Sans Pro'; font-weight: 300; font-size:48px; padding-top:280px; color:#FFF; text-align:center;
+    font-family:'Source Sans Pro'; font-weight: 300; font-size:48px; padding-top:200px; color:#FFF; text-align:center;
   }
   .home_header_big h2 {
     font-family:'Source Sans Pro'; font-weight: 600; font-size:20px; color:#FFF; text-align:center;
@@ -219,6 +222,35 @@ h1.homepage_title {
   .homepage_location .details {
     font-family:'Source Sans Pro'; font-weight: 400; font-size:18px; color:#A1A5A7;
   }
+
+/* Homepage reservation search */
+.homepage_reservation_search {
+  background-color:#FFF; margin-top:120px;
+}
+  .homepage_reservation_search .reservation_column {
+    width:15%; float:left;
+  }
+    .homepage_reservation_search .reservation_column .button {
+        background-color:#FD6F60; color:#FFF; width:100%; height:54px; line-height:54px; font-size:18px; font-weight: 600; padding:0px; border-radius:0px;
+    }
+    .homepage_reservation_search .reservation_column .input_fields {
+      height:40px; line-height:40px; font-family:'Source Sans Pro'; font-weight: 600; font-size:16px; border-style:solid; border-width:1px; border-color:#E3E3E3;
+    }
+    .homepage_reservation_search .reservation_column .select_fields {
+      height:54px; line-height:54px; font-family:'Source Sans Pro'; font-weight: 600; font-size:16px;
+    }
+  .homepage_reservation_search .reservation_column_search_icon {
+      width:5%; float:left;
+  }
+  .homepage_reservation_search .reservation_column_search_icon span {
+    width:100%; height:54px; line-height:54px; color:#BBBBBB; text-align:center; font-size:17px;
+   }
+   .homepage_reservation_search .reservation_column_input {
+       width:35%; float:left;
+   }
+   .homepage_reservation_search .reservation_column_input .input_fields {
+      height:54px; line-height:54px; color:#BBBBBB; border:0px; box-shadow: none; font-size:18px;
+   }
 
 /* Restaurant box */
 .restaurantbox {
@@ -253,7 +285,8 @@ h1.homepage_title {
     display:block; font-family:'Source Sans Pro'; font-weight: 600; font-size:18px; color:#131d24; background-color:#f9f9f9; height:36px; line-height:36px; border: solid 1px #e5e5e5; text-align:center; margin-top:30px;
   }
     .restaurantbox a.restaurant_reserve:hover {
-     }
+      color:#FFF; background-color:#fd6f60; text-decoration:none;
+    }
 
 /* Restaurant */
 .restaurant_header_big {
@@ -354,6 +387,96 @@ ul.restaurant_left_menu {
   .reservation_choose_time a:hover {
   }
 
+/* Restaurants filter box on restaurants page */
+.restaurants_filter {
+  margin-top:-50px; margin-bottom:60px; background-color:#FFF;
+}
+  .reservation_column_search_icon {
+    width:5%; float:left;
+  }
+  .reservation_column_search_icon span {
+    width:100%; height:54px; line-height:54px; color:#BBBBBB; text-align:center; font-size:17px;
+   }
+  .restaurants_filter .reservation_column_button {
+    width:15%; float:left;
+  }
+    .restaurants_filter .reservation_column_button .button {
+        background-color:#fd8c80; color:#FFF; width:100%; height:54px; line-height:54px; font-size:18px; font-weight: 600; padding:0px;
+    }
+  .restaurants_filter .reservation_column_input {
+    width:60%; float:left;
+  }
+    .restaurants_filter .reservation_column_input .input_fields {
+       height:54px; line-height:54px; color:#BBBBBB; border:0px; box-shadow: none; font-size:18px;
+     }
+  .restaurants_filter .reservation_column_filter {
+    width:20%; float:left; font-family:'Source Sans Pro'; font-weight: 600; font-size:18px; height:54px; line-height:54px; text-align:center; position:relative;
+  }
+    .restaurants_filter .reservation_column_filter span {
+      font-size:11px; color:#BBBBBB; font-weight: 300; padding-left:10px;
+    }
+  .restaurants_filter .reservation_column_filter:hover {
+    cursor: pointer; cursor: hand;
+  }
+  .restaurants_filter .reservation_column .input_fields {
+    height:40px; line-height:40px; font-family:'Source Sans Pro'; font-weight: 600; font-size:16px; border-style:solid; border-width:1px; border-color:#E3E3E3;
+  }
+
+    /* Filter popup details */
+    .restaurants_filter .reservation_column_filter .filter_details {
+      width:300px; background-color:#FFF; display:none; position:absolute; left:-70px; top:50px; z-index:999; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; cursor: auto; padding:20px; text-align:left;
+    }
+      .restaurants_filter .reservation_column_filter .filter_details .triangle {
+        position: absolute; left: 50%; margin-left:-10px; bottom: 100%; width:18px; height:14px; background-image:url('./images/box_triangle_top.png');
+      }
+    .restaurants_filter .reservation_column_filter:hover .filter_details {
+        display:block;
+    }
+
+    .restaurants_filter .reservation_column_filter .filter_details h4 {
+      font-family:'Source Sans Pro'; font-weight: 600; font-size:14px; color: rgba(46, 57, 63, 0.6); margin-bottom:10px;
+    }
+
+    .restaurants_filter .reservation_column_filter .filter_details .cousine_link:link, .restaurants_filter .reservation_column_filter .filter_details .cousine_link:visited {
+      display:block; width:50%; height:23px; line-height:23px; float:left; color:#131d24; font-family:'Source Sans Pro'; font-weight: 600; font-size:14px;
+    }
+    .restaurants_filter .reservation_column_filter .filter_details .cousine_link_active:link, .restaurants_filter .reservation_column_filter .filter_details .cousine_link_active:visited {
+      display:block; width:50%; height:23px; line-height:23px; float:left; color: #fd8c80; font-family:'Source Sans Pro'; font-weight: 600; font-size:14px;
+    }
+      .restaurants_filter .reservation_column_filter .filter_details .cousine_link_active:hover {
+        text-decoration:none;
+      }
+    .restaurants_filter .reservation_column_filter .filter_details .inline-dollars {
+      font-size:18px; color:#dbdbdb; letter-spacing: 1px; font-family:'Source Sans Pro'; font-weight: 600; margin:0px; padding:0px;
+    }
+      .restaurants_filter .reservation_column_filter .filter_details .inline-dollars span.active {
+        font-size:18px; color:#fd6f60; letter-spacing: 1px; font-family:'Source Sans Pro'; font-weight: 600; margin:0px; padding:0px;
+      }
+
+
+/* Restaurants pagination */
+.restaurants_nav_pagination {
+  text-align:center; margin-bottom:50px; margin-top:20px;
+}
+.pagination {
+
+}
+  .pagination li {
+    margin-right:5px;
+  }
+  .pagination li.active a:link, .pagination li.active a:visited {
+        margin-right:15px; font-size:14px; background-color:#fd6f60; color:#FFF; border:0px;
+    }
+    .pagination li.active a:hover {
+
+    }
+  .pagination li a:link, .pagination li a:visited {
+      margin-right:15px; font-size:14px; color: rgba(46, 57, 63, 0.6);
+  }
+  .pagination li a:hover {
+
+  }
+
 /* Restaurant menu */
 .restaurant_menu_item_title {
   margin-bottom:60px !important;
@@ -368,7 +491,7 @@ ul.restaurant_left_menu {
   height:50px;
 }
 .restaurant_menu_item_title_price {
-  font-family:'Source Sans Pro'; font-width:400; color:#1a1a1a; font-size:18px; border-bottom-width:1px; border-bottom-color:#D8D8D8; border-bottom-style:dashed; height: 20px; line-height: 20px;
+  font-family:'Source Sans Pro'; font-weight:400; color:#1a1a1a; font-size:18px; border-bottom-width:1px; border-bottom-color:#D8D8D8; border-bottom-style:dashed; height: 20px; line-height: 20px;
 }
   .restaurant_menu_item_title_price .name {
     float:left; background-color:#FFF; padding-right:10px;
@@ -377,7 +500,7 @@ ul.restaurant_left_menu {
     float:right; background-color:#FFF; padding-left:10px;
   }
 .restaurant_menu_item_description {
-  font-family:'Source Sans Pro'; font-width:400; color:#888888; font-size:14px;
+  font-family:'Source Sans Pro'; font-weight:400; color:#888888; font-size:14px;
 }
 
 /* Complete reservation */
@@ -391,7 +514,7 @@ ul.restaurant_left_menu {
   float:none !important;
 }
 .complete_reservation_remaining_time {
-  display:inline-block; float:right; font-family:'Source Sans Pro'; font-width:400; font-size:14px; color:#262626; border-radius: 2px; padding:10px; background-color:#FFC6C0;
+  display:inline-block; float:right; font-family:'Source Sans Pro'; font-weight:400; font-size:14px; color:#262626; border-radius: 2px; padding:10px; background-color:#FFC6C0;
 }
 .complete_reservation_restaurant_image {
   display:block; width:130px; height:113px; background-size:cover;
@@ -417,3 +540,78 @@ ul.restaurant_left_menu {
   .complete_reservation_button_container .description {
     font-size:14px; color:#878787; margin-top:40px;
   }
+
+/* Administration */
+.administration_headline {
+  height:54px; line-height:54px; background-color:#FFF;
+}
+  .administration_headline .navigation_column {
+    width:50%; float:left;
+  }
+  .administration_headline .navigation_column ul.navigation {
+    list-style:none; padding-left: 20px;
+  }
+    .administration_headline .navigation_column ul.navigation li {
+      display:inline-block; margin-right:20px;
+    }
+      .administration_headline .navigation_column ul.navigation li a:link, .administration_headline .navigation_column ul.navigation li a:visited {
+        font-family:'Source Sans Pro'; font-weight:600; font-size:16px; color:#BBBBBB;
+      }
+      .administration_headline .navigation_column ul.navigation li a.active:link, .administration_headline .navigation_column ul.navigation li a.active:visited {
+        font-family:'Source Sans Pro'; font-weight:600; font-size:16px; color:#fd6f60;
+      }
+  .administration_headline .search_column {
+        width:20px; float:right;
+    }
+    .administration_headline .search_column span {
+      width:100%; height:54px; line-height:54px; color:#BBBBBB; text-align:center; font-size:17px;
+     }
+     .administration_headline .input_column {
+        width:100px; float:right;
+     }
+     .administration_headline .input_column .input_fields {
+        height:54px; line-height:54px; color:#BBBBBB; border:0px; box-shadow: none; font-size:18px;
+     }
+.administration_headline_button {
+  background-color:#FD6F60; color:#FFF; width:100%; height:53px; line-height:53px; font-size:18px; font-weight: 600; padding:0px;
+}
+  .administration_headline_button:hover {
+    background-color:#FF8C80; color:#FFF;
+  }
+
+/* Administration / Homepage */
+.administration_homepage_item {
+
+}
+  .administration_homepage_item .number {
+     font-family:'Source Sans Pro'; font-weight:400; font-size:48px; color:#131d24; text-align:center; padding-top:60px;
+  }
+  .administration_homepage_item .title {
+     font-family:'Source Sans Pro'; font-weight:600; font-size:16px; color:#131d24; text-align:center; padding-bottom:60px;
+  }
+  .administration_homepage_item a.add_option:link, .administration_homepage_item a.add_option:visited {
+    position:relative; bottom:-17px; left:50%; margin-left:-75px; display:block; width:150px; height:35px; line-height:35px; background-color:#fd6f60; text-align:center; color:#FFF; font-size:16px;
+  }
+    .administration_homepage_item a.add_option:hover {
+    }
+
+/* Administration / Table */
+.administration_table {
+  font-family:'Source Sans Pro'; font-weight:600; font-size:16px; color:#1e1e1e;
+}
+  .administration_table thead td {
+    font-family:'Source Sans Pro'; font-weight:600; font-size:14px; color: rgba(30, 30, 30, 0.4);
+  }
+  .administration_table td {
+    padding:15px !important;
+  }
+  .administration_table td.options span {
+    color: rgba(30, 30, 30, 0.4); font-size:16px; margin-right:5px;
+  }
+    .administration_table td.options span:hover {
+       cursor: pointer; cursor: hand;
+    }
+  .administration_table td input[type="radio"], input[type="checkbox"] {
+    height:12px !important; width:12px !important; margin-right:15px;
+  }
+

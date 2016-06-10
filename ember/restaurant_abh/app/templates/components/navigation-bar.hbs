@@ -8,6 +8,11 @@
 
         {{#if currentUser.userLoggedIn}}
           <li><a href="javascript:void(0);" style="position:relative;"><span class="glyphicon glyphicon-user" aria-hidden="true" style="padding-right:5px; font-size:12px; color:#616161;"></span> {{currentUser.userFirstName}}<ul class="userdropdown"><li><a {{action 'logOut'}} href="javascript:void(0);"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true" style="font-size:10px;"></span> Logout</a></li><li>{{#link-to 'reservations'}}<span class="glyphicon glyphicon-chevron-right" aria-hidden="true" style="font-size:10px;"></span> Reservations{{/link-to}}</li></ul></a></li>
+
+          {{#if currentUser.isAdmin}}
+              <li>{{#link-to 'admin.index'}}Administration{{/link-to}}</li>
+          {{/if}}
+
         {{else}}
           <li>{{#link-to 'login'}}Login{{/link-to}}</li>
         {{/if}}

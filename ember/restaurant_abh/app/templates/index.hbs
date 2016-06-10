@@ -4,6 +4,45 @@
   <div class="background">
     <h1>Make a free reservation</h1>
     <h2>Choose your table from restaurants near you</h2>
+
+    <div class="container">
+      <div class="row">
+        <div class="homepage_reservation_search">
+          <div class="form-group" style="height:54px; overflow:visible;">
+            <div class="reservation_column_search_icon">
+              <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </div>
+            <div class="reservation_column_input">
+              {{input type="text" class="form-control input_fields" value=searchRestaurant placeholder="Search for a restaurant..."}}
+            </div>
+
+            <div class="reservation_column">
+              {{ember-selectize
+                content=selectPeople
+                value=reservation.people
+                placeholder="2 people"
+               }}
+            </div>
+            <div class="reservation_column">
+              {{ember-selectize
+                content=selectDate
+                value=reservation.date
+                placeholder="Pick a date"
+                select-item=(action 'changeDate')
+               }}
+            </div>
+            <div class="reservation_column">
+              {{ember-selectize
+                content=selectHour
+                value=reservation.hour
+                placeholder="7:00 PM"
+               }}
+            </div>
+            <div class="reservation_column"><button {{action 'findATable' model.restaurantDetails.id}} class="btn button">Find a table</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

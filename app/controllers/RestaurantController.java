@@ -83,9 +83,15 @@ public class RestaurantController extends Controller {
 
         long x = Long.parseLong(restaurantForm.get().id);
 
+        //Get restaurant
+        restaurant = restaurant.findById(x);
 
-        //Return JSON of all restaurants
-        return ok(Json.toJson(restaurant.findById(x)));
+        if(restaurant != null){
+            return ok(Json.toJson(restaurant));
+        } else {
+            return badRequest("{\"error\": \"Restaurant doesn't exist!\"}");
+        }
+
     }
 
     @Transactional
@@ -101,21 +107,29 @@ public class RestaurantController extends Controller {
         //Get restaurant id
         restaurant = restaurant.findById(x);
 
-        //Convert mark string to float
-        float mark = Float.parseFloat(restaurantForm.get().mark);
-        System.out.println("Ocjena restorana: " + mark);
+        if(restaurant != null){
+            //Convert mark string to float
+            float mark = Float.parseFloat(restaurantForm.get().mark);
+            System.out.println("Ocjena restorana: " + mark);
 
-        //Increase mark value in object
-        restaurant.setMark(restaurant.getMark() + mark);
+            if(mark > 5 || mark < 0){
+                return badRequest("{\"error\": \"Mark is not in valid format!\"}");
+            }
 
-        //Increase votes value in object
-        restaurant.setVotes(restaurant.getVotes() + 1);
+            //Increase mark value in object
+            restaurant.setMark(restaurant.getMark() + mark);
 
-        //Update restaurant in database
-        restaurant.update();
+            //Increase votes value in object
+            restaurant.setVotes(restaurant.getVotes() + 1);
 
-        //Return JSON of all restaurants
-        return ok(Json.toJson(restaurant));
+            //Update restaurant in database
+            restaurant.update();
+
+            //Return JSON of all restaurants
+            return ok();
+        } else {
+            return badRequest("{\"error\": \"Restaurant doesn't exist!\"}");
+        }
     }
 
     @Transactional
@@ -178,53 +192,57 @@ public class RestaurantController extends Controller {
         String personsNumber = parts[0]; // 004
         reservation.setPersons(Long.parseLong(personsNumber));
 
-        //Set User ID from session
-        long userId = Long.parseLong(session("idUser"));
-        reservation.setIdUser(userId);
+        if(session("idUser") != null) {
 
-        //Time stamp
-        String reservationDateTimeFromEmber = reservationForm.get().reservationDate + " " + reservationForm.get().reservationHour;
+            //Set User ID from session
+            long userId = Long.parseLong(session("idUser"));
+            reservation.setIdUser(userId);
 
-        String reservationDateTime = "";
-        SimpleDateFormat formatDateTimeFromEmber = new SimpleDateFormat("MMM d, yyyy hh:mm a");
-        SimpleDateFormat formatToCheckFunction = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            //Create date object to insert into database
-            Date parsedReservationDateTime = formatDateTimeFromEmber.parse(reservationDateTimeFromEmber);
+            //Time stamp
+            String reservationDateTimeFromEmber = reservationForm.get().reservationDate + " " + reservationForm.get().reservationHour;
 
-            //Set date and time of reservation to reservation object
-            reservation.setReservationDateTime(parsedReservationDateTime);
+            String reservationDateTime = "";
+            SimpleDateFormat formatDateTimeFromEmber = new SimpleDateFormat("MMM d, yyyy hh:mm a");
+            SimpleDateFormat formatToCheckFunction = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                //Create date object to insert into database
+                Date parsedReservationDateTime = formatDateTimeFromEmber.parse(reservationDateTimeFromEmber);
 
-            //Create String from Date for checkReservationAvailability method
-            reservationDateTime = formatToCheckFunction.format(parsedReservationDateTime);
-        }
-        catch(ParseException pe) {
-            System.out.println("ERROR: Cannot parse date in RestaurantController.makeReservation \"" + reservationDateTime + "\"");
-        }
+                //Set date and time of reservation to reservation object
+                reservation.setReservationDateTime(parsedReservationDateTime);
 
-        //Get list of all tables for that id restaurant
-        long idRestaurant = Long.parseLong(reservationForm.get().idRestaurant);
-        //Create restaurant object
-        Restaurant restoran = new Restaurant();
-        List<RestaurantTables> freeTables = new ArrayList<RestaurantTables>();
+                //Create String from Date for checkReservationAvailability method
+                reservationDateTime = formatToCheckFunction.format(parsedReservationDateTime);
+            } catch (ParseException pe) {
+                System.out.println("ERROR: Cannot parse date in RestaurantController.makeReservation \"" + reservationDateTime + "\"");
+            }
 
-        freeTables = restoran.checkReservationAvailability(reservation.getPersons(), reservationDateTime, idRestaurant);
+            //Get list of all tables for that id restaurant
+            long idRestaurant = Long.parseLong(reservationForm.get().idRestaurant);
+            //Create restaurant object
+            Restaurant restoran = new Restaurant();
+            List<RestaurantTables> freeTables = new ArrayList<RestaurantTables>();
 
-        if(freeTables.size() == 0) { //If there is no available tables
-            return badRequest("{error: \"No available tables!\"}");
+            freeTables = restoran.checkReservationAvailability(reservation.getPersons(), reservationDateTime, idRestaurant);
+
+            if (freeTables.size() == 0) { //If there is no available tables
+                return badRequest("{\"error\": \"No available tables!\"}");
+            } else {
+                RestaurantTables firstFreeTable = new RestaurantTables();
+
+                //Get first available table
+                firstFreeTable = freeTables.get(0);
+
+                //Set id of table
+                reservation.setIdTable(firstFreeTable.getId());
+
+                //Save reservation to database
+                reservation.save();
+
+                return ok(Json.toJson(reservation));
+            }
         } else {
-            RestaurantTables firstFreeTable = new RestaurantTables();
-
-            //Get first available table
-            firstFreeTable = freeTables.get(0);
-
-            //Set id of table
-            reservation.setIdTable(firstFreeTable.getId());
-
-            //Save reservation to database
-            reservation.save();
-
-            return ok(Json.toJson(reservation));
+            return badRequest("{\"error\": \"No user loggedin!\"}");
         }
     }
 

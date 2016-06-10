@@ -26,9 +26,10 @@ GET     /api/v1/getAllRestaurants           controllers.RestaurantController.get
 POST    /api/v1/getRestaurantDetails        controllers.RestaurantController.getRestaurantDetails
 POST    /api/v1/getRestaurantMenu           controllers.RestaurantController.getRestaurantMenu
 GET     /api/v1/getRestaurantsLocations     controllers.RestaurantController.getRestaurantsLocations
-POST    /api/v1/makeReservation             controllers.RestaurantController.makeReservation
 GET     /api/v1/allRestaurantsSortReservationsToday controllers.RestaurantController.getAllRestaurantsSortReservationsToday
 POST    /api/v1/restaurantVote              controllers.RestaurantController.restaurantVote
+
+POST    /api/v1/makeReservation             controllers.RestaurantController.makeReservation
 
 POST    /api/v1/checkReservationAvailability controllers.ReservationController.checkReservationAvailability
 GET     /api/v1/getListOfReservationsForUser    controllers.ReservationController.getListOfReservationsForUser

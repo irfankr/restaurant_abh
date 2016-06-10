@@ -1,0 +1,25 @@
+<div class="container" style="margin-top:-50px;">
+  <div class="row">
+    <div class="col-md-{{navColumn}}">
+      <div class="administration_headline box_shadow">
+        <div class="navigation_column">
+          <ul class="navigation">
+            <li>{{#link-to 'admin.index'}}Dashboard{{/link-to}}</li>
+            <li>{{#link-to 'admin.restaurants'}}Restaurants{{/link-to}}</li>
+            <li>{{#link-to 'admin.locations'}}Locations{{/link-to}}</li>
+            <li>{{#link-to 'admin.users'}}Users{{/link-to}}</li>
+          </ul>
+        </div>
+        <div class="input_column">
+          {{input type="text" class="form-control input_fields" value=searchRestaurant placeholder="Search..."}}
+        </div>
+        <div class="search_column">
+          <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+        </div>
+      </div>
+    </div>
+    {{#if addOption}}
+        <div class="col-md-2"><button {{action 'goToAddRoute' page}} class="btn button administration_headline_button">Add {{page}}</button></div>
+    {{/if}}
+  </div>
+</div>

@@ -82,7 +82,7 @@ public class ReservationController extends Controller {
         CheckReservationAvalibilityNumberTimes responseReservationCheck = new CheckReservationAvalibilityNumberTimes();
 
         if(freeTables.size() == 0) { //If there is no available tables
-            return badRequest("{error: \"No available tables!\"}");
+            return badRequest("{\"error\": \"No available tables!\"}");
         } else {
             //Return number of tables
             responseReservationCheck.setTablesLeft(freeTables.size());

@@ -1,4 +1,49 @@
 {{#navigation-bar styleClass='navigation_black'}}{{/navigation-bar}}
+<div class="container">
+  <div class="box_shadow restaurants_filter">
+    <div class="form-group" style="height:54px; overflow:visible;">
+      <div class="reservation_column_search_icon">
+        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+      </div>
+      <div class="reservation_column_input">
+        {{input type="text" class="form-control input_fields" value=searchRestaurant placeholder="Search for a restaurant..."}}
+      </div>
+      <div class="reservation_column_filter">
+        Filter by <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+        <div class="filter_details box_shadow"><div class="triangle"></div>
+          <div class="row" style="border-bottom-style:solid; border-bottom-width:1px; border-bottom-color:#e7eaec; margin-bottom:10px;">
+            <div class="col-md-6">
+              <h4>PRICE</h4>
+              {{#restaurant-price-range max=5 value=3}}{{/restaurant-price-range}}
+            </div>
+            <div class="col-md-6">
+              <h4>RATING</h4>
+              {{#restaurant-star max=5 value=2 votes=2 voteAllowed=true}}{{/restaurant-star}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <h4>COUSINE</h4>
+
+               <div class="cousines">
+                <a class="cousine_link_active" href="https://trello.com/">American</a>
+                <a class="cousine_link" href="https://trello.com/">American</a>
+                <a class="cousine_link" href="https://trello.com/">American</a>
+                <a class="cousine_link_active" href="https://trello.com/">American</a>
+                <a class="cousine_link" href="https://trello.com/">American</a>
+                <a class="cousine_link" href="https://trello.com/">American</a>
+                <a class="cousine_link" href="https://trello.com/">American</a>
+                <a class="cousine_link_active" href="https://trello.com/">American</a>
+                <a class="cousine_link" href="https://trello.com/">American</a>
+               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reservation_column_button"><button class="btn button">Search</button></div>
+    </div>
+  </div>
+</div>
 
 <div class="container" style="overflow:auto;">
   {{#each model.listRestaurants as |restaurantlist|}}
@@ -6,6 +51,15 @@
   {{else}}
     Sorry, nobody is here.
   {{/each}}
+</div>
+
+<div class="container">
+  <nav class="restaurants_nav_pagination">
+    <ul class="pagination">
+      <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+      <li><a href="#">2</a></li>
+    </ul>
+  </nav>
 </div>
 
 <h1 class="homepage_title" style="margin-bottom:75px;">Popular locations</h1>
