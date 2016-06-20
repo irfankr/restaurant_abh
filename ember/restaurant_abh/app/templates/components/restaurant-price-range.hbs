@@ -1,7 +1,7 @@
 {{#each priceRange as |dolarSign|}}
   {{#if dolarSign.isFilled}}
-    <span class="active">$</span>
+    <span class="active" {{action 'clickDolar' dolarSign.dolarNumber}}>$</span>
   {{else}}
-    $
+    <span {{action 'clickDolar' dolarSign.dolarNumber}}>$</span>
   {{/if}}
 {{/each}}

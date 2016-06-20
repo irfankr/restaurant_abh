@@ -17,6 +17,8 @@
         <li><a class="restaurant_left_menu_title" {{action 'moveToSegment' 'menu'}}href="javascript:void(0);">Menu</a></li>
       </ul>
     </div>
+
+
     <div class="col-md-9" style="padding-left:40px;">
       <div class="restaurant_details">
         <h1 class="title">{{model.restaurantDetails.restaurantName}}</h1>
@@ -26,6 +28,8 @@
             {{#restaurant-price-range max=5 value=model.restaurantDetails.priceRange}}{{/restaurant-price-range}}
           </span>
           <span class="restaurant_food">{{model.restaurantDetails.foodType}}</span>
+
+          <button type="button" class="btn btn-default restaurant_rate_this_place"  data-toggle="modal" data-target="#votePopup">Rate this place</button>
         </div>
       </div>
 

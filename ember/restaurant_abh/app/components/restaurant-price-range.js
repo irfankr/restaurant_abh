@@ -8,11 +8,20 @@ export default Ember.Component.extend({
     var result = [];
     for (var i = 0; i < this.get('max'); i++) {
       var dolar = {
-        isFilled: i < numberOfFilledDollars
+        isFilled: i < numberOfFilledDollars,
+        dolarNumber: i+1
       };
 
       result.push(dolar);
     }
     return result;
-  }.property('max', 'value')
+  }.property('max', 'value'),
+
+  actions: {
+    clickDolar: function(dolarNumber){
+      if(this.get('filter') == true){
+        this.sendAction('clickDolar', dolarNumber);
+      }
+    }
+  }
 });

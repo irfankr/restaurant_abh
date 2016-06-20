@@ -136,7 +136,7 @@ a:link, a:visited {
 .login_register_container .select_fields {
   height:54px; line-height:54px; font-family:'Source Sans Pro'; font-weight: 600; font-size:16px;
 }
-.login_register_container input[type="radio"], input[type="checkbox"] {
+.login_register_container input[type="radio"], .login_register_container input[type="checkbox"] {
   height:15px !important; width:15px !important;
 }
 .login_register_container .remember_me {
@@ -341,6 +341,19 @@ ul.restaurant_left_menu {
     .restaurant_details .stats .restaurant_food, .restaurant_details .statslogged .restaurant_food {
 
     }
+
+
+.restaurant_details .restaurant_rate_this_place {
+  float:right; font-family:'Source Sans Pro'; font-weight: 600; color:#131d24; font-size:16px; margin-top: -15px; padding: 10px; background-image:url('./images/star_active.png'); background-position:10px center; background-repeat:no-repeat; padding-left:35px;
+}
+
+#votePopup {
+  width:700px; height:580px; left:50%;top:50%; margin-left:-350px; height:-290px;
+}
+#votePopup .modal-dialog {
+  margin:0px; left:0px; top:0px; width:700px; height:580px;
+}
+
 .restaurant_data_container {
   padding:30px; margin-bottom:20px; background-color:#FFF;
 }
@@ -407,12 +420,12 @@ ul.restaurant_left_menu {
     width:60%; float:left;
   }
     .restaurants_filter .reservation_column_input .input_fields {
-       height:54px; line-height:54px; color:#BBBBBB; border:0px; box-shadow: none; font-size:18px;
+       height:54px; line-height:54px; color:#000; border:0px; box-shadow: none; font-size:18px;
      }
   .restaurants_filter .reservation_column_filter {
     width:20%; float:left; font-family:'Source Sans Pro'; font-weight: 600; font-size:18px; height:54px; line-height:54px; text-align:center; position:relative;
   }
-    .restaurants_filter .reservation_column_filter span {
+    .restaurants_filter .reservation_column_filter span.arrow_down {
       font-size:11px; color:#BBBBBB; font-weight: 300; padding-left:10px;
     }
   .restaurants_filter .reservation_column_filter:hover {
@@ -447,11 +460,22 @@ ul.restaurant_left_menu {
         text-decoration:none;
       }
     .restaurants_filter .reservation_column_filter .filter_details .inline-dollars {
-      font-size:18px; color:#dbdbdb; letter-spacing: 1px; font-family:'Source Sans Pro'; font-weight: 600; margin:0px; padding:0px;
+      font-size:18px; color:#dbdbdb; letter-spacing: 0px; font-family:'Source Sans Pro'; font-weight: 600; margin:0px; padding:0px; letter-spacing: 1px;
+    }
+    .restaurants_filter .reservation_column_filter .filter_details .inline-dollars span:hover {
+      color:#000; cursor: pointer; cursor: hand;
     }
       .restaurants_filter .reservation_column_filter .filter_details .inline-dollars span.active {
-        font-size:18px; color:#fd6f60; letter-spacing: 1px; font-family:'Source Sans Pro'; font-weight: 600; margin:0px; padding:0px;
+        font-size:18px; color:#fd6f60; letter-spacing: 0px; font-family:'Source Sans Pro'; font-weight: 600; margin:0px; padding:0px;
       }
+        .restaurants_filter .reservation_column_filter .filter_details .inline-dollars span.active:hover {
+          color:#000; cursor: pointer; cursor: hand;
+        }
+
+    .restaurants_filter .reservation_column_filter .filter_details .inline-stars img:hover {
+      opacity: 0.4; cursor: pointer; cursor: hand;
+    }
+
 
 
 /* Restaurants pagination */
@@ -459,21 +483,24 @@ ul.restaurant_left_menu {
   text-align:center; margin-bottom:50px; margin-top:20px;
 }
 .pagination {
-
+  list-style:none;
 }
-  .pagination li {
-    margin-right:5px;
+  .pagination .ember-view {
+    margin-right:5px; display:inline-block;
   }
-  .pagination li.active a:link, .pagination li.active a:visited {
-        margin-right:15px; font-size:14px; background-color:#fd6f60; color:#FFF; border:0px;
+  .pagination .ember-view li {
+
+  }
+  .pagination .ember-view li.active a:link, .pagination .ember-view  li.active a:visited {
+        margin-right:10px; font-size:14px; background-color:#fd6f60; color:#FFF; border:0px; padding:7px; padding-left:12px; padding-right:12px; border: solid 1px #eaeaee; border-radius:3px;
     }
-    .pagination li.active a:hover {
+    .pagination .ember-view  li.active a:hover {
 
     }
-  .pagination li a:link, .pagination li a:visited {
-      margin-right:15px; font-size:14px; color: rgba(46, 57, 63, 0.6);
+  .pagination .ember-view  li a:link, .pagination .ember-view  li a:visited {
+      margin-right:10px; font-size:14px; color: rgba(46, 57, 63, 0.6); padding:10px; padding:7px; padding-left:12px; padding-right:12px; background-color:#FFF; border: solid 1px #eaeaee; border-radius:3px;
   }
-  .pagination li a:hover {
+  .pagination .ember-view  li a:hover {
 
   }
 
@@ -546,7 +573,7 @@ ul.restaurant_left_menu {
   height:54px; line-height:54px; background-color:#FFF;
 }
   .administration_headline .navigation_column {
-    width:50%; float:left;
+    width:70%; float:left;
   }
   .administration_headline .navigation_column ul.navigation {
     list-style:none; padding-left: 20px;
@@ -581,7 +608,7 @@ ul.restaurant_left_menu {
 
 /* Administration / Homepage */
 .administration_homepage_item {
-
+  background-color:#FFF;
 }
   .administration_homepage_item .number {
      font-family:'Source Sans Pro'; font-weight:400; font-size:48px; color:#131d24; text-align:center; padding-top:60px;
@@ -597,7 +624,7 @@ ul.restaurant_left_menu {
 
 /* Administration / Table */
 .administration_table {
-  font-family:'Source Sans Pro'; font-weight:600; font-size:16px; color:#1e1e1e;
+  font-family:'Source Sans Pro'; font-weight:600; font-size:16px; color:#1e1e1e; background-color:#FFF;
 }
   .administration_table thead td {
     font-family:'Source Sans Pro'; font-weight:600; font-size:14px; color: rgba(30, 30, 30, 0.4);
@@ -611,7 +638,29 @@ ul.restaurant_left_menu {
     .administration_table td.options span:hover {
        cursor: pointer; cursor: hand;
     }
-  .administration_table td input[type="radio"], input[type="checkbox"] {
+  .administration_table td input[type="radio"], .administration_table td input[type="checkbox"] {
     height:12px !important; width:12px !important; margin-right:15px;
   }
 
+/* Administration fields */
+.administration_fields {
+  background-color:#FFF; padding:20px;
+}
+  .administration_fields .button {
+    display:inline-block; padding:0px; padding-left:35px; padding-right:35px; background-color:#FD6F60; color:#FFF; height:53px; line-height:53px; font-size:18px; font-weight: 600;
+  }
+  .administration_fields .cancel_button {
+       display:inline-block; padding:0px; padding-left:35px; padding-right:35px; background-color:#F9F9F9; color:#131d24; height:53px; line-height:53px; font-size:18px; font-weight: 600; margin-right:15px; border: solid 1px #e6e8eb;
+  }
+  .administration_fields .input_fields {
+    height:40px; line-height:40px; font-family:'Source Sans Pro'; font-weight: 600; font-size:16px;
+  }
+  .administration_fields .select_fields {
+    height:54px; line-height:54px; font-family:'Source Sans Pro'; font-weight: 600; font-size:16px;
+  }
+  .administration_fields input[type="radio"], .login_register_container input[type="checkbox"] {
+    height:15px !important; width:15px !important;
+  }
+  .administration_fields .input_title {
+    font-family:'Source Sans Pro'; font-weight: 600; font-size:16px; color:#1e1e1e;
+  }

@@ -16,6 +16,11 @@ export default Ember.Route.extend({
 
     controller.set('tablesAvailable', null);
   },
+  actions: {
+    vote: function(){
+      alert("Glasam za Restoran ID: " + this.get('restaurantId'));
+    }
+  },
   model: function(param){
     var self = this;
 

@@ -3,11 +3,13 @@
 {{else}}
   {{#each stars as |star|}}
     {{#if star.isFilled}}
-      <img {{action 'voteRestaurant' restaurantId star.starNumber}} src="assets/images/star_active.png" />
+      <img {{action 'clickStar' restaurantId star.starNumber}} src="assets/images/star_active.png" />
     {{else}}
-      <img {{action 'voteRestaurant' restaurantId star.starNumber}} src="assets/images/star_inactive.png" >
+      <img {{action 'clickStar' restaurantId star.starNumber}} src="assets/images/star_inactive.png" >
     {{/if}}
   {{/each}}
 
-  <span class="votes">({{votes}})</span>
+  {{#unless filter}}
+    <span class="votes">({{votes}})</span>
+  {{/unless}}
 {{/if}}

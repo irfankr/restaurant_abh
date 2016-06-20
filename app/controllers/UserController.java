@@ -52,6 +52,13 @@ import javax.inject.Inject;
 import java.io.File;
 import org.apache.commons.mail.EmailAttachment;
 
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
+
 public class UserController extends Controller {
     @Inject MailerClient mailerClient;
 
@@ -59,7 +66,7 @@ public class UserController extends Controller {
     @Transactional
     public Result login() {
         //Create loginForm
-        Form<UserLoginDto> loginForm = form(UserLoginDto.class).bindFromRequest();
+        Form<User.UserLoginDto> loginForm = form(User.UserLoginDto.class).bindFromRequest();
         Date currentTime = new Date();
         Date userLogInLockedUntil = new Date();
 
@@ -178,11 +185,10 @@ public class UserController extends Controller {
 
     }
 
-    /* Get data from register */
     @Transactional
     public Result register() {
         //Create loginForm
-        Form<UserRegisterDto> RegisterForm = form(UserRegisterDto.class).bindFromRequest();
+        Form<User.UserRegisterDto> RegisterForm = form(User.UserRegisterDto.class).bindFromRequest();
 
         //Create user object
         User user = new User();
@@ -232,10 +238,9 @@ public class UserController extends Controller {
     }
 
     @Transactional
-
     public Result createResetPasswordToken() {
         //Create loginForm
-        Form<UserCreateResetPasswordTokenDto> RegisterForm = form(UserCreateResetPasswordTokenDto.class).bindFromRequest();
+        Form<User.UserCreateResetPasswordTokenDto> RegisterForm = form(User.UserCreateResetPasswordTokenDto.class).bindFromRequest();
 
         //Create user object fron input data
         User user = new User();
@@ -260,28 +265,132 @@ public class UserController extends Controller {
             //Create token for reset password for 30min
             return ok("Saljemo");
         }
-
     }
 
-    public static class UserCreateResetPasswordTokenDto {
-        public String email;
+    @Transactional
+    public Result getAllUsers() {
+        //Create loginForm
+        Form<User.AdminUsersListDto> UsersForm = form(User.AdminUsersListDto.class).bindFromRequest();
+        System.out.println("ID Stranice: " + UsersForm.get().pageId);
+        //Declare list
+        List<User> users = new ArrayList<User>();
+        User user = new User();
+        users = user.getAll(UsersForm.get().pageId);
+
+        //Return JSON of all users
+        return ok(Json.toJson(users));
     }
 
-    public static class UserLoginDto {
-        public String email;
-        public String password;
-        public String rememberMe;
+    /* Admin */
+    @Transactional
+    public Result getFilteredUsers() {
+        Form<User.UsersFilterDto> inputForm = form(User.UsersFilterDto.class).bindFromRequest();
+
+        EntityManager em = JPA.em();
+        CriteriaBuilder qb = em.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = qb.createQuery(User.class);
+        Root<User> query = criteria.from(User.class);
+
+        //Create conditions
+        List<Predicate> predicates = new ArrayList<Predicate>();
+
+        if(inputForm.get().searchText != null && inputForm.get().searchText != "") {
+            //Search text
+            predicates.add(qb.like(query.<String>get("email"), "%"+inputForm.get().searchText+"%"));
+        }
+
+        //Execute query
+        criteria.select(query).where(predicates.toArray(new Predicate[]{}));
+        criteria.orderBy(qb.asc(query.get("id")));
+
+        //Get result from query
+        long offsetItems = (inputForm.get().pageNumber-1) * inputForm.get().itemsPerPage;
+        int offsetItemsInt = (int) offsetItems;
+        int itemsPerPageInt = (int) inputForm.get().itemsPerPage;
+        List<User> users = em.createQuery(criteria).setMaxResults(itemsPerPageInt).setFirstResult(offsetItemsInt).getResultList();
+
+        //Create return class
+        User.UsersDto returnItems = new User.UsersDto();
+
+        //Insert restaurants
+        returnItems.setUsers(users);
+
+        //Insert number of restaurants page
+        List<User> itemsTemp = em.createQuery(criteria).getResultList();
+
+        int itemsSize = (int) itemsTemp.size();
+        int numberOfPages = (int) Math.ceil(itemsSize*1.00 / itemsPerPageInt*1.00);
+
+        returnItems.setNumberOfPages(numberOfPages);
+
+        return ok(Json.toJson(returnItems));
     }
 
-    public static class UserRegisterDto {
-        public long id;
-        public String email;
-        public String password;
-        public String firstName;
-        public String lastName;
-        public String phone;
-        public String country;
-        public String city;
+    @Transactional
+    public Result addUser() {
+        Form<User.UserRegisterDto> inputForm = form(User.UserRegisterDto.class).bindFromRequest();
+
+        //Create object
+        User user = new User();
+
+        //Check is there category with this name already
+        if(user.findByEmail(inputForm.get().email) == null){
+
+            //Insert values
+            user.setFirstName(inputForm.get().firstName);
+            user.setLastName(inputForm.get().lastName);
+            user.setEmail(inputForm.get().email);
+            user.setPhone(inputForm.get().phone);
+            user.setPassword(inputForm.get().password);
+            user.setCity(inputForm.get().city);
+            user.setCountry(inputForm.get().country);
+
+            //Save to database
+            user.save();
+
+            return ok(Json.toJson(user));
+        } else {
+            return badRequest("{\"error\": \"User already exist!\"}");
+        }
     }
 
+    @Transactional
+    public Result editUser() {
+        Form<User.UserRegisterDto> inputForm = form(User.UserRegisterDto.class).bindFromRequest();
+
+        //Create object
+        User user = new User();
+        user = user.findById(inputForm.get().id);
+
+        if(user != null){
+            //Update values
+            user.setFirstName(inputForm.get().firstName);
+            user.setLastName(inputForm.get().lastName);
+            user.setEmail(inputForm.get().email);
+            user.setPhone(inputForm.get().phone);
+            user.setPassword(inputForm.get().password);
+            user.setCity(inputForm.get().city);
+            user.setCountry(inputForm.get().country);
+
+            //Save to database
+            user.update();
+
+            return ok(Json.toJson(user));
+        } else {
+            return badRequest("{\"error\": \"User doesn't exist!\"}");
+        }
+    }
+
+    @Transactional
+    public Result deleteUser() {
+        Form<User.UserRegisterDto> inputForm = form(User.UserRegisterDto.class).bindFromRequest();
+
+        //Create category object
+        User user = new User();
+        user = user.findById(inputForm.get().id);
+
+        user.delete();
+
+        return ok();
+    }
 }

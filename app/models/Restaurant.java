@@ -1,5 +1,6 @@
 package models;
 
+import controllers.RestaurantController;
 import play.*;
 import play.data.DynamicForm;
 import static play.data.Form.*;
@@ -11,6 +12,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.*;
+
+import models.RestaurantCategories;
 
 import play.db.*;
 
@@ -152,8 +155,6 @@ public class Restaurant {
         this.foodType = foodType;
     }
 
-
-
     public void save() { JPA.em().persist(this); }
 
     public void update() { JPA.em().merge(this); }
@@ -161,8 +162,6 @@ public class Restaurant {
     public void delete() {
         JPA.em().remove(this);
     }
-
-
 
     @Transactional
     public static Restaurant findById(long id){
@@ -173,13 +172,43 @@ public class Restaurant {
         }
     }
 
-    @Transactional
     public static List<Restaurant> getAll() {
-        // LIMIT 6 OFFSET 6
-        List<Restaurant> restaurants = JPA.em().createNativeQuery("SELECT * FROM restaurants ORDER BY id ASC", Restaurant.class).getResultList();
-        return restaurants;
+        return JPA.em().createQuery("SELECT u FROM Restaurant u ORDER BY id ASC", Restaurant.class).getResultList();
     }
 
+    /* NE KORISTI SE */
+    @Transactional
+    public static List<Restaurant> getAllWithLimitOffset(long pageNumber, long displayPerPage) {
+        long offsetRestaurants = (pageNumber-1) * displayPerPage;
+
+        return JPA.em().createNativeQuery("SELECT * FROM restaurants ORDER BY id ASC LIMIT ? OFFSET ?", Restaurant.class).setParameter(1, displayPerPage).setParameter(2, offsetRestaurants).getResultList();
+    }
+
+    @Transactional
+    public static String getStringRestaurantCategories(long idRestaurant){
+
+        //Execute SQL Query
+        Query query = JPA.em().createNativeQuery("SELECT rc.name AS categoryName FROM restaurantcategories rc, restaurantstocategories rtc WHERE rc.id = rtc.idCategory AND rtc.idRestaurant = ?");
+        query.setParameter(1, idRestaurant);
+        List resultList = query.getResultList();
+
+        Iterator resultListIterator = resultList.iterator();
+
+        String finalCategoriesString = "";
+
+        while (resultListIterator.hasNext()) {
+            String categoryName = (String)resultListIterator.next();
+
+            finalCategoriesString += categoryName;
+
+            if (resultListIterator.hasNext()) {
+                finalCategoriesString += " | ";
+            }
+
+        }
+
+        return finalCategoriesString;
+    }
 
     @Transactional
     public static List<Restaurant> getAllSortByTodayReservations() {
@@ -236,18 +265,6 @@ public class Restaurant {
             query.setParameter(5, reservationDateTime2HRS);
             query.setParameter(6, idRestaurant);
 
-
-            //TypedQuery<RestaurantTables> query = JPA.em().createQuery("SELECT * FROM restauranttables rtt WHERE sittingPlaces >= 4 AND (SELECT COUNT(rsv.id) FROM reservations rsv WHERE (('2016-05-27 16:00:00' > rsv.reservationDateTime AND '2016-05-27 16:00:00' < (rsv.reservationDateTime + INTERVAL '2 hour')) OR ('2016-05-27 18:00:00' > rsv.reservationDateTime AND '2016-05-27 18:00:00' < (rsv.reservationDateTime + INTERVAL '2 hour')))AND rsv.idtable = rtt.id) = 0 AND rtt.idRestaurant = 4", RestaurantTables.class);
-
-            /*
-            query.setParameter(1, persons);
-            query.setParameter(2, reservationDateTime);
-            query.setParameter(3, reservationDateTime);
-            query.setParameter(4, reservationDateTime);
-            query.setParameter(5, reservationDateTime);
-            query.setParameter(6, idRestaurant);
-            */
-
             //Execute SQL Query
 
             List resultList = query.getResultList();
@@ -277,6 +294,326 @@ public class Restaurant {
             return restaurantsTables;
         } catch(NoResultException noresult) { //If there is no user with
             return null;
+        }
+    }
+
+    public static class PaginationNumberOfPagesDto {
+        public long itemsPerPage;
+    }
+
+    public static class PaginationPagesDto {
+        public long numberOfPages;
+
+        public void setNumberOfPages(long numberOfPages) {
+            this.numberOfPages = numberOfPages;
+        }
+    }
+
+    public static class RestaurantsFilterDto {
+        public long priceRange;
+        public long mark;
+        public List<Long> categories = new ArrayList<Long>();
+        public String searchText;
+        public long itemsPerPage;
+        public long pageNumber;
+
+        public long getPriceRange() {
+            return priceRange;
+        }
+
+        public void setPriceRange(long priceRange) {
+            this.priceRange = priceRange;
+        }
+
+        public long getMark() {
+            return mark;
+        }
+
+        public void setMark(long mark) {
+            this.mark = mark;
+        }
+
+        public List<Long> getCategories() {
+            return categories;
+        }
+
+        public void setCategories(List<Long> categories) {
+            this.categories = categories;
+        }
+
+        public String getSearchText() {
+            return searchText;
+        }
+
+        public void setSearchText(String searchText) {
+            this.searchText = searchText;
+        }
+
+        public long getItemsPerPage() {
+            return itemsPerPage;
+        }
+
+        public void setItemsPerPage(long itemsPerPage) {
+            this.itemsPerPage = itemsPerPage;
+        }
+
+        public long getPageNumber() {
+            return pageNumber;
+        }
+
+        public void setPageNumber(long pageNumber) {
+            this.pageNumber = pageNumber;
+        }
+    }
+
+    public static class RestaurantsDto {
+        public List<Restaurant> restaurants = new ArrayList<Restaurant>();
+        public long numberOfRestaurantPages;
+
+        public List<Restaurant> getRestaurants() {
+            return restaurants;
+        }
+
+        public void setRestaurants(List<Restaurant> restaurants) {
+            this.restaurants = restaurants;
+        }
+
+        public long getNumberOfRestaurantPages() {
+            return numberOfRestaurantPages;
+        }
+
+        public void setNumberOfRestaurantPages(long numberOfRestaurantPages) {
+            this.numberOfRestaurantPages = numberOfRestaurantPages;
+        }
+    }
+
+    public static class RestaurantDetailsDto {
+        public long id;
+
+        public long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            this.id = id;
+        }
+    }
+
+    public static class RestaurantMenuDto {
+        public long idRestaurant;
+        public String type;
+
+        public long getIdRestaurant() {
+            return idRestaurant;
+        }
+
+        public void setIdRestaurant(long idRestaurant) {
+            this.idRestaurant = idRestaurant;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+    }
+
+    public static class RestaurantVoteDto {
+        public long id;
+        public long mark;
+
+        public long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            this.id = id;
+        }
+
+        public long getMark() {
+            return mark;
+        }
+
+        public void setMark(long mark) {
+            this.mark = mark;
+        }
+    }
+
+    public static class RestaurantLocation {
+        public String location;
+        public long number;
+
+        public RestaurantLocation() {};
+
+        public String getLocation() {
+            return location;
+        }
+
+        public void setLocation(String location) {
+            this.location = location;
+        }
+
+        public long getNumber() {
+            return number;
+        }
+
+        public void setNumber(long number) {
+            this.number = number;
+        }
+    }
+
+    public static class PaginationDto {
+        public long pageNumber;
+        public long itemsPerPage;
+
+        public long getPageNumber() {
+            return pageNumber;
+        }
+
+        public void setPageNumber(long pageNumber) {
+            this.pageNumber = pageNumber;
+        }
+
+        public long getItemsPerPage() {
+            return itemsPerPage;
+        }
+
+        public void setItemsPerPage(long itemsPerPage) {
+            this.itemsPerPage = itemsPerPage;
+        }
+    }
+
+    public static class ReservationDto {
+        public long idRestaurant;
+        public String persons;
+        public String reservationDate;
+        public String reservationHour;
+
+        public long getIdRestaurant() {
+            return idRestaurant;
+        }
+
+        public void setIdRestaurant(long idRestaurant) {
+            this.idRestaurant = idRestaurant;
+        }
+
+        public String getPersons() {
+            return persons;
+        }
+
+        public void setPersons(String persons) {
+            this.persons = persons;
+        }
+
+        public String getReservationDate() {
+            return reservationDate;
+        }
+
+        public void setReservationDate(String reservationDate) {
+            this.reservationDate = reservationDate;
+        }
+
+        public String getReservationHour() {
+            return reservationHour;
+        }
+
+        public void setReservationHour(String reservationHour) {
+            this.reservationHour = reservationHour;
+        }
+    }
+
+    public static class FormRestaurantDto {
+        public long id;
+        public String restaurantName;
+        public String description;
+        public float latitude;
+        public float longitude;
+        public float mark = 0;
+        public long votes = 0;
+        public long priceRange;
+        public String imageFileName;
+        public String locationName;
+
+        public long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            this.id = id;
+        }
+
+        public String getRestaurantName() {
+            return restaurantName;
+        }
+
+        public void setRestaurantName(String restaurantName) {
+            this.restaurantName = restaurantName;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public float getLatitude() {
+            return latitude;
+        }
+
+        public void setLatitude(float latitude) {
+            this.latitude = latitude;
+        }
+
+        public float getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(float longitude) {
+            this.longitude = longitude;
+        }
+
+        public float getMark() {
+            return mark;
+        }
+
+        public void setMark(float mark) {
+            this.mark = mark;
+        }
+
+        public long getVotes() {
+            return votes;
+        }
+
+        public void setVotes(long votes) {
+            this.votes = votes;
+        }
+
+        public long getPriceRange() {
+            return priceRange;
+        }
+
+        public void setPriceRange(long priceRange) {
+            this.priceRange = priceRange;
+        }
+
+        public String getImageFileName() {
+            return imageFileName;
+        }
+
+        public void setImageFileName(String imageFileName) {
+            this.imageFileName = imageFileName;
+        }
+
+        public String getLocationName() {
+            return locationName;
+        }
+
+        public void setLocationName(String locationName) {
+            this.locationName = locationName;
         }
     }
 }

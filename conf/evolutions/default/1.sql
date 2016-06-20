@@ -115,6 +115,45 @@ CREATE TABLE reservations(
 	PRIMARY KEY (id)
 );
 
+CREATE TABLE restaurantcategories(
+	id bigint,
+	name varchar(255) NOT NULL,
+	PRIMARY KEY (id)
+);
+
+INSERT INTO restaurantcategories (id, name) VALUES (1, 'Vegetarian');
+INSERT INTO restaurantcategories (id, name) VALUES (2, 'American');
+INSERT INTO restaurantcategories (id, name) VALUES (3, 'Barbeque');
+
+CREATE TABLE restaurantstocategories(
+	id bigint,
+	idRestaurant bigint NOT NULL,
+    idCategory bigint NOT NULL,
+	PRIMARY KEY (id)
+);
+
+CREATE TABLE restaurantlocations(
+	id bigint,
+	name varchar(255) NOT NULL,
+	PRIMARY KEY (id)
+);
+
+
+INSERT INTO restaurantstocategories (id, idRestaurant, idCategory) VALUES (1, 1, 1);
+INSERT INTO restaurantstocategories (id, idRestaurant, idCategory) VALUES (2, 1, 2);
+INSERT INTO restaurantstocategories (id, idRestaurant, idCategory) VALUES (3, 2, 3);
+INSERT INTO restaurantstocategories (id, idRestaurant, idCategory) VALUES (4, 3, 2);
+INSERT INTO restaurantstocategories (id, idRestaurant, idCategory) VALUES (5, 4, 1);
+INSERT INTO restaurantstocategories (id, idRestaurant, idCategory) VALUES (6, 4, 3);
+INSERT INTO restaurantstocategories (id, idRestaurant, idCategory) VALUES (7, 5, 2);
+INSERT INTO restaurantstocategories (id, idRestaurant, idCategory) VALUES (8, 6, 3);
+INSERT INTO restaurantstocategories (id, idRestaurant, idCategory) VALUES (9, 7, 1);
+INSERT INTO restaurantstocategories (id, idRestaurant, idCategory) VALUES (10, 7, 2);
+INSERT INTO restaurantstocategories (id, idRestaurant, idCategory) VALUES (11, 7, 3);
+INSERT INTO restaurantstocategories (id, idRestaurant, idCategory) VALUES (12, 8, 2);
+INSERT INTO restaurantstocategories (id, idRestaurant, idCategory) VALUES (13, 8, 3);
+
+
 CREATE TABLE restaurantmenuitem(
     id bigint,
     idRestaurant bigint NOT NULL,
@@ -199,6 +238,8 @@ INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description
 INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (62, 8, 'Dinner', 'Rainbow Naruto Roll', 12, 'Tuna, salmon, white fish, kani, avocado and tobiko');
 
 
+
+
 CREATE SEQUENCE hibernate_sequence;
 
 # --- !Downs
@@ -207,5 +248,8 @@ DROP TABLE restaurants;
 DROP TABLE restauranttables;
 DROP TABLE reservations;
 DROP TABLE restaurantmenuitem;
+DROP TABLE restaurantcategories;
+DROP TABLE restaurantstocategories;
+DROP TABLE restaurantlocations;
 
 DROP SEQUENCE IF EXISTS hibernate_sequence;

@@ -1,0 +1,5 @@
+{{#if checkIsActive}}
+  <li id="pagination_{{itemNumber}}" class="active"><a href="javascript:void(0);" {{action 'changePage' itemNumber}}>{{itemNumber}}</a></li>
+{{else}}
+  <li id="pagination_{{itemNumber}}"><a href="javascript:void(0);" {{action 'changePage' itemNumber}}>{{itemNumber}}</a></li>
+{{/if}}

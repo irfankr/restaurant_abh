@@ -7,15 +7,18 @@
             <li>{{#link-to 'admin.index'}}Dashboard{{/link-to}}</li>
             <li>{{#link-to 'admin.restaurants'}}Restaurants{{/link-to}}</li>
             <li>{{#link-to 'admin.locations'}}Locations{{/link-to}}</li>
+            <li>{{#link-to 'admin.categories'}}Categories{{/link-to}}</li>
             <li>{{#link-to 'admin.users'}}Users{{/link-to}}</li>
           </ul>
         </div>
-        <div class="input_column">
-          {{input type="text" class="form-control input_fields" value=searchRestaurant placeholder="Search..."}}
-        </div>
-        <div class="search_column">
-          <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-        </div>
+        {{#if page}}
+          <div class="input_column">
+            {{input type="text" class="form-control input_fields" value=searchRestaurant placeholder="Search..."}}
+          </div>
+          <div class="search_column">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+          </div>
+        {{/if}}
       </div>
     </div>
     {{#if addOption}}

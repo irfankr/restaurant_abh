@@ -7,7 +7,7 @@ const Router = Ember.Router.extend({
 
 Router.map(function() {
   this.route('login');
-  this.route('restaurants');
+  this.route('restaurants', {path: '/restaurants/:pageNumber'});
   this.route('register');
   this.route('restaurant', {path: '/restaurant/:restaurantId'});
   this.route('completereservation');
@@ -20,10 +20,22 @@ Router.map(function() {
   this.route('admin', function() {
     this.route('restaurants', function() {
       this.route('add');
+      this.route('edit');
     });
-    this.route('locations');
-    this.route('users');
+    this.route('categories', function() {
+      this.route('add');
+      this.route('edit');
+    });
+    this.route('locations', function() {
+      this.route('add');
+      this.route('edit');
+    });
+    this.route('users', function() {
+      this.route('add');
+      this.route('edit');
+    });
   });
+  this.route('findtable');
 });
 
 export default Router;

@@ -130,6 +130,12 @@ public class User {
     }
 
     @Transactional
+    public static List<User> getAll(long pageId) {
+        List<User> users = JPA.em().createNativeQuery("SELECT * FROM users ORDER BY id ASC LIMIT 13 OFFSET ?", User.class).setParameter(1, pageId).getResultList();
+        return users;
+    }
+
+    @Transactional
     public static User findById(long id){
         try {
             return JPA.em().find(User.class, id);
@@ -165,4 +171,183 @@ public class User {
         }
     }
 
+    public static class UserCreateResetPasswordTokenDto {
+        public String email;
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+    }
+
+    public static class UserLoginDto {
+        public String email;
+        public String password;
+        public String rememberMe;
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+        public String getRememberMe() {
+            return rememberMe;
+        }
+
+        public void setRememberMe(String rememberMe) {
+            this.rememberMe = rememberMe;
+        }
+    }
+
+    public static class UserRegisterDto {
+        public long id;
+        public String email;
+        public String password;
+        public String firstName;
+        public String lastName;
+        public String phone;
+        public String country;
+        public String city;
+
+        public long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            this.id = id;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
+        }
+
+        public String getPhone() {
+            return phone;
+        }
+
+        public void setPhone(String phone) {
+            this.phone = phone;
+        }
+
+        public String getCountry() {
+            return country;
+        }
+
+        public void setCountry(String country) {
+            this.country = country;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
+        }
+    }
+
+    public static class AdminUsersListDto {
+        public long pageId;
+
+        public long getPageId() {
+            return pageId;
+        }
+
+        public void setPageId(long pageId) {
+            this.pageId = pageId;
+        }
+    }
+
+    public static class UsersFilterDto {
+        public String searchText;
+        public long itemsPerPage;
+        public long pageNumber;
+
+        public String getSearchText() {
+            return searchText;
+        }
+
+        public void setSearchText(String searchText) {
+            this.searchText = searchText;
+        }
+
+        public long getItemsPerPage() {
+            return itemsPerPage;
+        }
+
+        public void setItemsPerPage(long itemsPerPage) {
+            this.itemsPerPage = itemsPerPage;
+        }
+
+        public long getPageNumber() {
+            return pageNumber;
+        }
+
+        public void setPageNumber(long pageNumber) {
+            this.pageNumber = pageNumber;
+        }
+    }
+
+    public static class UsersDto {
+        public List<User> users = new ArrayList<User>();
+        public long numberOfPages;
+
+        public List<User> getUsers() {
+            return users;
+        }
+
+        public void setUsers(List<User> users) {
+            this.users = users;
+        }
+
+        public long getNumberOfPages() {
+            return numberOfPages;
+        }
+
+        public void setNumberOfPages(long numberOfPages) {
+            this.numberOfPages = numberOfPages;
+        }
+    }
 }

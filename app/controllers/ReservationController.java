@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 public class ReservationController extends Controller {
     @Transactional
     public Result checkReservationAvailability() { //Method returns how much tables left for that criteria
-        Form<ReservationDto> reservationForm = form(ReservationDto.class).bindFromRequest();
+        Form<Reservation.ReservationDto> reservationForm = form(Reservation.ReservationDto.class).bindFromRequest();
 
         //Create reservation object
         Reservation reservation = new Reservation();
@@ -71,7 +71,7 @@ public class ReservationController extends Controller {
         }
 
         //Get list of all tables for that id restaurant
-        long idRestaurant = Long.parseLong(reservationForm.get().idRestaurant);
+        long idRestaurant = reservationForm.get().idRestaurant;
         //Create restaurant object
         Restaurant restoran = new Restaurant();
         List<RestaurantTables> freeTables = new ArrayList<RestaurantTables>();
@@ -79,7 +79,7 @@ public class ReservationController extends Controller {
         freeTables = restoran.checkReservationAvailability(reservation.getPersons(), reservationDateTime, idRestaurant);
 
         //Create response object
-        CheckReservationAvalibilityNumberTimes responseReservationCheck = new CheckReservationAvalibilityNumberTimes();
+        Reservation.CheckReservationAvalibilityNumberTimes responseReservationCheck = new Reservation.CheckReservationAvalibilityNumberTimes();
 
         if(freeTables.size() == 0) { //If there is no available tables
             return badRequest("{\"error\": \"No available tables!\"}");
@@ -99,7 +99,7 @@ public class ReservationController extends Controller {
 
     public static List<String> getListOfBestTimes(String reservationFormHour, String reservationFormDate, long persons, long idRestaurant){
         //Create response object
-        CheckReservationAvalibilityNumberTimes responseReservationCheck = new CheckReservationAvalibilityNumberTimes();
+        Reservation.CheckReservationAvalibilityNumberTimes responseReservationCheck = new Reservation.CheckReservationAvalibilityNumberTimes();
 
         //Times to offer
         List<String> bestTimesArray = new ArrayList<String>(); bestTimesArray.add("08:00 PM"); bestTimesArray.add("08:30 PM"); bestTimesArray.add("09:00 PM"); bestTimesArray.add("09:30 PM"); bestTimesArray.add("07:00 PM"); bestTimesArray.add("07:30 PM");  bestTimesArray.add("06:00 PM"); bestTimesArray.add("06:30 PM"); bestTimesArray.add("05:00 PM"); bestTimesArray.add("05:30 PM");  bestTimesArray.add("04:00 PM"); bestTimesArray.add("04:30 PM"); bestTimesArray.add("03:00 PM"); bestTimesArray.add("03:30 PM"); bestTimesArray.add("02:00 PM"); bestTimesArray.add("02:30 PM"); bestTimesArray.add("01:00 PM"); bestTimesArray.add("01:30 PM"); bestTimesArray.add("12:00 PM"); bestTimesArray.add("12:30 PM"); bestTimesArray.add("10:00 PM"); bestTimesArray.add("11:00 AM"); bestTimesArray.add("11:30 AM"); bestTimesArray.add("10:00 AM"); bestTimesArray.add("10:30 AM"); bestTimesArray.add("09:00 AM"); bestTimesArray.add("09:30 AM");
@@ -163,11 +163,11 @@ public class ReservationController extends Controller {
         Iterator resultListIterator = resultList.iterator();
 
         //Create restaurants locations list object
-        List<UserReservationsDto> userReservations = new ArrayList();
+        List<Reservation.UserReservationsDto> userReservations = new ArrayList();
 
         while (resultListIterator.hasNext()) {
             Object col[] = (Object[])resultListIterator.next();
-            UserReservationsDto userReservation = new UserReservationsDto();
+            Reservation.UserReservationsDto userReservation = new Reservation.UserReservationsDto();
 
             //Set attribute values
             userReservation.setRestaurantName((String)col[0]);
@@ -196,87 +196,5 @@ public class ReservationController extends Controller {
         }
 
         return ok(Json.toJson(userReservations));
-    }
-
-    public static class ReservationDto {
-        public String idRestaurant;
-        public String people;
-        public String date;
-        public String hour;
-    }
-
-    public static class CheckReservationAvalibilityNumberTimes {
-        public long tablesLeft;
-        public List<String> bestTime = new ArrayList<String>();
-
-        public CheckReservationAvalibilityNumberTimes() {}
-
-        public long getTablesLeft() {
-            return tablesLeft;
-        }
-
-        public void setTablesLeft(long tablesLeft) {
-            this.tablesLeft = tablesLeft;
-        }
-
-        public List<String> getBestTime() {
-            return bestTime;
-        }
-
-        public void setBestTime(List<String> bestTime) {
-            this.bestTime = bestTime;
-        }
-
-        public void addBestTime(String bestTime){
-            this.bestTime.add(bestTime);
-        }
-    }
-
-    public static class UserReservationsDto {
-        public String restaurantName;
-        public String imageFileName; //Restaurant Image
-        public long guests;
-        public String reservationDate;
-        public String reservationHour;
-
-        public String getRestaurantName() {
-            return restaurantName;
-        }
-
-        public void setRestaurantName(String restaurantName) {
-            this.restaurantName = restaurantName;
-        }
-
-        public String getImageFileName() {
-            return imageFileName;
-        }
-
-        public void setImageFileName(String imageFileName) {
-            this.imageFileName = imageFileName;
-        }
-
-        public long getGuests() {
-            return guests;
-        }
-
-        public void setGuests(long guests) {
-            this.guests = guests;
-        }
-
-        public String getReservationDate() {
-            return reservationDate;
-        }
-
-        public void setReservationDate(String reservationDate) {
-            this.reservationDate = reservationDate;
-        }
-
-        public String getReservationHour() {
-            return reservationHour;
-        }
-
-        public void setReservationHour(String reservationHour) {
-            this.reservationHour = reservationHour;
-        }
     }
 }

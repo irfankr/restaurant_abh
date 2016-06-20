@@ -1,0 +1,11 @@
+<!-- Voting popup -->
+<div class="modal fade" id="votePopup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        ID: {{model.restaurantDetails.id}}
+        <button type="button" class="btn btn-default" {{action 'vote'}}>Rate this place</button>
+      </div>
+    </div>
+  </div>
+</div>

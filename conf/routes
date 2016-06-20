@@ -17,12 +17,18 @@ GET     /api/v1/message                     controllers.AsyncController.message
 # Map static resources from the /public folder to the /assets URL path
 # GET     /assets/*file                     controllers.Assets.versioned(path="/public", file: Asset)
 
+# Users
 POST    /api/v1/login                       controllers.UserController.login
 GET     /api/v1/currentUser                 controllers.UserController.currentUser
 GET     /api/v1/logout                      controllers.UserController.logout
 POST    /api/v1/register                    controllers.UserController.register
+POST    /api/v1/getAllUsers                 controllers.UserController.getAllUsers
 
-GET     /api/v1/getAllRestaurants           controllers.RestaurantController.getAllRestaurants
+# Restaurants
+# POST    /api/v1/getAllRestaurants           controllers.RestaurantController.getAllRestaurants
+# POST    /api/v1/getNumberOfRestaurantPages  controllers.RestaurantController.getNumberOfRestaurantPages
+
+POST    /api/v1/getRestaurantsByFilter      controllers.RestaurantController.getRestaurantsByFilter
 POST    /api/v1/getRestaurantDetails        controllers.RestaurantController.getRestaurantDetails
 POST    /api/v1/getRestaurantMenu           controllers.RestaurantController.getRestaurantMenu
 GET     /api/v1/getRestaurantsLocations     controllers.RestaurantController.getRestaurantsLocations
@@ -30,11 +36,37 @@ GET     /api/v1/allRestaurantsSortReservationsToday controllers.RestaurantContro
 POST    /api/v1/restaurantVote              controllers.RestaurantController.restaurantVote
 
 POST    /api/v1/makeReservation             controllers.RestaurantController.makeReservation
-
 POST    /api/v1/checkReservationAvailability controllers.ReservationController.checkReservationAvailability
 GET     /api/v1/getListOfReservationsForUser    controllers.ReservationController.getListOfReservationsForUser
 
 POST    /api/v1/createResetPasswordToken    controllers.UserController.createResetPasswordToken
+
+# Categories (Administration)
+GET     /api/v1/getAllCategories            controllers.RestaurantCategoriesController.getAllCategories
+POST    /api/v1/admin/getFilteredCategories      controllers.RestaurantCategoriesController.getFilteredCategories
+POST    /api/v1/admin/addCategory                controllers.RestaurantCategoriesController.addCategory
+POST    /api/v1/admin/editCategory               controllers.RestaurantCategoriesController.editCategory
+POST    /api/v1/admin/deleteCategory             controllers.RestaurantCategoriesController.deleteCategory
+
+# Locations (Administration)
+POST    /api/v1/admin/getFilteredLocations      controllers.RestaurantLocationController.getFilteredLocations
+POST    /api/v1/admin/addLocation                controllers.RestaurantLocationController.addLocation
+POST    /api/v1/admin/editLocation               controllers.RestaurantLocationController.editLocation
+POST    /api/v1/admin/deleteLocation             controllers.RestaurantLocationController.deleteLocation
+
+# Restaurants (Administration)
+POST    /api/v1/admin/getFilteredRestaurants      controllers.RestaurantController.getFilteredRestaurants
+POST    /api/v1/admin/addRestaurant                controllers.RestaurantController.addRestaurant
+POST    /api/v1/admin/editRestaurant               controllers.RestaurantController.editRestaurant
+POST    /api/v1/admin/deleteRestaurant             controllers.RestaurantController.deleteRestaurant
+
+# Users (Administration)
+POST    /api/v1/admin/getFilteredUsers      controllers.UserController.getFilteredUsers
+POST    /api/v1/admin/addUser                controllers.UserController.addUser
+POST    /api/v1/admin/editUser               controllers.UserController.editUser
+POST    /api/v1/admin/deleteUser             controllers.UserController.deleteUser
+
+
 
 GET     /                                   controllers.HomeController.index(slug = "")
 GET     /*slug                              controllers.HomeController.index(slug)
