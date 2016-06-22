@@ -1,31 +1,31 @@
 <div class="box_shadow restaurant_data_container" style="margin-bottom:65px;">
   <div class="row">
     <div class="col-md-2">
-      <div class="complete_reservation_restaurant_image" style="background-image:url('assets/images/restaurants/thumbnails/{{currentReservation.restaurantImageFilename}}.jpg');"></div>
+      <div class="complete_reservation_restaurant_image" style="background-image:url('assets/images/restaurants/thumbnails/{{restaurantImageFilename}}.jpg');"></div>
     </div>
     <div class="col-md-10 complete_reservation_restaurant_details">
       <div class="title">RESTAURANT</div>
-      <div class="name">{{currentReservation.restaurantName}}</div>
+      <div class="name">{{restaurantName}}</div>
 
       <div class="row">
         <div class="col-md-2">
           <div class="title">GUESTS</div>
-          <div class="details">{{currentReservation.people}}</div>
+          <div class="details">{{people}}</div>
         </div>
         <div class="col-md-3">
           <div class="title">DATE</div>
-          <div class="details">{{currentReservation.date}}</div>
+          <div class="details">{{date}}</div>
         </div>
         <div class="col-md-2">
           <div class="title">TIME</div>
-          <div class="details">{{currentReservation.hour}}</div>
+          <div class="details">{{hour}}</div>
         </div>
       </div>
     </div>
   </div>
 
   <div class="availability_text">
-    Availability on {{reservation.date}} around {{reservation.hour}} for {{reservation.people}}:
+    Availability on {{date}} around {{hour}} for {{people}}:
   </div>
 
   <div class="tables_left">
@@ -36,7 +36,7 @@
 
   <div class="reservation_choose_time">
     {{#each bestTime as |time|}}
-      <a href="javascript:void(0);" {{action 'proceedToReservationComplete' time model.restaurantDetails.id model.restaurantDetails.restaurantName model.restaurantDetails.imageFileName}}>{{time}}</a>
+      <a href="javascript:void(0);" {{action 'proceedToReservationComplete' time idRestaurant restaurantName restaurantImageFilename}}>{{time}}</a>
     {{/each}}
   </div>
 </div>

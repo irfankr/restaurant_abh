@@ -8,6 +8,7 @@ export default Ember.Service.extend({
   restaurandId: null,
   restaurantName: null,
   restaurantImageFilename: null,
+  searchText: null,
 
   setReservation(reservation, restaurandId, restaurantName, restaurantImageFilename){
     this.set('people', reservation.get('people'));
@@ -16,6 +17,7 @@ export default Ember.Service.extend({
     this.set('restaurandId', restaurandId);
     this.set('restaurantName', restaurantName);
     this.set('restaurantImageFilename', restaurantImageFilename);
+    this.set('searchText', reservation.get('searchText'));
   },
   removeReservation(){
     this.set('people', null);
@@ -24,5 +26,6 @@ export default Ember.Service.extend({
     this.set('restaurandId', null);
     this.set('restaurantName', null);
     this.set('restaurantImageFilename', null);
+    this.set('searchText', null);
   }
 });

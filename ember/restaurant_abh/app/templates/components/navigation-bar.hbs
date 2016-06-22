@@ -3,18 +3,26 @@
     <nav>
       {{#link-to 'index' class='app_name'}}Restaurant ABH{{/link-to}}
       <ul class="navbar-right">
-        <li>{{#link-to 'index'}}Home{{/link-to}}</li>
-        <li>{{#link-to 'restaurants' 1}}Restaurants{{/link-to}}</li>
+        <li class="item">{{#link-to 'index'}}Home{{/link-to}}</li>
+        <li class="item">{{#link-to 'restaurants' 1}}Restaurants{{/link-to}}</li>
 
         {{#if currentUser.userLoggedIn}}
-          <li><a href="javascript:void(0);" style="position:relative;"><span class="glyphicon glyphicon-user" aria-hidden="true" style="padding-right:5px; font-size:12px; color:#616161;"></span> {{currentUser.userFirstName}}<ul class="userdropdown"><li><a {{action 'logOut'}} href="javascript:void(0);"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true" style="font-size:10px;"></span> Logout</a></li><li>{{#link-to 'reservations'}}<span class="glyphicon glyphicon-chevron-right" aria-hidden="true" style="font-size:10px;"></span> Reservations{{/link-to}}</li></ul></a></li>
+          <li class="dropdown item">
+            <a href="javascript:void(0);" style="position:relative;" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" aria-hidden="true" style="padding-right:5px; font-size:12px; color:#616161;"></span> {{currentUser.userFirstName}}</a>
+
+            <ul class="dropdown-menu">
+              <li><a href="javascript:void(0);" {{action 'logOut'}}>Logout</a></li>
+              <li>{{#link-to 'reservations'}}Reservations{{/link-to}}</li>
+            </ul>
+
+          </li>
 
           {{#if currentUser.isAdmin}}
-              <li>{{#link-to 'admin.index'}}Administration{{/link-to}}</li>
+              <li class="item">{{#link-to 'admin.index'}}Administration{{/link-to}}</li>
           {{/if}}
 
         {{else}}
-          <li>{{#link-to 'login'}}Login{{/link-to}}</li>
+          <li class="item">{{#link-to 'login'}}Login{{/link-to}}</li>
         {{/if}}
 
       </ul>

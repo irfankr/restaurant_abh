@@ -84,8 +84,8 @@ public class RestaurantLocationController extends Controller {
         RestaurantLocation location = new RestaurantLocation();
 
         //Check is there category with this name already
-        if(location.findByName(locationForm.get().locationName) == null){
-            location.setName(locationForm.get().locationName);
+        if(location.findByName(locationForm.get().name) == null){
+            location.setName(locationForm.get().name);
 
             //Save to database
             location.save();
@@ -106,7 +106,7 @@ public class RestaurantLocationController extends Controller {
 
         if(location != null){
             //Update value
-            location.setName(locationForm.get().locationName);
+            location.setName(locationForm.get().name);
 
             //Save to database
             location.update();
@@ -128,5 +128,16 @@ public class RestaurantLocationController extends Controller {
         location.delete();
 
         return ok();
+    }
+
+    @Transactional
+    public Result getLocationDetails() {
+        Form<RestaurantLocation.FormLocationsDto> locationForm = form(RestaurantLocation.FormLocationsDto.class).bindFromRequest();
+
+        //Create object
+        RestaurantLocation location = new RestaurantLocation();
+        location = location.findById(locationForm.get().id);
+
+        return ok(Json.toJson(location));
     }
 }

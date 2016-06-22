@@ -3,8 +3,23 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body">
-        ID: {{model.restaurantDetails.id}}
-        <button type="button" class="btn btn-default" {{action 'vote'}}>Rate this place</button>
+        <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+
+        <h1>Rate this place</h1>
+
+        <div class="stars_container">
+          {{#each filledStars as |star|}}
+              {{#if star.[1]}}
+                <div class="star_active" {{action 'clickStar' star.[0]}}></div>
+              {{else}}
+                <div class="star" {{action 'clickStar' star.[0]}}></div>
+              {{/if}}
+          {{/each}}
+        </div>
+
+        {{textarea value=description class="comment_field"}}
+
+        <button type="button" class="btn vote_button" {{action 'vote'}} data-dismiss="modal">Rate this place</button>
       </div>
     </div>
   </div>

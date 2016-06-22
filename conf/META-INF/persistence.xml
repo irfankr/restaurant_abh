@@ -14,6 +14,7 @@
         <class>models.RestaurantLocation</class>
         <class>models.RestaurantMenuItem</class>
         <class>models.RestaurantsToCategories</class>
+        <class>models.RestaurantComment</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL82Dialect"/>
         </properties>

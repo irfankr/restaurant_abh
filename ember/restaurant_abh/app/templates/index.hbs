@@ -13,7 +13,7 @@
               <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
             </div>
             <div class="reservation_column_input">
-              {{input type="text" class="form-control input_fields" value=searchRestaurant placeholder="Search for a restaurant..."}}
+              {{input type="text" class="form-control input_fields" value=reservation.searchText placeholder="Search for a restaurant..."}}
             </div>
 
             <div class="reservation_column">
@@ -59,9 +59,6 @@
 <h1 class="homepage_title" style="margin-bottom:75px;">Popular locations</h1>
 <div class="container" style="overflow:auto; margin-bottom:205px;">
   {{#each model.listRestaurantsLocations as |restaurantsLocation|}}
-    <div class="homepage_location">
-      <a class="location">{{restaurantsLocation.location}}</a>
-      <div class="details">{{restaurantsLocation.number}} restaurants</div>
-    </div>
+    {{#restaurant-location clickLocation='clickLocation' restaurantsLocation=restaurantsLocation homepage=true }}{{/restaurant-location}}
   {{/each}}
 </div>

@@ -123,7 +123,7 @@ public class RestaurantLocation {
 
     public static class FormLocationsDto {
         public long id;
-        public String locationName;
+        public String name;
 
         public long getId() {
             return id;
@@ -133,12 +133,12 @@ public class RestaurantLocation {
             this.id = id;
         }
 
-        public String getLocationName() {
-            return locationName;
+        public String getName() {
+            return name;
         }
 
-        public void setLocationName(String locationName) {
-            this.locationName = locationName;
+        public void setName(String name) {
+            this.name = name;
         }
     }
 }

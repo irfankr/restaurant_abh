@@ -1,1 +1,23 @@
+{{#admin-navigation-bar addOption=true navColumn=10 page='locations'}}{{/admin-navigation-bar}}
+
+
+<div class="container" style="margin-top:80px;">
+  {{#admin-notification visible=model.notification.visible classStyle=model.notification.classStyle text=model.notification.text}}{{/admin-notification}}
+
+  <div class="box_shadow administration_fields">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label class="input_title">Location name</label>
+          {{input type="text" class="form-control input_fields" value=model.location.name}}
+        </div>
+      </div>
+      <div class="col-md-6" style="padding-top:25px;">
+        <button {{action 'editItem'}} class="btn button pull-right">Edit location</button>
+        <button {{action 'cancel'}} class="btn cancel_button pull-right">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {{outlet}}

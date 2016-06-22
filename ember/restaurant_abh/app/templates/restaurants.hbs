@@ -60,9 +60,6 @@
 <h1 class="homepage_title" style="margin-bottom:75px;">Popular locations</h1>
 <div class="container" style="overflow:auto; margin-bottom:205px;">
   {{#each model.listRestaurantsLocations as |restaurantsLocation|}}
-    <div class="homepage_location">
-      <a class="location">{{restaurantsLocation.location}}</a>
-      <div class="details">{{restaurantsLocation.number}} restaurants</div>
-    </div>
+    {{#restaurant-location clickLocation='clickLocation' activeLocation=model.filter.location restaurantsLocation=restaurantsLocation }}{{/restaurant-location}}
   {{/each}}
 </div>

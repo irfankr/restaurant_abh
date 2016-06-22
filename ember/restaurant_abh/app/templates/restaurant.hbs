@@ -23,7 +23,7 @@
       <div class="restaurant_details">
         <h1 class="title">{{model.restaurantDetails.restaurantName}}</h1>
         <div class="{{model.restaurantsStatsStyle}}">
-          {{#restaurant-star max=5 value=model.restaurantDetails.mark votes=model.restaurantDetails.votes voteAllowed=true restaurantId=model.restaurantDetails.id}}{{/restaurant-star}}
+          {{#restaurant-star max=5 value=model.restaurantDetails.mark votes=model.restaurantDetails.votes restaurantId=model.restaurantDetails.id}}{{/restaurant-star}}
           <span class="price_range">
             {{#restaurant-price-range max=5 value=model.restaurantDetails.priceRange}}{{/restaurant-price-range}}
           </span>

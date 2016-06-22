@@ -120,6 +120,9 @@ public class Reservation {
     public static class CheckReservationAvalibilityNumberTimes {
         public long tablesLeft;
         public List<String> bestTime = new ArrayList<String>();
+        public long idRestaurant;
+        public String restaurantName;
+        public String restaurantImageFilename;
 
         public CheckReservationAvalibilityNumberTimes() {}
 
@@ -142,6 +145,30 @@ public class Reservation {
         public void addBestTime(String bestTime){
             this.bestTime.add(bestTime);
         }
+
+        public long getIdRestaurant() {
+            return idRestaurant;
+        }
+
+        public void setIdRestaurant(long idRestaurant) {
+            this.idRestaurant = idRestaurant;
+        }
+
+        public String getRestaurantName() {
+            return restaurantName;
+        }
+
+        public void setRestaurantName(String restaurantName) {
+            this.restaurantName = restaurantName;
+        }
+
+        public String getRestaurantImageFilename() {
+            return restaurantImageFilename;
+        }
+
+        public void setRestaurantImageFilename(String restaurantImageFilename) {
+            this.restaurantImageFilename = restaurantImageFilename;
+        }
     }
 
     public static class ReservationDto {
@@ -149,6 +176,9 @@ public class Reservation {
         public String people;
         public String date;
         public String hour;
+        public String searchText;
+        public long itemsPerPage;
+        public long pageNumber;
 
         public long getIdRestaurant() {
             return idRestaurant;
@@ -181,5 +211,33 @@ public class Reservation {
         public void setHour(String hour) {
             this.hour = hour;
         }
+
+        public String getSearchText() {
+            return searchText;
+        }
+
+        public void setSearchText(String searchText) {
+            this.searchText = searchText;
+        }
+
+        public long getItemsPerPage() {
+            return itemsPerPage;
+        }
+
+        public void setItemsPerPage(long itemsPerPage) {
+            this.itemsPerPage = itemsPerPage;
+        }
+
+        public long getPageNumber() {
+            return pageNumber;
+        }
+
+        public void setPageNumber(long pageNumber) {
+            this.pageNumber = pageNumber;
+        }
+    }
+
+    public static class FreeTablesForRestaurants {
+        public List<CheckReservationAvalibilityNumberTimes> restaurantsFreeTablesTimes = new ArrayList<CheckReservationAvalibilityNumberTimes>();
     }
 }

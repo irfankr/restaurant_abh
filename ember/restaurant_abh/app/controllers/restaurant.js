@@ -11,6 +11,9 @@ export default Ember.Controller.extend({
   bestTime: [],
 
   init(){
+    //Unset all reservations
+    this.get('currentReservation').removeReservation();
+
     //Generate date select list
     var date = new Date();
     var month = new Array(); month[0] = "Jan"; month[1] = "Feb"; month[2] = "Mar"; month[3] = "Apr"; month[4] = "May"; month[5] = "Jun"; month[6] = "Jul"; month[7] = "Aug"; month[8] = "Sep"; month[9] = "Oct"; month[10] = "Nov"; month[11] = "Dec";
@@ -22,10 +25,6 @@ export default Ember.Controller.extend({
       this.get('selectDate').push(month[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear());
       var date = new Date();
     }
-
-    //Unset all reservations
-    this.get('currentReservation').removeReservation();
-
   },
    actions: {
      showMenu: function(post, restaurantId){
@@ -68,6 +67,9 @@ export default Ember.Controller.extend({
 
             //Display error
             $(".registerNotifications").show();
+
+            self.set('tablesAvailable', null);
+             self.set('bestTime', []);
         }).then(function(data) {
             //Display error
             $(".registerNotifications").hide();

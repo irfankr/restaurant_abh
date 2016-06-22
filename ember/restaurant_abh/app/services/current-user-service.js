@@ -11,6 +11,7 @@ export default Ember.Service.extend({
     this.set("userLoggedIn", true);
     //console.log(this.get('userLoggedIn'));
     this.set("userFirstName", user.get('firstName'));
+    this.set("userId", user.get('id'));
 
     //HARDCODED is user admin
     if(user.get('id') == "3000"){

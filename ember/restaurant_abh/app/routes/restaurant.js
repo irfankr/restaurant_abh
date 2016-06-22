@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import Restaurant from '../models/restaurant';
 import RestaurantMenu from '../models/restaurantmenu';
+import Comment from '../models/comment';
 
 export default Ember.Route.extend({
   restaurantId: null,
@@ -10,6 +11,7 @@ export default Ember.Route.extend({
   restaurantsStatsStyle: null,
   restaurantMenu: RestaurantMenu.create(),
   currentReservation: Ember.inject.service(),
+  comment: Comment.create(),
 
   setupController: function(controller, model){
     this._super(controller, model);
@@ -17,8 +19,30 @@ export default Ember.Route.extend({
     controller.set('tablesAvailable', null);
   },
   actions: {
-    vote: function(){
-      alert("Glasam za Restoran ID: " + this.get('restaurantId'));
+    vote: function(mark, comment){
+      //Insert data in comment object
+      this.set('comment.mark', mark);
+      this.set('comment.idUser', this.get('currentUser.userId'));
+      this.set('comment.idRestaurant', this.get('restaurantId'));
+      this.set('comment.comment', comment);
+
+      //Get menu for restaurant
+      $.ajax({ //No return here
+        url: "/api/v1/insertComment",
+        type: "POST",
+        data: JSON.stringify(this.get('comment')),
+        processData: false,
+        async:false, //Need to wait
+        contentType: "application/json; charset=UTF-8",
+      }).fail(function(data) {
+        console.log(data);
+      }).then(function(data) {
+        console.log('USPJESNO');
+      });
+
+      //Change values in restaurantDetails
+      this.set('restaurantDetails.mark', this.get('restaurantDetails.mark') + mark);
+      this.set('restaurantDetails.votes', this.get('restaurantDetails.votes') + 1);
     }
   },
   model: function(param){
@@ -64,6 +88,9 @@ export default Ember.Route.extend({
       }).then(function(data) {
         self.set('restaurantMenu', data);
       });
+
+      //Animate to top of the page
+      $("html, body").animate({ scrollTop: 0 }, 500);
 
     });
     //Return model to template

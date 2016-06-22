@@ -34,12 +34,16 @@ POST    /api/v1/getRestaurantMenu           controllers.RestaurantController.get
 GET     /api/v1/getRestaurantsLocations     controllers.RestaurantController.getRestaurantsLocations
 GET     /api/v1/allRestaurantsSortReservationsToday controllers.RestaurantController.getAllRestaurantsSortReservationsToday
 POST    /api/v1/restaurantVote              controllers.RestaurantController.restaurantVote
+POST    /api/v1/insertComment               controllers.RestaurantController.insertComment
 
 POST    /api/v1/makeReservation             controllers.RestaurantController.makeReservation
 POST    /api/v1/checkReservationAvailability controllers.ReservationController.checkReservationAvailability
 GET     /api/v1/getListOfReservationsForUser    controllers.ReservationController.getListOfReservationsForUser
+POST    /api/v1/getFreeTables                   controllers.ReservationController.getFreeTables
 
 POST    /api/v1/createResetPasswordToken    controllers.UserController.createResetPasswordToken
+
+GET    /api/v1/admin/getAdministrationCounters      controllers.RestaurantController.getAdministrationCounters
 
 # Categories (Administration)
 GET     /api/v1/getAllCategories            controllers.RestaurantCategoriesController.getAllCategories
@@ -47,24 +51,28 @@ POST    /api/v1/admin/getFilteredCategories      controllers.RestaurantCategorie
 POST    /api/v1/admin/addCategory                controllers.RestaurantCategoriesController.addCategory
 POST    /api/v1/admin/editCategory               controllers.RestaurantCategoriesController.editCategory
 POST    /api/v1/admin/deleteCategory             controllers.RestaurantCategoriesController.deleteCategory
+POST    /api/v1/admin/getCategoryDetails         controllers.RestaurantCategoriesController.getCategoryDetails
 
 # Locations (Administration)
 POST    /api/v1/admin/getFilteredLocations      controllers.RestaurantLocationController.getFilteredLocations
 POST    /api/v1/admin/addLocation                controllers.RestaurantLocationController.addLocation
 POST    /api/v1/admin/editLocation               controllers.RestaurantLocationController.editLocation
 POST    /api/v1/admin/deleteLocation             controllers.RestaurantLocationController.deleteLocation
+POST    /api/v1/admin/getLocationDetails         controllers.RestaurantLocationController.getLocationDetails
 
 # Restaurants (Administration)
 POST    /api/v1/admin/getFilteredRestaurants      controllers.RestaurantController.getFilteredRestaurants
 POST    /api/v1/admin/addRestaurant                controllers.RestaurantController.addRestaurant
 POST    /api/v1/admin/editRestaurant               controllers.RestaurantController.editRestaurant
 POST    /api/v1/admin/deleteRestaurant             controllers.RestaurantController.deleteRestaurant
+POST    /api/v1/admin/getAllRestaurantComments      controllers.RestaurantController.getAllRestaurantComments
 
 # Users (Administration)
 POST    /api/v1/admin/getFilteredUsers      controllers.UserController.getFilteredUsers
 POST    /api/v1/admin/addUser                controllers.UserController.addUser
 POST    /api/v1/admin/editUser               controllers.UserController.editUser
 POST    /api/v1/admin/deleteUser             controllers.UserController.deleteUser
+POST    /api/v1/admin/getUserDetails         controllers.UserController.getUserDetails
 
 
 

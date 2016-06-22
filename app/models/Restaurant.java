@@ -57,17 +57,22 @@ import java.util.concurrent.TimeUnit;
 @Entity
 @Table(name="restaurants")
 public class Restaurant {
-    @Column(name="id") @Id @GeneratedValue long id;
-    @Column(name="restaurantName") private String restaurantName;
-    @Column(name="description") private String description;
-    @Column(name="latitude") private float latitude;
-    @Column(name="longitude")  private float longitude;
-    @Column(name="mark") private float mark;
-    @Column(name="votes") private long votes;
-    @Column(name="priceRange") private long priceRange;
-    @Column(name="imageFileName") private String imageFileName;
-    @Column(name="locationName") private String locationName;
-    @Column(name="foodType") private String foodType;
+    @Id @GeneratedValue long id;
+    private String restaurantName;
+    private String description;
+    private float latitude;
+    private float longitude;
+    private float mark;
+    private long votes;
+    private long priceRange;
+    private String imageFileName;
+    private long location;
+    private String foodType;
+
+    //@ElementCollection
+    //@Column(name="comments")
+    //private List<String> comments;
+
 
     public Restaurant() {}
 
@@ -139,12 +144,12 @@ public class Restaurant {
         this.imageFileName = imageFileName;
     }
 
-    public String getLocationName() {
-        return locationName;
+    public long getLocation() {
+        return location;
     }
 
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
+    public void setLocation(long location) {
+        this.location = location;
     }
 
     public String getFoodType() {
@@ -155,6 +160,20 @@ public class Restaurant {
         this.foodType = foodType;
     }
 
+    /*
+    public List<String> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<String> comments) {
+        this.comments = comments;
+    }
+
+    public void addComment(String comment){
+        this.comments.add(comment);
+    }
+    */
+
     public void save() { JPA.em().persist(this); }
 
     public void update() { JPA.em().merge(this); }
@@ -162,6 +181,7 @@ public class Restaurant {
     public void delete() {
         JPA.em().remove(this);
     }
+
 
     @Transactional
     public static Restaurant findById(long id){
@@ -176,12 +196,14 @@ public class Restaurant {
         return JPA.em().createQuery("SELECT u FROM Restaurant u ORDER BY id ASC", Restaurant.class).getResultList();
     }
 
-    /* NE KORISTI SE */
     @Transactional
-    public static List<Restaurant> getAllWithLimitOffset(long pageNumber, long displayPerPage) {
-        long offsetRestaurants = (pageNumber-1) * displayPerPage;
-
-        return JPA.em().createNativeQuery("SELECT * FROM restaurants ORDER BY id ASC LIMIT ? OFFSET ?", Restaurant.class).setParameter(1, displayPerPage).setParameter(2, offsetRestaurants).getResultList();
+    public static List<Restaurant> getAllWithTextFilter(String text) {
+        if(text != null) {
+            text = "%" + text + "%";
+            return JPA.em().createQuery("SELECT r FROM Restaurant r WHERE restaurantName LIKE ? OR description LIKE ? ORDER BY id ASC", Restaurant.class).setParameter(1, text).setParameter(2, text).getResultList();
+        } else {
+            return JPA.em().createQuery("SELECT r FROM Restaurant r ORDER BY id ASC", Restaurant.class).getResultList();
+        }
     }
 
     @Transactional
@@ -316,6 +338,7 @@ public class Restaurant {
         public String searchText;
         public long itemsPerPage;
         public long pageNumber;
+        public String location;
 
         public long getPriceRange() {
             return priceRange;
@@ -363,6 +386,14 @@ public class Restaurant {
 
         public void setPageNumber(long pageNumber) {
             this.pageNumber = pageNumber;
+        }
+
+        public String getLocation() {
+            return location;
+        }
+
+        public void setLocation(String location) {
+            this.location = location;
         }
     }
 
@@ -534,7 +565,7 @@ public class Restaurant {
         public long votes = 0;
         public long priceRange;
         public String imageFileName;
-        public String locationName;
+        public long location;
 
         public long getId() {
             return id;
@@ -608,12 +639,42 @@ public class Restaurant {
             this.imageFileName = imageFileName;
         }
 
-        public String getLocationName() {
-            return locationName;
+        public long getLocation() {
+            return location;
         }
 
-        public void setLocationName(String locationName) {
-            this.locationName = locationName;
+        public void setLocation(long location) {
+            this.location = location;
+        }
+    }
+
+    public static class AdministrationCountersDto {
+        public long restaurantsNumber;
+        public long locationsNumber;
+        public long usersNumber;
+
+        public long getRestaurantsNumber() {
+            return restaurantsNumber;
+        }
+
+        public void setRestaurantsNumber(long restaurantsNumber) {
+            this.restaurantsNumber = restaurantsNumber;
+        }
+
+        public long getLocationsNumber() {
+            return locationsNumber;
+        }
+
+        public void setLocationsNumber(long locationsNumber) {
+            this.locationsNumber = locationsNumber;
+        }
+
+        public long getUsersNumber() {
+            return usersNumber;
+        }
+
+        public void setUsersNumber(long usersNumber) {
+            this.usersNumber = usersNumber;
         }
     }
 }

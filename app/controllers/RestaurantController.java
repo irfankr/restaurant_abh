@@ -10,6 +10,7 @@ import models.Restaurant;
 import models.Reservation;
 import models.RestaurantMenuItem;
 import models.User;
+import models.RestaurantComment;
 
 import controllers.UserController;
 
@@ -199,15 +200,13 @@ public class RestaurantController extends Controller {
         //Create conditions
         //Constructing list of parameters
         List<Predicate> predicates = new ArrayList<Predicate>();
-
+            //Price range
             if(restaurantForm.get().priceRange != 0){
-                //Price range
                 predicates.add(qb.lessThanOrEqualTo(query.get("priceRange"), restaurantForm.get().priceRange));
             }
 
-        // .add(categories.name
+            //Mark
             if(restaurantForm.get().mark != 0) {
-                //Marks
                 Expression<Integer> mark = query.get("mark");
                 Expression<Integer> votes = query.get("votes");
                 Expression<Number> quot1 = qb.quot(mark, votes);
@@ -216,9 +215,19 @@ public class RestaurantController extends Controller {
                 predicates.add(qb.lessThanOrEqualTo(roundExpression, restaurantForm.get().mark));
             }
 
+            //Search text
             if(restaurantForm.get().searchText != null && restaurantForm.get().searchText != "") {
-                //Search text
                 predicates.add(qb.like(query.<String>get("restaurantName"), "%"+restaurantForm.get().searchText+"%"));
+            }
+
+            //Location
+            if(restaurantForm.get().location != null) {
+                RestaurantLocation location = new RestaurantLocation();
+
+                location = location.findByName(restaurantForm.get().location);
+                System.out.println("//////////////////////////////" + location.getId());
+
+                predicates.add(qb.equal(query.get("location"), location.getId()));
             }
 
             //Categories
@@ -245,6 +254,11 @@ public class RestaurantController extends Controller {
         int itemsPerPageInt = (int) restaurantForm.get().itemsPerPage;
         List<Restaurant> restaurants = em.createQuery(criteria).setMaxResults(itemsPerPageInt).setFirstResult(offsetRestaurantsInt).getResultList();
 
+        //Insert categories string in restaurant
+        for (int i = 0; i < restaurants.size(); i++) {
+            restaurants.get(i).setFoodType(Restaurant.getStringRestaurantCategories(Long.valueOf(restaurants.get(i).getId())));
+        }
+
         //Create return class
         Restaurant.RestaurantsDto returnRestaurants = new Restaurant.RestaurantsDto();
 
@@ -264,12 +278,10 @@ public class RestaurantController extends Controller {
 
     @Transactional
     public Result getRestaurantsLocations() {
-        //Execute SQL Query
-        Query query = JPA.em().createNativeQuery("SELECT r.locationName AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.locationName");
-        List resultList = query.getResultList();
-        //List<Object> queryRestaurantsLocations = (List<Object>) query.getResultList();
-        //int queryListSize = queryRestaurantsLocations.size();
 
+        //Execute SQL Query
+        Query query = JPA.em().createNativeQuery("SELECT r.location AS location, COUNT(r.id) AS number FROM restaurants r GROUP BY r.location");
+        List resultList = query.getResultList();
         Iterator resultListIterator = resultList.iterator();
 
         //Create restaurants locations list object
@@ -279,9 +291,15 @@ public class RestaurantController extends Controller {
             Object col[] = (Object[])resultListIterator.next();
             Restaurant.RestaurantLocation restaurantLocation = new Restaurant.RestaurantLocation();
             //Set attribute values
-            restaurantLocation.setLocation((String)col[0]);
-            BigInteger temp = (BigInteger)col[1];
-            restaurantLocation.setNumber(temp.longValue());
+            RestaurantLocation location = new RestaurantLocation();
+
+            BigInteger temp1 = (BigInteger)col[0];
+            location = location.findById(temp1.longValue());
+            restaurantLocation.setLocation(location.getName());
+
+
+            BigInteger temp2 = (BigInteger)col[1];
+            restaurantLocation.setNumber(temp2.longValue());
 
             restaurantsLocations.add(restaurantLocation);
         }
@@ -364,11 +382,76 @@ public class RestaurantController extends Controller {
         Restaurant restaurant = new Restaurant();
         restaurants = restaurant.getAllSortByTodayReservations();
 
+        //Insert categories string in restaurant
+        for (int i = 0; i < restaurants.size(); i++) {
+            restaurants.get(i).setFoodType(Restaurant.getStringRestaurantCategories(Long.valueOf(restaurants.get(i).getId())));
+        }
+
         //Return JSON of all restaurants
         return ok(Json.toJson(restaurants));
     }
 
+    @Transactional
+    public Result insertComment(){
+        Form<RestaurantComment.InputCommentDto> inputForm = form(RestaurantComment.InputCommentDto.class).bindFromRequest();
+
+        //Create object
+        RestaurantComment comment = new RestaurantComment();
+
+        //Set values
+        comment.setIdRestaurant(inputForm.get().idRestaurant);
+        comment.setComment(inputForm.get().comment);
+        comment.setIdUser(inputForm.get().idUser);
+        comment.setMark(inputForm.get().mark);
+
+        //Save comment to database
+        comment.save();
+
+        return ok(Json.toJson(comment));
+    }
+
+    @Transactional
+    public Result getAllRestaurantComments() {
+        Form<RestaurantComment.InputCommentDto> inputForm = form(RestaurantComment.InputCommentDto.class).bindFromRequest();
+
+        //Create list of comments
+        List<RestaurantComment> comments = new ArrayList();
+
+        //Read from database
+        comments = JPA.em().createQuery("SELECT rc FROM RestaurantComment rc WHERE idRestaurant = ? ORDER BY id DESC", RestaurantComment.class).setParameter(1, inputForm.get().idRestaurant).getResultList();
+
+        //Return JSON of all restaurants
+        return ok(Json.toJson(comments));
+    }
+
     /* Admin */
+    @Transactional
+    public Result getAdministrationCounters() {
+        //Create return object
+        Restaurant.AdministrationCountersDto counters = new Restaurant.AdministrationCountersDto();
+
+        //Count restaurants
+        Query query1 = JPA.em().createNativeQuery("SELECT COUNT(id) AS number FROM restaurants");
+        Object queryNumber1 = (Object) query1.getSingleResult();
+        BigInteger temp1 = (BigInteger)queryNumber1;
+        counters.setRestaurantsNumber(temp1.longValue());
+
+        //Count locations
+        Query query2 = JPA.em().createNativeQuery("SELECT COUNT(id) AS number FROM restaurantlocations");
+        Object queryNumber2 = (Object) query2.getSingleResult();
+        BigInteger temp2 = (BigInteger)queryNumber2;
+        counters.setLocationsNumber(temp2.longValue());
+
+        //Count users
+        Query query3 = JPA.em().createNativeQuery("SELECT COUNT(id) AS number FROM users");
+        Object queryNumber3 = (Object) query3.getSingleResult();
+        BigInteger temp3 = (BigInteger)queryNumber3;
+        counters.setUsersNumber(temp3.longValue());
+
+        //Return JSON of all restaurants
+        return ok(Json.toJson(counters));
+    }
+
     @Transactional
     public Result getFilteredRestaurants() {
         Form<Restaurant.RestaurantsFilterDto> inputForm = form(Restaurant.RestaurantsFilterDto.class).bindFromRequest();
@@ -426,7 +509,7 @@ public class RestaurantController extends Controller {
         restaurant.setImageFileName(inputForm.get().imageFileName);
         restaurant.setLatitude(inputForm.get().latitude);
         restaurant.setLongitude(inputForm.get().longitude);
-        restaurant.setLocationName(inputForm.get().locationName);
+        restaurant.setLocation(inputForm.get().location);
         restaurant.setPriceRange(inputForm.get().priceRange);
         restaurant.setFoodType("NO");
 
@@ -452,7 +535,7 @@ public class RestaurantController extends Controller {
             restaurant.setImageFileName(inputForm.get().imageFileName);
             restaurant.setLatitude(inputForm.get().latitude);
             restaurant.setLongitude(inputForm.get().longitude);
-            restaurant.setLocationName(inputForm.get().locationName);
+            restaurant.setLocation(inputForm.get().location);
             restaurant.setPriceRange(inputForm.get().priceRange);
             restaurant.setFoodType("NO");
 

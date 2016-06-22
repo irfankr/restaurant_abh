@@ -1,0 +1,9 @@
+<div class="homepage_location">
+  {{#if isSelected}}
+    <a href="javascript:void(0);" class="location_active" {{action 'clickLocation' restaurantsLocation.location}}>{{restaurantsLocation.location}}</a>
+  {{else}}
+    <a href="javascript:void(0);" class="location" {{action 'clickLocation' restaurantsLocation.location}}>{{restaurantsLocation.location}}</a>
+  {{/if}}
+
+  <div class="details">{{restaurantsLocation.number}} restaurants</div>
+</div>

@@ -48,7 +48,7 @@ export default Ember.Controller.extend({
               //Set alert text
               $(".alertText").html('<strong>Success!</strong> You will be redirected to restaurants page in 2s');
 
-              setTimeout(function(){ self.transitionToRoute('restaurants'); }, 2000);
+              setTimeout(function(){ self.transitionToRoute('restaurants', 1); }, 2000);
 
             });
 

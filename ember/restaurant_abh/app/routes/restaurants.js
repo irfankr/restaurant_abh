@@ -48,12 +48,6 @@ export default Ember.Route.extend({
     });
   },
 
-  activePaginationNumber: function() {
-    alert(this.get('currentPage'));
-    alert(this.get('currentPageNumber'));
-    return this.get('currentPage') === this.get('currentPageNumber');
-  }.property('currentPage'),
-
   init(){
     var self = this;
 
@@ -95,8 +89,16 @@ export default Ember.Route.extend({
       this.set('currentPageNumber', param.pageNumber);
     }
 
+    if(param.location != null){
+        //Set page number from url
+        this.set('filter.location', param.location);
+     }
+
     //Get all restaurants
     this.getRestaurants();
+
+    //Scroll to top
+    $("html, body").animate({ scrollTop: 0 }, 500);
 
     //Return model to template
     return Ember.RSVP.hash({
@@ -127,6 +129,23 @@ export default Ember.Route.extend({
 
       //Go to route page
       this.transitionTo('restaurants', pageNumber);
+    },
+
+    clickLocation: function(value){
+      //Check is activation or deactivation (if is clicked on same value then deactivate)
+      if(this.get('filter.location') == value){
+        this.set('filter.location', null);
+        this.transitionTo('/restaurants/1');
+      } else {
+        this.set('filter.location', value);
+        this.transitionTo('/restaurants/1?location=' + value);
+      }
+
+      //Scroll to top
+      $("html, body").animate({ scrollTop: 0 }, 500);
+      this.refresh();
+
+      console.log(this.get('filter'));
     },
 
     clickDolar: function(value){

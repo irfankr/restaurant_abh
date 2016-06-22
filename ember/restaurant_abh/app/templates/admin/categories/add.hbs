@@ -2,16 +2,18 @@
 
 
 <div class="container" style="margin-top:80px;">
+  {{#admin-notification visible=model.notification.visible classStyle=model.notification.classStyle text=model.notification.text}}{{/admin-notification}}
+
   <div class="box_shadow administration_fields">
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
           <label class="input_title">Category name</label>
-          {{input type="text" class="form-control input_fields" value=name}}
+          {{input type="text" class="form-control input_fields" value=model.category.name}}
         </div>
       </div>
       <div class="col-md-6" style="padding-top:25px;">
-        <button {{action 'add'}} class="btn button pull-right">Add category</button>
+        <button {{action 'addItem'}} class="btn button pull-right">Add category</button>
         <button {{action 'cancel'}} class="btn cancel_button pull-right">Cancel</button>
       </div>
     </div>

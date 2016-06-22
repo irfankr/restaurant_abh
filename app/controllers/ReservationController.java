@@ -34,11 +34,26 @@ public class ReservationController extends Controller {
     public Result checkReservationAvailability() { //Method returns how much tables left for that criteria
         Form<Reservation.ReservationDto> reservationForm = form(Reservation.ReservationDto.class).bindFromRequest();
 
+        //Create return object
+        Reservation.CheckReservationAvalibilityNumberTimes responseReservationCheck = getAvailableReservationTimes(reservationForm.get().people, reservationForm.get().date, reservationForm.get().hour, reservationForm.get().idRestaurant);
+
+        if(responseReservationCheck == null) { //If there is no available tables
+            return badRequest("{\"error\": \"No available tables!\"}");
+        } else {
+            //Return
+            return ok(Json.toJson(responseReservationCheck));
+        }
+
+    }
+
+    // Get information about free tables for that time and persons and suggest best time for reservation
+    public static Reservation.CheckReservationAvalibilityNumberTimes getAvailableReservationTimes(String people, String date, String hour, long idRestaurant){
+
         //Create reservation object
         Reservation reservation = new Reservation();
 
         //Set persons parameter
-        String[] parts = reservationForm.get().people.split(" ");
+        String[] parts = people.split(" ");
         String personsNumber = parts[0]; // 004
         reservation.setPersons(Long.parseLong(personsNumber));
 
@@ -49,7 +64,7 @@ public class ReservationController extends Controller {
         }
 
         //Time stamp
-        String reservationDateTimeFromEmber = reservationForm.get().date + " " + reservationForm.get().hour;
+        String reservationDateTimeFromEmber = date + " " + hour;
         System.out.println("Vrijeme iz Embera: " + reservationDateTimeFromEmber);
 
         String reservationDateTime = "";
@@ -71,30 +86,36 @@ public class ReservationController extends Controller {
         }
 
         //Get list of all tables for that id restaurant
-        long idRestaurant = reservationForm.get().idRestaurant;
         //Create restaurant object
-        Restaurant restoran = new Restaurant();
+        Restaurant restaurant = new Restaurant();
         List<RestaurantTables> freeTables = new ArrayList<RestaurantTables>();
         System.out.println("Provjera vremena: " + reservationDateTime);
-        freeTables = restoran.checkReservationAvailability(reservation.getPersons(), reservationDateTime, idRestaurant);
+        freeTables = restaurant.checkReservationAvailability(reservation.getPersons(), reservationDateTime, idRestaurant);
+
+        //Get some restaurant details
+        restaurant = restaurant.findById(idRestaurant);
 
         //Create response object
         Reservation.CheckReservationAvalibilityNumberTimes responseReservationCheck = new Reservation.CheckReservationAvalibilityNumberTimes();
 
         if(freeTables.size() == 0) { //If there is no available tables
-            return badRequest("{\"error\": \"No available tables!\"}");
+            return null;
         } else {
             //Return number of tables
             responseReservationCheck.setTablesLeft(freeTables.size());
 
             //Get list of best times to recommend
-            List<String> listOfBestTimes = getListOfBestTimes(reservationForm.get().hour, reservationForm.get().date, reservation.getPersons(), idRestaurant);
+            List<String> listOfBestTimes = getListOfBestTimes(hour, date, reservation.getPersons(), idRestaurant);
             responseReservationCheck.setBestTime(listOfBestTimes);
 
-            //Return
-            return ok(Json.toJson(responseReservationCheck));
-        }
+            //Set additional data for restaurant
+            responseReservationCheck.setIdRestaurant(idRestaurant);
+            responseReservationCheck.setRestaurantName(restaurant.getRestaurantName());
+            responseReservationCheck.setRestaurantImageFilename(restaurant.getImageFileName());
 
+            //Return
+            return responseReservationCheck;
+        }
     }
 
     public static List<String> getListOfBestTimes(String reservationFormHour, String reservationFormDate, long persons, long idRestaurant){
@@ -148,6 +169,35 @@ public class ReservationController extends Controller {
         } while(responseReservationCheck.getBestTime().size() < 4);
 
         return responseReservationCheck.getBestTime();
+    }
+
+    @Transactional
+    public Result getFreeTables(){
+        Form<Reservation.ReservationDto> reservationForm = form(Reservation.ReservationDto.class).bindFromRequest();
+
+        List<Reservation.CheckReservationAvalibilityNumberTimes> freeTablesRestaurant = new ArrayList<Reservation.CheckReservationAvalibilityNumberTimes>();
+
+        List<Restaurant> restaurants = new ArrayList<Restaurant>();
+        Restaurant restaurant = new Restaurant();
+        restaurants = restaurant.getAllWithTextFilter(reservationForm.get().searchText);
+
+        //Loop through all restaurants
+        for (int i = 0; i < restaurants.size(); i++) {
+            Restaurant restaurantTemp = new Restaurant();
+
+            Reservation.CheckReservationAvalibilityNumberTimes reservationsCheck = getAvailableReservationTimes(reservationForm.get().people, reservationForm.get().date, reservationForm.get().hour, restaurants.get(i).getId());
+
+            if(reservationsCheck != null){
+                freeTablesRestaurant.add(reservationsCheck);
+            }
+        }
+
+        if(freeTablesRestaurant.size() == 0) { //If there is no available tables
+            return badRequest("{\"error\": \"No available tables!\"}");
+        } else {
+            //Return
+            return ok(Json.toJson(freeTablesRestaurant));
+        }
     }
 
     @Transactional

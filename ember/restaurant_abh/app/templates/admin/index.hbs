@@ -4,26 +4,26 @@
   <div class="row">
     <div class="col-md-4">
       <div class="administration_homepage_item box_shadow">
-        <div class="number">5142</div>
+        <div class="number">{{model.counters.restaurantsNumber}}</div>
         <div class="title">Restaurants</div>
 
-        <a class="add_option" href="#">Add restaurant</a>
+        {{#link-to 'admin.restaurants.add' class='add_option'}}Add new restaurant{{/link-to}}
       </div>
     </div>
     <div class="col-md-4">
       <div class="administration_homepage_item box_shadow">
-        <div class="number">251</div>
+        <div class="number">{{model.counters.locationsNumber}}</div>
         <div class="title">Locations</div>
 
-        <a class="add_option" href="#">Add new location</a>
+        {{#link-to 'admin.locations.add' class='add_option'}}Add new location{{/link-to}}
       </div>
     </div>
     <div class="col-md-4">
       <div class="administration_homepage_item box_shadow">
-        <div class="number">412</div>
+        <div class="number">{{model.counters.usersNumber}}</div>
         <div class="title">Users</div>
 
-        <a class="add_option" href="#">Add new user</a>
+        {{#link-to 'admin.users' class='add_option'}}Add new user{{/link-to}}
       </div>
     </div>
   </div>

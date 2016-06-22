@@ -3,6 +3,7 @@ import Ember from 'ember';
 export default Ember.Route.extend({
   listRestaurants: null,
   listRestaurantsLocations: null,
+
   model: function(){
     var self = this;
 

@@ -1,5 +1,43 @@
-{{#admin-navigation-bar addOption=true navColumn=10 page='users'}}{{/admin-navigation-bar}}
+{{#admin-navigation-bar addOption=true navColumn=10 page='users' filter=model.filter  searchTextChanged='searchTextChanged'}}{{/admin-navigation-bar}}
 
-Ovo je stranica users
+<div class="container" style="margin-top:30px;">
+  {{#admin-notification visible=model.notification.visible classStyle=model.notification.classStyle text=model.notification.text}}{{/admin-notification}}
+
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table table-bordered table-hover box_shadow administration_table">
+        <thead>
+          <tr>
+            <td class="col-md-6">First Name</td>
+            <td class="col-md-5">Email</td>
+            <td class="col-md-1"></td>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each model.listItems as |item|}}
+            <tr>
+              <td>{{item.firstName}}</td>
+              <td>{{item.email}}</td>
+              <td class="options">
+                <span {{action 'editItem' item.id}} class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                <span {{action 'deleteItem' item.id}} class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <nav class="restaurants_nav_pagination">
+    <ul class="pagination">
+      {{#each model.itemPages as |pagination|}}
+        <li><a href="javascript:void(0);" {{action 'changePage' pagination}}>{{pagination}}</a></li>
+      {{/each}}
+    </ul>
+  </nav>
+</div>
 
 {{outlet}}

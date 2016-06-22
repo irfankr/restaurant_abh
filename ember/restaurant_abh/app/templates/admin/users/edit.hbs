@@ -1,1 +1,66 @@
+{{#admin-navigation-bar addOption=true navColumn=10 page='users'}}{{/admin-navigation-bar}}
+
+<div class="container" style="margin-top:80px;">
+  {{#admin-notification visible=model.notification.visible classStyle=model.notification.classStyle text=model.notification.text}}{{/admin-notification}}
+
+  <div class="box_shadow administration_fields">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label class="input_title">First Name</label>
+          {{input type="text" class="form-control input_fields" placeholder="First Name" value=model.user.firstName}}
+        </div>
+
+        <div class="form-group">
+          <label class="input_title">Last Name</label>
+          {{input type="text" class="form-control input_fields" placeholder="Last Name"  value=model.user.lastName}}
+        </div>
+
+        <div class="form-group">
+          <label class="input_title">Email</label>
+          {{input type="text" class="form-control input_fields" placeholder="Email" value=model.user.email}}
+        </div>
+
+        <div class="form-group">
+          <label class="input_title">Phone Number</label>
+          {{input type="text" class="form-control input_fields" placeholder="Phone Number" value=model.user.phone}}
+        </div>
+{{model.user.country}}
+        <div class="form-group" style="height:54px; overflow:visible;">
+          <div class="register_select_list_country_container">
+            <label class="input_title">Country</label>
+            {{ember-selectize
+              content=model.countries
+              value=model.user.country
+              placeholder="Select country"
+              select-item=(action 'changeCity')
+             }}
+          </div>
+          <div class="register_select_list_country_container">
+            <label class="input_title">City</label>
+            {{ember-selectize
+              content=model.cities
+              value=model.user.city
+              placeholder="Select city"
+             }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="input_title">Password</label>
+          {{input type="password" class="form-control input_fields" value=model.user.password placeholder="Password"}}
+        </div>
+        <div class="form-group">
+          <label class="input_title">Confirm Password</label>
+          {{input type="password" class="form-control input_fields"  placeholder="Confirm Password" value=model.confirmPassword}}
+        </div>
+      </div>
+      <div class="col-md-6" style="padding-top:25px;">
+        <button {{action 'editItem'}} class="btn button pull-right">Edit user</button>
+        <button {{action 'cancel'}} class="btn cancel_button pull-right">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {{outlet}}

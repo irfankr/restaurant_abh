@@ -20,19 +20,19 @@ Router.map(function() {
   this.route('admin', function() {
     this.route('restaurants', function() {
       this.route('add');
-      this.route('edit');
+      this.route('edit', {path: '/edit/:id'});
     });
     this.route('categories', function() {
       this.route('add');
-      this.route('edit');
+      this.route('edit', {path: '/edit/:id'});
     });
     this.route('locations', function() {
       this.route('add');
-      this.route('edit');
+      this.route('edit', {path: '/edit/:id'});
     });
     this.route('users', function() {
       this.route('add');
-      this.route('edit');
+      this.route('edit', {path: '/edit/:id'});
     });
   });
   this.route('findtable');

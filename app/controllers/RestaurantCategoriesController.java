@@ -3,6 +3,7 @@ package controllers;
 import models.Restaurant;
 import models.RestaurantCategories;
 
+import models.RestaurantLocation;
 import play.*;
 import play.data.Form;
 import play.db.*;
@@ -98,8 +99,8 @@ public class RestaurantCategoriesController extends Controller {
         RestaurantCategories category = new RestaurantCategories();
 
         //Check is there category with this name already
-        if(category.findByName(categoryForm.get().categoryName) == null){
-            category.setName(categoryForm.get().categoryName);
+        if(category.findByName(categoryForm.get().name) == null){
+            category.setName(categoryForm.get().name);
 
             //Save to database
             category.save();
@@ -121,7 +122,7 @@ public class RestaurantCategoriesController extends Controller {
 
         if(category != null){
             //Update value
-            category.setName(categoryForm.get().categoryName);
+            category.setName(categoryForm.get().name);
 
             //Save to database
             category.update();
@@ -143,5 +144,16 @@ public class RestaurantCategoriesController extends Controller {
         category.delete();
 
         return ok();
+    }
+
+    @Transactional
+    public Result getCategoryDetails() {
+        Form<RestaurantCategories.FormCategoriesDto> categoryForm = form(RestaurantCategories.FormCategoriesDto.class).bindFromRequest();
+
+        //Create object
+        RestaurantCategories category = new RestaurantCategories();
+        category = category.findById(categoryForm.get().id);
+
+        return ok(Json.toJson(category));
     }
 }

@@ -7,4 +7,8 @@ export default Ember.Route.extend({
 
     controller.set('remainingTime', '03:00');
   },
+  model: function(){
+    //Animate to top of the page
+    $("html, body").animate({ scrollTop: 0 }, 500);
+  }
 });

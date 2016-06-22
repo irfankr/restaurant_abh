@@ -8,3 +8,4 @@ ember/restaurant_abh/dist/
 project/target/streams/
 target/streams/
 logs/application.log
+conf/application.conf

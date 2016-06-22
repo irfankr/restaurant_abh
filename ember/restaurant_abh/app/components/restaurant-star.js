@@ -27,32 +27,6 @@ export default Ember.Component.extend({
 
       if(this.get('filter') == true){
         this.sendAction('clickStar', starNumber);
-      } else {
-        if(this.get('voteAllowed') == true && this.get('currentUser.userLoggedIn') == true){
-          //Set values to restaurant object
-          self.set('restaurant.id', restaurantId);
-          self.set('restaurant.mark', starNumber); //Star number is mark
-
-          //Test echo to console
-          console.log("Broj restorana: " + restaurantId);
-          console.log("Rb. zvijezde: " + starNumber);
-
-          //Send POST to Play vote route
-          $.ajax({
-            url: "/api/v1/restaurantVote",
-            type: "POST",
-            data: JSON.stringify(this.get('restaurant')),
-            processData: false,
-            contentType: "application/json; charset=UTF-8",
-          }).fail(function(data) {
-            console.log(data);
-          }).done(function(data) {
-            console.log(data);
-
-            //Set voted variable to true
-            self.set('voted', true);
-          });
-        }
       }
     }
   }

@@ -296,7 +296,13 @@ public class UserController extends Controller {
 
         if(inputForm.get().searchText != null && inputForm.get().searchText != "") {
             //Search text
-            predicates.add(qb.like(query.<String>get("email"), "%"+inputForm.get().searchText+"%"));
+            predicates.add(
+                    qb.or(
+                            qb.like(query.<String>get("email"), "%"+inputForm.get().searchText+"%"),
+                            qb.like(query.<String>get("firstname"), "%"+inputForm.get().searchText+"%"),
+                            qb.like(query.<String>get("lastname"), "%"+inputForm.get().searchText+"%")
+                    )
+            );
         }
 
         //Execute query
@@ -368,9 +374,12 @@ public class UserController extends Controller {
             user.setLastName(inputForm.get().lastName);
             user.setEmail(inputForm.get().email);
             user.setPhone(inputForm.get().phone);
-            user.setPassword(inputForm.get().password);
             user.setCity(inputForm.get().city);
             user.setCountry(inputForm.get().country);
+
+            if(inputForm.get().password != null) {
+                user.setPassword(inputForm.get().password);
+            }
 
             //Save to database
             user.update();
@@ -392,5 +401,16 @@ public class UserController extends Controller {
         user.delete();
 
         return ok();
+    }
+
+    @Transactional
+    public Result getUserDetails() {
+        Form<User.UserRegisterDto> inputForm = form(User.UserRegisterDto.class).bindFromRequest();
+
+        //Create object
+        User user = new User();
+        user = user.findById(inputForm.get().id);
+
+        return ok(Json.toJson(user));
     }
 }

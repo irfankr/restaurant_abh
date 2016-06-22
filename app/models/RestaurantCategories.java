@@ -124,7 +124,7 @@ public class RestaurantCategories {
 
     public static class FormCategoriesDto {
         public long id;
-        public String categoryName;
+        public String name;
 
         public long getId() {
             return id;
@@ -134,12 +134,12 @@ public class RestaurantCategories {
             this.id = id;
         }
 
-        public String getCategoryName() {
-            return categoryName;
+        public String getName() {
+            return name;
         }
 
-        public void setCategoryName(String categoryName) {
-            this.categoryName = categoryName;
+        public void setName(String name) {
+            this.name = name;
         }
     }
 }
