@@ -21,18 +21,6 @@ import static play.libs.Json.toJson;
 
 public class RestaurantLocationController extends Controller {
 
-    /*
-    @Transactional
-    public Result getAllCategories() {
-        //Declare list
-        List<RestaurantCategories> restaurants = new ArrayList<RestaurantCategories>();
-        RestaurantCategories restaurantCategory = new RestaurantCategories();
-
-        //Return JSON of all restaurants
-        return ok(Json.toJson(restaurantCategory.getAll()));
-    }
-    */
-
     @Transactional
     public Result getFilteredLocations() {
         Form<RestaurantLocation.LocationsFilterDto> locationForm = form(RestaurantLocation.LocationsFilterDto.class).bindFromRequest();

@@ -87,9 +87,10 @@
 
       <div class="box_shadow restaurant_data_container" id="about">
         <h1 class="title">About {{model.restaurantDetails.restaurantName}}</h1>
-        {{#g-map lat=model.restaurantDetails.latitude lng=model.restaurantDetails.longitude zoom=17 as |google_mapa|}}
-          {{g-map-marker google_mapa lat=model.restaurantDetails.latitude lng=model.restaurantDetails.longitude title="model.restaurantName"}}
-        {{/g-map}}
+         {{#g-map lat=model.restaurantDetails.latitude lng=model.restaurantDetails.longitude zoom=17 as |google_mapa|}}
+            {{g-map-marker google_mapa lat=model.restaurantDetails.latitude lng=model.restaurantDetails.longitude title="model.restaurantName" title="Marker #3"}}
+          {{/g-map}}
+
         <h2 class="description_title">Description</h2>
         <div class="description_text">{{model.restaurantDetails.description}}</div>
       </div>

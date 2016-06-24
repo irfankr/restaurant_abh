@@ -103,4 +103,70 @@ public class RestaurantMenuItem {
     public void delete() {
         JPA.em().remove(this);
     }
+
+    @Transactional
+    public static RestaurantMenuItem findById(long id){
+        try {
+            return JPA.em().find(RestaurantMenuItem.class, id);
+        } catch(NoResultException noresult) { //If there is no
+            return null;
+        }
+    }
+
+    public static class RestaurantMenuItemDto {
+        public long id;
+        public long idRestaurant;
+        public String type;
+        public String name;
+        public float price;
+        public String description;
+
+        public long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            this.id = id;
+        }
+
+        public long getIdRestaurant() {
+            return idRestaurant;
+        }
+
+        public void setIdRestaurant(long idRestaurant) {
+            this.idRestaurant = idRestaurant;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public float getPrice() {
+            return price;
+        }
+
+        public void setPrice(float price) {
+            this.price = price;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+    }
 }

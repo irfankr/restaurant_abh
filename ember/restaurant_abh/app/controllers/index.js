@@ -24,6 +24,9 @@ export default Ember.Controller.extend({
       this.get('selectDate').push(month[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear());
       var date = new Date();
     }
+
+    //Set today as default
+    this.set('reservation.date', this.get('selectDate.0'));
   },
   actions: {
     clickLocation: function(location){

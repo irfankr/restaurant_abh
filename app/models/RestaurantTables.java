@@ -54,4 +54,43 @@ public class RestaurantTables {
     public void delete() {
         JPA.em().remove(this);
     }
+
+    @Transactional
+    public static RestaurantTables findById(long id){
+        try {
+            return JPA.em().find(RestaurantTables.class, id);
+        } catch(NoResultException noresult) { //If there is no
+            return null;
+        }
+    }
+
+    public static class RestaurantTableDto {
+        public long id;
+        public long idRestaurant;
+        public long sittingPlaces;
+
+        public long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            this.id = id;
+        }
+
+        public long getIdRestaurant() {
+            return idRestaurant;
+        }
+
+        public void setIdRestaurant(long idRestaurant) {
+            this.idRestaurant = idRestaurant;
+        }
+
+        public long getSittingPlaces() {
+            return sittingPlaces;
+        }
+
+        public void setSittingPlaces(long sittingPlaces) {
+            this.sittingPlaces = sittingPlaces;
+        }
+    }
 }

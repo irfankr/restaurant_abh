@@ -1,0 +1,98 @@
+{{outlet}}
+
+{{#admin-restaurants-add-tabs displayAdditionalOptions=model.displayAdditionalOptions idRestaurant=model.idRestaurant}}{{/admin-restaurants-add-tabs}}
+
+<div class="container">
+  {{#admin-notification visible=model.notification.visible classStyle=model.notification.classStyle text=model.notification.text}}{{/admin-notification}}
+
+  <div class="box_shadow administration_fields">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label class="input_title">Name</label>
+          {{input type="text" class="form-control input_fields" value=restaurant.restaurantName}}
+        </div>
+        <div class="form-group">
+          <label class="input_title">Description</label>
+          {{textarea value=restaurant.description rows="6"}}
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group" style="height:54px; overflow:visible;">
+              <label class="input_title">Price range</label>
+              {{ember-selectize
+                content=priceRange.priceRange
+                optionValuePath="content.value"
+                optionLabelPath="content.name"
+                value=restaurant.priceRange
+                placeholder="Select price range"
+               }}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group" style="height:54px; overflow:visible;">
+                <label class="input_title">Location</label>
+                {{ember-selectize
+                  content=locations
+                  optionValuePath="content.id"
+                  optionLabelPath="content.location"
+                  value=restaurant.location
+                  placeholder="Select location"
+                 }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:30px;">
+          <div class="col-md-12">
+            <div class="form-group multiply_selection" style="height:54px;">
+               <label class="input_title">Category</label>
+               {{ember-selectize
+                 content=categories
+                 optionValuePath="content.id"
+                 optionLabelPath="content.name"
+                 selection=selectedCategories
+                 placeholder="Select categories"
+                 multiple=true
+                }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:30px;">
+          <div class="col-md-12">
+            <div class="form-group admin_restaurants_add_map_container" style="overflow:auto;">
+               <label class="input_title">Location</label>
+               {{#g-map lat=restaurant.latitude lng=restaurant.longitude zoom=17 as |google_mapa|}}
+                  {{g-map-marker google_mapa lat=restaurant.latitude lng=restaurant.longitude}}
+               {{/g-map}}
+
+               <div class="row">
+                 <div class="col-md-6">
+                   <div class="form-group">
+                      <label class="input_title">Latitude</label>
+                      {{input type="text" class="form-control input_fields" value=restaurant.latitude}}
+                   </div>
+                 </div>
+                 <div class="col-md-6">
+                   <div class="form-group">
+                       <label class="input_title">Longitude</label>
+                      {{input type="text" class="form-control input_fields" value=restaurant.longitude}}
+                   </div>
+                 </div>
+               </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-md-6" style="padding-top:25px;">
+        <div>
+          <button {{action 'addItem'}} class="btn button pull-right">Add restaurant</button>
+          <button {{action 'cancel'}} class="btn cancel_button pull-right">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

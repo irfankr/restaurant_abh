@@ -26,7 +26,16 @@ export default Ember.Component.extend({
       var self = this;
 
       if(this.get('filter') == true){
+        this.set('voted', true);
         this.sendAction('clickStar', starNumber);
+      }
+    },
+    removeStar: function(){
+      if(this.get('filter') == true){
+        this.set('voted', false);
+        this.sendAction('removeStar');
+        this.set('value', null);
+        this.set('votes', null);
       }
     }
   }

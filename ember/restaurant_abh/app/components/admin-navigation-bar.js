@@ -7,7 +7,11 @@ export default Ember.Component.extend({
   actions: {
     goToAddRoute: function(page){
       //Go to page to add restaurant
-      this.get('router').transitionTo('admin.'+page+'.add');
+      if(page == "restaurants"){
+        this.get('router').transitionTo('admin.restaurants.add.info', 0);
+      } else {
+        this.get('router').transitionTo('admin.'+page+'.add');
+      }
     }
   }
 });

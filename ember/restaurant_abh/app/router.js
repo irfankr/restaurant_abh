@@ -19,7 +19,12 @@ Router.map(function() {
   this.route('forgotpassword');
   this.route('admin', function() {
     this.route('restaurants', function() {
-      this.route('add');
+      this.route('add', function() {
+        this.route('menu', {path: '/menu/:id'});
+        this.route('tables', {path: '/tables/:id'});
+        this.route('gallery', {path: '/gallery/:id'});
+        this.route('info', {path: '/info/:id'});
+      });
       this.route('edit', {path: '/edit/:id'});
     });
     this.route('categories', function() {

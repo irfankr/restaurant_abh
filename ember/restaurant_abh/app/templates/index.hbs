@@ -12,15 +12,15 @@
             <div class="reservation_column_search_icon">
               <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
             </div>
-            <div class="reservation_column_input">
+            <div class="reservation_column_input" style="width:30%;">
               {{input type="text" class="form-control input_fields" value=reservation.searchText placeholder="Search for a restaurant..."}}
             </div>
 
-            <div class="reservation_column">
+            <div class="reservation_column" style="width:20%;">
               {{ember-selectize
                 content=selectPeople
                 value=reservation.people
-                placeholder="2 people"
+                placeholder="How manu people?"
                }}
             </div>
             <div class="reservation_column">
@@ -35,7 +35,7 @@
               {{ember-selectize
                 content=selectHour
                 value=reservation.hour
-                placeholder="7:00 PM"
+                placeholder="Pick hour"
                }}
             </div>
             <div class="reservation_column"><button {{action 'findATable' model.restaurantDetails.id}} class="btn button">Find a table</button></div>

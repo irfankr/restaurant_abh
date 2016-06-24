@@ -473,10 +473,19 @@ public class Restaurant {
     }
 
     public static class RestaurantLocation {
+        public long id;
         public String location;
         public long number;
 
         public RestaurantLocation() {};
+
+        public long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            this.id = id;
+        }
 
         public String getLocation() {
             return location;
@@ -566,6 +575,7 @@ public class Restaurant {
         public long priceRange;
         public String imageFileName;
         public long location;
+        public List<Long> categories = new ArrayList<Long>();
 
         public long getId() {
             return id;
@@ -645,6 +655,14 @@ public class Restaurant {
 
         public void setLocation(long location) {
             this.location = location;
+        }
+
+        public List<Long> getCategories() {
+            return categories;
+        }
+
+        public void setCategories(List<Long> categories) {
+            this.categories = categories;
         }
     }
 

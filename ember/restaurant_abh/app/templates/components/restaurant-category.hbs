@@ -1,5 +1,5 @@
 {{#if isSelected}}
-  <a {{action 'clickCategory' categoryId}} class="cousine_link_active" href="javascript:void(0);">{{categoryName}}</a>
+  <a {{action 'clickCategory' categoryId}} class="cousine_link_active" href="javascript:void(0);">{{categoryName}} <span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:#5F5F5F !important;"></span></a>
 {{else}}
   <a {{action 'clickCategory' categoryId}} class="cousine_link" href="javascript:void(0);">{{categoryName}}</a>
 {{/if}}

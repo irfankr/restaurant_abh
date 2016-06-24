@@ -5,9 +5,11 @@ import Notification from '../../../models/notification';
 export default Ember.Route.extend({
   category: Category.create(),
   notification: Notification.create(),
+  finished: false,
 
   exit: function(){
     this.set('notification.visible', false);
+    this.set('finished', false);
   },
   actions: {
     editItem: function(){
@@ -36,6 +38,10 @@ export default Ember.Route.extend({
           self.set('notification.visible', true);
           self.set('notification.classStyle', 'alert-success');
           self.set('notification.text', 'Successful update!');
+
+          //Set finished flag
+          self.set('finished', true);
+
           self.refresh();
         });
       }
@@ -44,6 +50,7 @@ export default Ember.Route.extend({
       this.transitionTo('admin.categories');
     }
   },
+
   model: function(param){
     var self = this;
 
@@ -72,7 +79,8 @@ export default Ember.Route.extend({
     //Return model to template
     return Ember.RSVP.hash({
       category: self.get('category'),
-      notification: self.get('notification')
+      notification: self.get('notification'),
+      finished: self.get('finished')
     });
 
   }

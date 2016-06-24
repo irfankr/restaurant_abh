@@ -1,6 +1,5 @@
 {{#admin-navigation-bar addOption=true navColumn=10 page='categories'}}{{/admin-navigation-bar}}
 
-
 <div class="container" style="margin-top:80px;">
   {{#admin-notification visible=model.notification.visible classStyle=model.notification.classStyle text=model.notification.text}}{{/admin-notification}}
 
@@ -13,8 +12,12 @@
         </div>
       </div>
       <div class="col-md-6" style="padding-top:25px;">
-        <button {{action 'editItem'}} class="btn button pull-right">Edit category</button>
-        <button {{action 'cancel'}} class="btn cancel_button pull-right">Cancel</button>
+        {{#if model.finished}}
+          <button {{action 'cancel'}} class="btn cancel_button pull-right">Back</button>
+        {{else}}
+          <button {{action 'editItem'}} class="btn button pull-right">Edit category</button>
+          <button {{action 'cancel'}} class="btn cancel_button pull-right">Cancel</button>
+        {{/if}}
       </div>
     </div>
   </div>

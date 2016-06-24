@@ -5,10 +5,12 @@ import Notification from '../../../models/notification';
 export default Ember.Route.extend({
   location: Location.create(),
   notification: Notification.create(),
+  finished: false,
 
   exit: function(){
     this.set('notification.visible', false);
     this.set('location.name', null);
+    this.set('finished', false);
   },
   actions: {
     addItem: function(){
@@ -37,6 +39,10 @@ export default Ember.Route.extend({
           self.set('notification.visible', true);
           self.set('notification.classStyle', 'alert-success');
           self.set('notification.text', 'Successful insert!');
+
+          //Set finished flag
+          self.set('finished', true);
+
           self.refresh();
         });
       }
@@ -51,7 +57,8 @@ export default Ember.Route.extend({
     //Return model to template
     return Ember.RSVP.hash({
       location: self.get('location'),
-      notification: self.get('notification')
+      notification: self.get('notification'),
+      finished: self.get('finished')
     });
   }
 });

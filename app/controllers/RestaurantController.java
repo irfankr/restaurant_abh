@@ -5,6 +5,7 @@ import play.data.DynamicForm;
 import static play.data.Form.*;
 import play.data.Form;
 import play.mvc.*;
+import java.util.Arrays;
 
 import models.Restaurant;
 import models.Reservation;
@@ -69,6 +70,9 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
+
+import java.util.Collections;
+
 
 public class RestaurantController extends Controller {
     /*
@@ -230,47 +234,75 @@ public class RestaurantController extends Controller {
                 predicates.add(qb.equal(query.get("location"), location.getId()));
             }
 
-            //Categories
-            //Expression<Collection<Long>> categories = query.get("categories");
-            for (int i = 0; i < restaurantForm.get().categories.size(); i++) {
-                Long categoryId = restaurantForm.get().categories.get(i);
-
-                //Expression<Long> tempCategoryId = restaurantForm.get().categories.get(i);
-
-                //predicates.add(qb.in(r, categories));
-
-
-                //predicates.add(qb.lessThanOrEqualTo(query.get("priceRange"), restaurantForm.get().priceRange));
-                System.out.println(categoryId);
-            }
-
         //Execute query
         criteria.select(query).where(predicates.toArray(new Predicate[]{}));
         criteria.orderBy(qb.asc(query.get("id")));
 
         //Get result from queryCriteriaQuery.
-        long offsetRestaurants = (restaurantForm.get().pageNumber-1) * restaurantForm.get().itemsPerPage;
-        int offsetRestaurantsInt = (int) offsetRestaurants;
-        int itemsPerPageInt = (int) restaurantForm.get().itemsPerPage;
-        List<Restaurant> restaurants = em.createQuery(criteria).setMaxResults(itemsPerPageInt).setFirstResult(offsetRestaurantsInt).getResultList();
+        List<Restaurant> restaurants = em.createQuery(criteria).getResultList();
+
+        List<Restaurant> foodTypeFiltereRestaurants = new ArrayList<Restaurant>();
 
         //Insert categories string in restaurant
         for (int i = 0; i < restaurants.size(); i++) {
-            restaurants.get(i).setFoodType(Restaurant.getStringRestaurantCategories(Long.valueOf(restaurants.get(i).getId())));
+
+            //Check if restaurant filter is active
+            if(restaurantForm.get().categories.size() > 0){
+
+                //Get all categories for restaurant
+                RestaurantsToCategories restaurantToCategory = new RestaurantsToCategories();
+                List<Long> restaurantCategories = restaurantToCategory.getRestaurantCategories(restaurants.get(i).getId());
+
+                //Check is restaurant in any of selected categories for filter
+                if(Collections.disjoint(restaurantForm.get().categories, restaurantCategories)){
+                    //Remove this restaurant from restaurants list
+                    //restaurants.remove(i);
+                    System.out.println("--------------------------------------------------------------------------");
+                    System.out.println(restaurantCategories);
+                    System.out.println(restaurantForm.get().categories);
+                    System.out.println("Ukolonio: " + i);
+                } else {
+                    System.out.println("--------------------------------------------------------------------------");
+                    System.out.println(restaurantCategories);
+                    System.out.println(restaurantForm.get().categories);
+                    System.out.println("Nasao: " + i);
+
+                    //Create final food type string
+                    restaurants.get(i).setFoodType(Restaurant.getStringRestaurantCategories(Long.valueOf(restaurants.get(i).getId())));
+
+                    //Add new restaurants element
+                    foodTypeFiltereRestaurants.add(restaurants.get(i));
+                }
+
+
+            }
         }
+
+        //Check is there food type filtered restaurants
+        if(foodTypeFiltereRestaurants.size() > 0){
+            restaurants = new ArrayList<Restaurant>(foodTypeFiltereRestaurants);
+        }
+
+        //Get segment of display restaurants for pagination
+        long offsetRestaurants = (restaurantForm.get().pageNumber) * restaurantForm.get().itemsPerPage - restaurantForm.get().itemsPerPage;
+        int offsetRestaurantsInt = (int) offsetRestaurants;
+        int itemsPerPageInt = (int) restaurantForm.get().itemsPerPage;
+        int endIndex = offsetRestaurantsInt + itemsPerPageInt;
+        //Check is end of subpart of array lower than offset end index
+        if(endIndex > restaurants.size()) endIndex = restaurants.size();
+
+        //Get final array of restaurants (part of restaurants for pagination)
+        List<Restaurant> paginatedRestaurants = restaurants.subList(offsetRestaurantsInt, endIndex);
 
         //Create return class
         Restaurant.RestaurantsDto returnRestaurants = new Restaurant.RestaurantsDto();
 
         //Insert restaurants
-        returnRestaurants.setRestaurants(restaurants);
+        returnRestaurants.setRestaurants(paginatedRestaurants);
 
-        //Insert number of restaurants page
-        List<Restaurant> restaurantsTemp = em.createQuery(criteria).getResultList();
-
-        int restaurantsSize = (int) restaurantsTemp.size();
+        //Insert info about total restaurants number
+        int restaurantsSize = restaurants.size();
         int numberOfRestaurantPages = (int) Math.ceil(restaurantsSize*1.00 / itemsPerPageInt*1.00);
-        System.out.println("BROJ STRANA:" + numberOfRestaurantPages);
         returnRestaurants.setNumberOfRestaurantPages(numberOfRestaurantPages);
 
         return ok(Json.toJson(returnRestaurants));
@@ -300,6 +332,8 @@ public class RestaurantController extends Controller {
 
             BigInteger temp2 = (BigInteger)col[1];
             restaurantLocation.setNumber(temp2.longValue());
+
+            restaurantLocation.setId(temp1.longValue());
 
             restaurantsLocations.add(restaurantLocation);
         }
@@ -407,6 +441,13 @@ public class RestaurantController extends Controller {
         //Save comment to database
         comment.save();
 
+        //Modify restaurant details
+        Restaurant restaurant = new Restaurant();
+        restaurant = restaurant.findById(inputForm.get().idRestaurant);
+        restaurant.setVotes(restaurant.getVotes() + 1);
+        restaurant.setMark(restaurant.getMark() + inputForm.get().mark);
+        restaurant.update();
+
         return ok(Json.toJson(comment));
     }
 
@@ -499,6 +540,7 @@ public class RestaurantController extends Controller {
     @Transactional
     public Result addRestaurant() {
         Form<Restaurant.FormRestaurantDto> inputForm = form(Restaurant.FormRestaurantDto.class).bindFromRequest();
+        System.out.println(inputForm);
 
         //Create object
         Restaurant restaurant = new Restaurant();
@@ -511,7 +553,7 @@ public class RestaurantController extends Controller {
         restaurant.setLongitude(inputForm.get().longitude);
         restaurant.setLocation(inputForm.get().location);
         restaurant.setPriceRange(inputForm.get().priceRange);
-        restaurant.setFoodType("NO");
+        restaurant.setFoodType("-");
 
         //Save to database
         restaurant.save();

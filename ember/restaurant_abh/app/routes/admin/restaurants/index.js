@@ -69,7 +69,7 @@ export default Ember.Route.extend({
       this.refresh();
     },
     editItem: function(id){
-      this.transitionTo('admin.users.edit', id);
+      this.transitionTo('admin.restaurants.add.info', id);
     },
     deleteItem: function(id){
       var self = this;

@@ -1,6 +1,6 @@
 <div class="homepage_location">
   {{#if isSelected}}
-    <a href="javascript:void(0);" class="location_active" {{action 'clickLocation' restaurantsLocation.location}}>{{restaurantsLocation.location}}</a>
+    <a href="javascript:void(0);" class="location_active" {{action 'clickLocation' restaurantsLocation.location}}>{{restaurantsLocation.location}} <span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:#5F5F5F !important; font-size: 13px;"></span></a>
   {{else}}
     <a href="javascript:void(0);" class="location" {{action 'clickLocation' restaurantsLocation.location}}>{{restaurantsLocation.location}}</a>
   {{/if}}

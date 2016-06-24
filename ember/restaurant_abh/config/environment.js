@@ -43,5 +43,12 @@ module.exports = function(environment) {
 
   }
 
+  ENV['g-map'] = {
+    libraries: ['places', 'geometry'],
+    key: 'AIzaSyCrMevgzS6TDkguWaTwcg8pDwS8Ew-db-o',
+    language: 'en',
+    protocol: 'https'
+  }
+
   return ENV;
 };

@@ -40,7 +40,6 @@ export default Ember.Route.extend({
 
       //Set fetched items
       self.set('listItems', data.locations);
-
     });
   },
 

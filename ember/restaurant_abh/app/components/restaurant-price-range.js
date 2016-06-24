@@ -3,6 +3,8 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   classNameBindings: ['inlineDollars'],
   inlineDollars: true,
+  priceActive:false,
+
   priceRange: function() {
     var numberOfFilledDollars = this.get('value');
     var result = [];
@@ -20,8 +22,14 @@ export default Ember.Component.extend({
   actions: {
     clickDolar: function(dolarNumber){
       if(this.get('filter') == true){
+        this.set('priceActive', true);
         this.sendAction('clickDolar', dolarNumber);
       }
+    },
+    removeDolar: function(){
+      this.set('priceActive', false);
+      this.sendAction('removeDolar');
+      this.set('value', null);
     }
   }
 });

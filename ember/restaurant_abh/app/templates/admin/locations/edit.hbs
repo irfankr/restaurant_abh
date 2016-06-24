@@ -13,8 +13,12 @@
         </div>
       </div>
       <div class="col-md-6" style="padding-top:25px;">
-        <button {{action 'editItem'}} class="btn button pull-right">Edit location</button>
-        <button {{action 'cancel'}} class="btn cancel_button pull-right">Cancel</button>
+        {{#if model.finished}}
+          <button {{action 'cancel'}} class="btn cancel_button pull-right">Back</button>
+        {{else}}
+          <button {{action 'editItem'}} class="btn button pull-right">Edit location</button>
+          <button {{action 'cancel'}} class="btn cancel_button pull-right">Cancel</button>
+        {{/if}}
       </div>
     </div>
   </div>

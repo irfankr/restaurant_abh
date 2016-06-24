@@ -2,8 +2,8 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   filledStars: [[5, false], [4, false], [3, false], [2, false], [1, false]],
-  mark: 0,
   description: null,
+  mark: 0,
   actions: {
     vote: function(){
       this.sendAction('vote', this.get('mark'), this.get('description'));

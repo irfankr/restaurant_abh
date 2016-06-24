@@ -16,6 +16,7 @@ export default Ember.Route.extend({
   itemsPerPage:6,
   filter: Filter.create(),
   categories: [],
+
   getRestaurants: function(){
     var self = this;
 
@@ -107,7 +108,8 @@ export default Ember.Route.extend({
       restaurantsPages: self.get('restaurantsPages'),
       currentPageNumber: self.get('currentPageNumber'),
       filter: self.get('filter'),
-      categories: self.get('categories')
+      categories: self.get('categories'),
+      activeStarFilter:  self.get('activeStarFilter')
     });
   },
 
@@ -158,6 +160,12 @@ export default Ember.Route.extend({
 
       console.log(this.get('filter'));
     },
+      removeDolar: function(){
+        //Check is activation or deactivation (if is clicked on same value then deactivate)
+        this.set('filter.priceRange', null);
+
+        console.log(this.get('filter'));
+      },
 
     clickStar: function(value){
       //Check is activation or deactivation (if is clicked on same value then deactivate)
@@ -169,6 +177,12 @@ export default Ember.Route.extend({
 
       console.log(this.get('filter'));
     },
+      removeStar: function(){
+        //Check is activation or deactivation (if is clicked on same value then deactivate)
+        this.set('filter.mark', null);
+
+        console.log(this.get('filter'));
+      },
 
     clickCategory: function(categoryId){
       function isValueInArray(array, value){

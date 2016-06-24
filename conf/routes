@@ -74,6 +74,17 @@ POST    /api/v1/admin/editUser               controllers.UserController.editUser
 POST    /api/v1/admin/deleteUser             controllers.UserController.deleteUser
 POST    /api/v1/admin/getUserDetails         controllers.UserController.getUserDetails
 
+# Tables (Administration)
+POST    /api/v1/admin/getAllRestaurantTables                controllers.RestaurantTablesController.getAllRestaurantTables
+POST    /api/v1/admin/addTable                controllers.RestaurantTablesController.addTable
+POST    /api/v1/admin/editTable               controllers.RestaurantTablesController.editTable
+POST    /api/v1/admin/deleteTable             controllers.RestaurantTablesController.deleteTable
+
+# Menu item (Administration)
+POST    /api/v1/admin/addMenuItem                controllers.RestaurantMenuItemController.addMenuItem
+POST    /api/v1/admin/editMenuItem               controllers.RestaurantMenuItemController.editMenuItem
+POST    /api/v1/admin/deleteMenuItem             controllers.RestaurantMenuItemController.deleteMenuItem
+
 
 
 GET     /                                   controllers.HomeController.index(slug = "")
