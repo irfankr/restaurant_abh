@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Restaurant;
 import models.RestaurantCategories;
 import models.RestaurantMenuItem;
 
@@ -24,58 +25,68 @@ import static play.libs.Json.toJson;
 
 public class RestaurantMenuItemController extends Controller {
 
-    @Transactional
-    public Result addMenuItem() {
-        Form<RestaurantMenuItem.RestaurantMenuItemDto> inputForm = form(RestaurantMenuItem.RestaurantMenuItemDto.class).bindFromRequest();
-
+    public void addMenuItem(RestaurantMenuItem menuItemInput) {
         //Create menuitem object
         RestaurantMenuItem menuItem = new RestaurantMenuItem();
 
-        menuItem.setIdRestaurant(inputForm.get().idRestaurant);
-        menuItem.setDescription(inputForm.get().description);
-        menuItem.setName(inputForm.get().name);
-        menuItem.setPrice(inputForm.get().price);
-        menuItem.setType(inputForm.get().type);
+        menuItem.setIdRestaurant(menuItemInput.getIdRestaurant());
+        menuItem.setDescription(menuItemInput.getDescription());
+        menuItem.setName(menuItemInput.getName());
+        menuItem.setPrice(menuItemInput.getPrice());
+        menuItem.setType(menuItemInput.getType());
 
         //Save to database
         menuItem.save();
-
-        return ok(Json.toJson(menuItem));
     }
 
-    @Transactional
-    public Result editMenuItem() {
-        Form<RestaurantMenuItem.RestaurantMenuItemDto> inputForm = form(RestaurantMenuItem.RestaurantMenuItemDto.class).bindFromRequest();
+
+    public void editMenuItem(RestaurantMenuItem menuItemInput) {
 
         //Create menu item object
         RestaurantMenuItem menuItem = new RestaurantMenuItem();
-        menuItem = menuItem.findById(inputForm.get().id);
+        menuItem = menuItem.findById(menuItemInput.getId());
 
-        if(menuItem != null){
-            //Update value
-            menuItem.setDescription(inputForm.get().description);
-            menuItem.setName(inputForm.get().name);
-            menuItem.setPrice(inputForm.get().price);
-            menuItem.setType(inputForm.get().type);
+        //Update value
+        menuItem.setDescription(menuItemInput.getDescription());
+        menuItem.setName(menuItemInput.getName());
+        menuItem.setPrice(menuItemInput.getPrice());
+        menuItem.setType(menuItemInput.getType());
 
-            //Save to database
-            menuItem.update();
-
-            return ok(Json.toJson(menuItem));
-        } else {
-            return badRequest("{\"error\": \"Menu item doesn't exist!\"}");
-        }
+        //Save to database
+        //menuItem.update();
     }
 
-    @Transactional
-    public Result deleteMenuItem() {
-        Form<RestaurantMenuItem.RestaurantMenuItemDto> inputForm = form(RestaurantMenuItem.RestaurantMenuItemDto.class).bindFromRequest();
+    public void deleteMenuItem(RestaurantMenuItem menuItemInput) {
 
         //Create menu item object
         RestaurantMenuItem menuItem = new RestaurantMenuItem();
-        menuItem = menuItem.findById(inputForm.get().id);
+        menuItem = menuItem.findById(menuItemInput.getId());
 
+        //Save to database
         menuItem.delete();
+    }
+
+    @Transactional
+    public Result adminMenuItems() {
+        Form<RestaurantMenuItem.RestaurantMenuAdministrationDto> inputForm = form(RestaurantMenuItem.RestaurantMenuAdministrationDto.class).bindFromRequest();
+
+        //Add new menu items
+        List<RestaurantMenuItem> addQueue = new ArrayList<RestaurantMenuItem>(inputForm.get().addQueue);
+        for(int i=0; i<addQueue.size(); i++){
+            addMenuItem(addQueue.get(i));
+        }
+
+        List<RestaurantMenuItem> editQueue = new ArrayList<RestaurantMenuItem>(inputForm.get().editQueue);
+        //Edit menu items
+        for(int i=0; i<editQueue.size(); i++){
+            editMenuItem(editQueue.get(i));
+        }
+
+        List<RestaurantMenuItem> deleteQueue = new ArrayList<RestaurantMenuItem>(inputForm.get().deleteQueue);
+        //Add new menu items
+        for(int i=0; i<deleteQueue.size(); i++){
+            deleteMenuItem(deleteQueue.get(i));
+        }
 
         return ok();
     }

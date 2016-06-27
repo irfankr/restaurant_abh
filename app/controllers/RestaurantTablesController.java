@@ -1,9 +1,6 @@
 package controllers;
 
-import models.RestaurantCategories;
-import models.RestaurantComment;
-import models.Restaurant;
-import models.RestaurantTables;
+import models.*;
 
 import play.*;
 import play.data.Form;
@@ -33,58 +30,66 @@ public class RestaurantTablesController extends Controller {
         List<RestaurantTables> tables = new ArrayList();
 
         //Read from database
-        tables = JPA.em().createQuery("SELECT rc FROM RestaurantTables rc WHERE idRestaurant = ? ORDER BY id DESC", RestaurantTables.class).setParameter(1, inputForm.get().id).getResultList();
+        tables = JPA.em().createQuery("SELECT rc FROM RestaurantTables rc WHERE idRestaurant = ? ORDER BY id DESC", RestaurantTables.class).setParameter(1, inputForm.get().idRestaurant).getResultList();
 
         //Return JSON of all restaurants
         return ok(Json.toJson(tables));
     }
 
-    @Transactional
-    public Result addTable() {
-        Form<RestaurantTables.RestaurantTableDto> inputForm = form(RestaurantTables.RestaurantTableDto.class).bindFromRequest();
-
+    public void addTable(RestaurantTables tableItemInput) {
         //Create table object
         RestaurantTables table = new RestaurantTables();
 
-        table.setSittingPlaces(inputForm.get().sittingPlaces);
-        table.setIdRestaurant(inputForm.get().idRestaurant);
+        table.setSittingPlaces(tableItemInput.getSittingPlaces());
+        table.setIdRestaurant(tableItemInput.getIdRestaurant());
 
         //Save to database
         table.save();
-
-        return ok(Json.toJson(table));
     }
 
-    @Transactional
-    public Result editTable() {
-        Form<RestaurantTables.RestaurantTableDto> inputForm = form(RestaurantTables.RestaurantTableDto.class).bindFromRequest();
-
+    public void editTable(RestaurantTables tableItemInput) {
         //Create table object
         RestaurantTables table = new RestaurantTables();
-        table = table.findById(inputForm.get().id);
+        table = table.findById(tableItemInput.getId());
 
         if(table != null){
             //Update value
-            table.setSittingPlaces(inputForm.get().sittingPlaces);
+            table.setSittingPlaces(tableItemInput.getSittingPlaces());
 
             //Save to database
             table.update();
-
-            return ok(Json.toJson(table));
-        } else {
-            return badRequest("{\"error\": \"Table doesn't exist!\"}");
         }
     }
 
-    @Transactional
-    public Result deleteTable() {
-        Form<RestaurantTables.RestaurantTableDto> inputForm = form(RestaurantTables.RestaurantTableDto.class).bindFromRequest();
-
+    public void deleteTable(RestaurantTables tableItemInput) {
         //Create table object
         RestaurantTables table = new RestaurantTables();
-        table = table.findById(inputForm.get().id);
+        table = table.findById(tableItemInput.getId());
 
         table.delete();
+    }
+
+    @Transactional
+    public Result adminTableItems() {
+        Form<RestaurantTables.RestaurantTableAdministrationDto> inputForm = form(RestaurantTables.RestaurantTableAdministrationDto.class).bindFromRequest();
+
+        //Add new table items
+        List<RestaurantTables> addQueue = new ArrayList<RestaurantTables>(inputForm.get().addQueue);
+        for(int i=0; i<addQueue.size(); i++){
+            addTable(addQueue.get(i));
+        }
+
+        List<RestaurantTables> editQueue = new ArrayList<RestaurantTables>(inputForm.get().editQueue);
+        //Edit table items
+        for(int i=0; i<editQueue.size(); i++){
+            editTable(editQueue.get(i));
+        }
+
+        List<RestaurantTables> deleteQueue = new ArrayList<RestaurantTables>(inputForm.get().deleteQueue);
+        //Delete table item
+        for(int i=0; i<deleteQueue.size(); i++){
+            deleteTable(deleteQueue.get(i));
+        }
 
         return ok();
     }

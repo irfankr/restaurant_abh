@@ -181,10 +181,11 @@ CREATE TABLE restaurantmenuitem(
     idRestaurant bigint NOT NULL,
     type varchar(255) NOT NULL,
     name varchar(255) NOT NULL,
-    price float NOT NULL,
-    description varchar(1000) NOT NULL,
+    price float NULL,
+    description varchar(1000) NULL,
     PRIMARY KEY (id)
 );
+
 
 INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (3001, 3001, 'Breakfast', 'Pronto Guacamole', 8, '3 oz of fresh ripe Avocados, Garlic, lime Juice, Salsa and Roma Tomatoes.');
 INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (3002, 3001, 'Breakfast', 'Smoky Queso Fundido', 4, '8 oz spicy, three pepper, cheese dip mixed with our own freshly made Salsa Roja');

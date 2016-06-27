@@ -35,6 +35,22 @@ a:link, a:visited {
     margin-right: auto;
 }
 
+/* Administraiton columns same height fix */
+.column_same_height .row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;
+  flex-wrap: wrap;
+}
+.column_same_height .row > [class*='col-'] {
+  display: flex;
+  flex-direction: column;
+}
+.administration_fields .buttons_container {
+  bottom: 0px; position: absolute; right: 15px;
+}
+
 .inline-stars {
   display:inline;
 }
@@ -665,10 +681,10 @@ ul.restaurant_left_menu {
   .administration_table td {
     padding:15px !important;
   }
-  .administration_table td.options span {
+  .administration_table td.options span, .administration_restaurant_menu_table_options span {
     color: rgba(30, 30, 30, 0.4); font-size:16px; margin-right:5px;
   }
-    .administration_table td.options span:hover {
+    .administration_table td.options span:hover, .administration_restaurant_menu_table_options span:hover {
        cursor: pointer; cursor: hand;
     }
   .administration_table td input[type="radio"], .administration_table td input[type="checkbox"] {
@@ -701,9 +717,19 @@ ul.restaurant_left_menu {
 .multiply_selection .selectize-input {
   height:54px; line-height: 34px;
 }
-.admin_restaurants_add_tabs a.active:link, .admin_restaurants_add_tabs a.active:visited {
-  border-top-style:solid; border-left-style:solid; border-right-style:solid; border-top-color:#D8D8D8; border-left-color:#D8D8D8; border-right-color:#D8D8D8; border-top-width:1px; border-left-width:1px; border-right-width:1px; background-color:#FFF;
+
+
+.admin_restaurants_add_tabls_container {
+  background-color:#FFF; border-top-style:solid; border-left-style:solid; border-right-style:solid; border-top-color:#D8D8D8; border-left-color:#D8D8D8; border-right-color:#D8D8D8; border-top-width:1px; border-left-width:1px; border-right-width:1px; border-bottom-width:0px; width:400px;
 }
+.admin_restaurants_add_tabs a:link, .admin_restaurants_add_tabs a:visited {
+  color: rgba(19, 29, 36, 0.4);
+}
+.admin_restaurants_add_tabs a.active:link, .admin_restaurants_add_tabs a.active:visited {
+  color: #fd6f60;
+}
+
+
 .admin_restaurants_add_map_container .g-map-canvas {
   position:relative; width: 450px; height: 250px; margin-left: 0px;
 }
@@ -715,4 +741,19 @@ ul.restaurant_left_menu {
 }
   .administration_menu_table_div_row input {
     line-height: 40px !important; height:40px !important;
+  }
+
+.admin_menu_buttons_type {
+}
+  .admin_menu_buttons_type .menu_button {
+    color:rgba(19, 29, 36, 0.4); padding:7px; padding-left:12px; padding-right:12px; background-color:#FFF; border:0px; font-family:'Source Sans Pro'; font-weight: 600; font-size:16px; float:left;
+  }
+  .admin_menu_buttons_type .menu_button:hover {
+    cursor: pointer; cursor: hand;
+  }
+  .admin_menu_buttons_type .active {
+    color:#FFF; padding:7px; padding-left:12px; padding-right:12px; background-color:#fd6f60; border:0px; border-radius: 5px; font-family:'Source Sans Pro'; font-weight: 600; font-size:16px;  float:left;
+  }
+  .admin_menu_buttons_add {
+    color:#FFF; padding:3px; padding-left:12px; padding-right:12px; background-color:#A1A5A8; border:0px; border-radius: 5px; font-family:'Source Sans Pro'; font-weight: 600; font-size:16px;
   }

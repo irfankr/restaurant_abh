@@ -251,22 +251,10 @@ public class RestaurantController extends Controller {
 
                 //Get all categories for restaurant
                 RestaurantsToCategories restaurantToCategory = new RestaurantsToCategories();
-                List<Long> restaurantCategories = restaurantToCategory.getRestaurantCategories(restaurants.get(i).getId());
+                List<Long> restaurantCategories = restaurantToCategory.getRestaurantCategoriesIds(restaurants.get(i).getId());
 
                 //Check is restaurant in any of selected categories for filter
-                if(Collections.disjoint(restaurantForm.get().categories, restaurantCategories)){
-                    //Remove this restaurant from restaurants list
-                    //restaurants.remove(i);
-                    System.out.println("--------------------------------------------------------------------------");
-                    System.out.println(restaurantCategories);
-                    System.out.println(restaurantForm.get().categories);
-                    System.out.println("Ukolonio: " + i);
-                } else {
-                    System.out.println("--------------------------------------------------------------------------");
-                    System.out.println(restaurantCategories);
-                    System.out.println(restaurantForm.get().categories);
-                    System.out.println("Nasao: " + i);
-
+                if(!Collections.disjoint(restaurantForm.get().categories, restaurantCategories)){
                     //Create final food type string
                     restaurants.get(i).setFoodType(Restaurant.getStringRestaurantCategories(Long.valueOf(restaurants.get(i).getId())));
 
@@ -281,6 +269,10 @@ public class RestaurantController extends Controller {
         //Check is there food type filtered restaurants
         if(foodTypeFiltereRestaurants.size() > 0){
             restaurants = new ArrayList<Restaurant>(foodTypeFiltereRestaurants);
+        } else {
+            for (int i = 0; i < restaurants.size(); i++) {
+                restaurants.get(i).setFoodType(Restaurant.getStringRestaurantCategories(Long.valueOf(restaurants.get(i).getId())));
+            }
         }
 
         //Get segment of display restaurants for pagination
@@ -556,7 +548,10 @@ public class RestaurantController extends Controller {
         restaurant.setFoodType("-");
 
         //Save to database
-        restaurant.save();
+        long idCreatedRestaurant = restaurant.save();
+
+        //Set restaurants categories
+        RestaurantsToCategories.addUpdateRestaurantCategories(inputForm.get().categories, idCreatedRestaurant);
 
         return ok(Json.toJson(restaurant));
 
@@ -584,6 +579,9 @@ public class RestaurantController extends Controller {
             //Save to database
             restaurant.update();
 
+            //Set restaurants categories
+            RestaurantsToCategories.addUpdateRestaurantCategories(inputForm.get().categories, inputForm.get().id);
+
             return ok(Json.toJson(restaurant));
         } else {
             return badRequest("{\"error\": \"Restaurant doesn't exist!\"}");
@@ -601,5 +599,28 @@ public class RestaurantController extends Controller {
         restaurant.delete();
 
         return ok();
+    }
+
+    @Transactional
+    public Result getRestaurantCategories(){
+        Form<Restaurant.FormRestaurantDto> inputForm = form(Restaurant.FormRestaurantDto.class).bindFromRequest();
+
+        try {
+            TypedQuery<RestaurantsToCategories> query = JPA.em().createQuery("SELECT u FROM RestaurantsToCategories u WHERE idRestaurant = ?", RestaurantsToCategories.class);
+            query.setParameter(1, inputForm.get().id);
+            List<RestaurantsToCategories> categories = query.getResultList();
+
+            List<RestaurantCategories> categoriesWithNames = new ArrayList<RestaurantCategories>();
+
+            for(int i=0; i<categories.size(); i++){
+                RestaurantCategories tempCategory = new RestaurantCategories();
+
+                categoriesWithNames.add(tempCategory.findById(categories.get(i).getIdCategory()));
+            }
+
+            return ok(Json.toJson(categoriesWithNames));
+        } catch(NoResultException noresult) { //If there is no user with
+            return null;
+        }
     }
 }

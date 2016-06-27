@@ -1,19 +1,38 @@
-{{outlet}}
-
-{{#admin-restaurants-add-tabs}}{{/admin-restaurants-add-tabs}}
-
 <div class="container">
   {{#admin-notification visible=model.notification.visible classStyle=model.notification.classStyle text=model.notification.text}}{{/admin-notification}}
+</div>
+
+{{outlet}}
+
+{{#admin-restaurants-add-tabs displayAdditionalOptions=true idRestaurant=model.idRestaurant}}{{/admin-restaurants-add-tabs}}
+
+<div class="container">
 
   <div class="box_shadow administration_fields">
-    <div class="row">
-      <div class="col-md-6">
-        dodavanje stolova
-      </div>
-      <div class="col-md-6" style="padding-top:25px;">
-        <button {{action 'addItem'}} class="btn button pull-right">Add location</button>
-        <button {{action 'cancel'}} class="btn cancel_button pull-right">Cancel</button>
-      </div>
+
+    <div class="row" style="margin-bottom:20px;">
+      <div class="col-md-4"><strong>Sitting places</strong></div>
+      <div class="col-md-7"></div>
+      <div class="col-md-1"></div>
     </div>
+
+    {{#each model.restaurantTables as |tableitem|}}
+      {{#admin-restaurant-table tableitem=tableitem deleteItem='deleteItem' editItem='editItem'}}{{/admin-restaurant-table}}
+    {{/each}}
+
+    <div class="row administration_menu_table_div_row" style="margin-top:20px;">
+      <div class="col-md-4">{{input type="text" class="form-control input_fields" value=model.newTableItem.sittingPlaces placeholder="Sitting places"}}</div>
+      <div class="col-md-7">{{#restaurant-sitting-place value=model.newTableItem.sittingPlaces}}{{/restaurant-sitting-place}}</div>
+      <div class="col-md-1"><button {{action 'addItem'}} type="button" class="admin_menu_buttons_add">Add</button></div>
+    </div>
+
+    {{#if model.edited}}
+      <div class="row">
+        <div style="margin-right:15px; margin-top:40px;">
+          <button {{action 'saveChanges'}} class="btn button pull-right">Save</button>
+          <button {{action 'cancel'}} class="btn cancel_button pull-right">Cancel</button>
+        </div>
+      </div>
+    {{/if}}
   </div>
 </div>

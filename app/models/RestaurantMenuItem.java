@@ -56,6 +56,9 @@ public class RestaurantMenuItem {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
     public long getIdRestaurant() {
         return idRestaurant;
     }
@@ -167,6 +170,36 @@ public class RestaurantMenuItem {
 
         public void setDescription(String description) {
             this.description = description;
+        }
+    }
+
+    public static class RestaurantMenuAdministrationDto {
+        public List<RestaurantMenuItem> addQueue = new ArrayList<RestaurantMenuItem>();
+        public List<RestaurantMenuItem> editQueue = new ArrayList<RestaurantMenuItem>();
+        public List<RestaurantMenuItem> deleteQueue = new ArrayList<RestaurantMenuItem>();
+
+        public List<RestaurantMenuItem> getAddQueue() {
+            return addQueue;
+        }
+
+        public void setAddQueue(List<RestaurantMenuItem> addQueue) {
+            this.addQueue = addQueue;
+        }
+
+        public List<RestaurantMenuItem> getEditQueue() {
+            return editQueue;
+        }
+
+        public void setEditQueue(List<RestaurantMenuItem> editQueue) {
+            this.editQueue = editQueue;
+        }
+
+        public List<RestaurantMenuItem> getDeleteQueue() {
+            return deleteQueue;
+        }
+
+        public void setDeleteQueue(List<RestaurantMenuItem> deleteQueue) {
+            this.deleteQueue = deleteQueue;
         }
     }
 }

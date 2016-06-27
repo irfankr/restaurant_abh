@@ -66,6 +66,7 @@ POST    /api/v1/admin/addRestaurant                controllers.RestaurantControl
 POST    /api/v1/admin/editRestaurant               controllers.RestaurantController.editRestaurant
 POST    /api/v1/admin/deleteRestaurant             controllers.RestaurantController.deleteRestaurant
 POST    /api/v1/admin/getAllRestaurantComments      controllers.RestaurantController.getAllRestaurantComments
+POST    /api/v1/admin/getRestaurantCategories      controllers.RestaurantController.getRestaurantCategories
 
 # Users (Administration)
 POST    /api/v1/admin/getFilteredUsers      controllers.UserController.getFilteredUsers
@@ -76,14 +77,16 @@ POST    /api/v1/admin/getUserDetails         controllers.UserController.getUserD
 
 # Tables (Administration)
 POST    /api/v1/admin/getAllRestaurantTables                controllers.RestaurantTablesController.getAllRestaurantTables
-POST    /api/v1/admin/addTable                controllers.RestaurantTablesController.addTable
-POST    /api/v1/admin/editTable               controllers.RestaurantTablesController.editTable
-POST    /api/v1/admin/deleteTable             controllers.RestaurantTablesController.deleteTable
+# POST    /api/v1/admin/addTable                controllers.RestaurantTablesController.addTable
+# POST    /api/v1/admin/editTable               controllers.RestaurantTablesController.editTable
+# POST    /api/v1/admin/deleteTable             controllers.RestaurantTablesController.deleteTable
+POST      /api/v1/admin/adminTableItems          controllers.RestaurantTablesController.adminTableItems
 
 # Menu item (Administration)
-POST    /api/v1/admin/addMenuItem                controllers.RestaurantMenuItemController.addMenuItem
-POST    /api/v1/admin/editMenuItem               controllers.RestaurantMenuItemController.editMenuItem
-POST    /api/v1/admin/deleteMenuItem             controllers.RestaurantMenuItemController.deleteMenuItem
+# POST    /api/v1/admin/addMenuItem                controllers.RestaurantMenuItemController.addMenuItem
+# POST    /api/v1/admin/editMenuItem               controllers.RestaurantMenuItemController.editMenuItem
+# POST    /api/v1/admin/deleteMenuItem             controllers.RestaurantMenuItemController.deleteMenuItem
+POST      /api/v1/admin/adminMenuItems          controllers.RestaurantMenuItemController.adminMenuItems
 
 
 

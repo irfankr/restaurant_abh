@@ -174,7 +174,10 @@ public class Restaurant {
     }
     */
 
-    public void save() { JPA.em().persist(this); }
+    public long save() {
+            JPA.em().persist(this);
+            return this.getId(); //Get inserted id
+    }
 
     public void update() { JPA.em().merge(this); }
 

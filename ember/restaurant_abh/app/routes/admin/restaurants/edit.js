@@ -10,25 +10,8 @@ export default Ember.Route.extend({
     this.set('notification.visible', false);
   },
   actions: {
-    editItem: function(){
-      var self = this;
-      var data = JSON.stringify(self.get('location'));
-
-      $.ajax({ //No return here
-        url: "/api/v1/admin/editLocation",
-        type: "POST",
-        data: data,
-        processData: false,
-        async:false, //Need to wait
-        contentType: "application/json; charset=UTF-8",
-      }).fail(function(data) {
-        console.log(data);
-      }).then(function(data) {
-        console.log("USPJESNA IZMJENA");
-      });
-    },
     cancel: function(){
-      this.transitionTo('admin.locations');
+      this.transitionTo('admin.restaurants');
     }
   },
   model: function(param){

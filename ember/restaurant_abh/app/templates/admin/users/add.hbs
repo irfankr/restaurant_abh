@@ -3,7 +3,7 @@
 <div class="container" style="margin-top:80px;">
   {{#admin-notification visible=notification.visible classStyle=notification.classStyle text=notification.text}}{{/admin-notification}}
 
-  <div class="box_shadow administration_fields">
+  <div class="box_shadow administration_fields column_same_height">
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
@@ -56,12 +56,14 @@
         </div>
       </div>
       <div class="col-md-6" style="padding-top:25px;">
-        {{#if finished}}
-          <button {{action 'cancel'}} class="btn cancel_button pull-right">Back</button>
-        {{else}}
-          <button {{action 'addItem'}} class="btn button pull-right">Add user</button>
-          <button {{action 'cancel'}} class="btn cancel_button pull-right">Cancel</button>
-        {{/if}}
+        <div class="buttons_container">
+          {{#if finished}}
+            <button {{action 'cancel'}} class="btn cancel_button pull-right">Back</button>
+          {{else}}
+            <button {{action 'addItem'}} class="btn button pull-right">Add user</button>
+            <button {{action 'cancel'}} class="btn cancel_button pull-right">Cancel</button>
+          {{/if}}
+        </div>
       </div>
     </div>
   </div>
