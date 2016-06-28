@@ -71,7 +71,20 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.UUID;
+
 import java.util.Collections;
+import play.mvc.Http.MultipartFormData;
+import play.mvc.Http.MultipartFormData.FilePart;
 
 
 public class RestaurantController extends Controller {
@@ -430,6 +443,10 @@ public class RestaurantController extends Controller {
         comment.setIdUser(inputForm.get().idUser);
         comment.setMark(inputForm.get().mark);
 
+        //Current date
+        Date date = new Date();
+        comment.setInsertTime(date);
+
         //Save comment to database
         comment.save();
 
@@ -453,8 +470,31 @@ public class RestaurantController extends Controller {
         //Read from database
         comments = JPA.em().createQuery("SELECT rc FROM RestaurantComment rc WHERE idRestaurant = ? ORDER BY id DESC", RestaurantComment.class).setParameter(1, inputForm.get().idRestaurant).getResultList();
 
+        List<RestaurantComment.OutputCommentsDto> outputComments = new ArrayList();
+
+        for(int i=0; i<comments.size(); i++){
+            //Create new comment
+            RestaurantComment.OutputCommentsDto outputComment = new RestaurantComment.OutputCommentsDto();
+
+            //Read user details
+            User user = new User();
+            user = user.findById(comments.get(i).getIdUser());
+
+            //Convert timestamp to date string
+            SimpleDateFormat formatToCheckFunction = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String commentDateTime = formatToCheckFunction.format(comments.get(i).getInsertTime());
+
+            //Set values
+            outputComment.setName(user.getFirstName() + " " + user.getLastName());
+            outputComment.setInsertTime(commentDateTime);
+            outputComment.setMark(comments.get(i).getMark());
+            outputComment.setComment(comments.get(i).getComment());
+
+            outputComments.add(outputComment);
+        }
+
         //Return JSON of all restaurants
-        return ok(Json.toJson(comments));
+        return ok(Json.toJson(outputComments));
     }
 
     /* Admin */
@@ -541,6 +581,7 @@ public class RestaurantController extends Controller {
         restaurant.setRestaurantName(inputForm.get().restaurantName);
         restaurant.setDescription(inputForm.get().description);
         restaurant.setImageFileName(inputForm.get().imageFileName);
+        restaurant.setCoverFileName(inputForm.get().coverFileName);
         restaurant.setLatitude(inputForm.get().latitude);
         restaurant.setLongitude(inputForm.get().longitude);
         restaurant.setLocation(inputForm.get().location);
@@ -570,6 +611,7 @@ public class RestaurantController extends Controller {
             restaurant.setRestaurantName(inputForm.get().restaurantName);
             restaurant.setDescription(inputForm.get().description);
             restaurant.setImageFileName(inputForm.get().imageFileName);
+            restaurant.setCoverFileName(inputForm.get().coverFileName);
             restaurant.setLatitude(inputForm.get().latitude);
             restaurant.setLongitude(inputForm.get().longitude);
             restaurant.setLocation(inputForm.get().location);
@@ -623,4 +665,45 @@ public class RestaurantController extends Controller {
             return null;
         }
     }
+
+    @Transactional
+    public Result uploadRestaurantLogo(){
+        MultipartFormData<File> body = request().body().asMultipartFormData();
+        FilePart<File> picture = body.getFile("file");
+        File file = picture.getFile();
+        String fileName = picture.getFilename();
+        String fileExtension = fileName.split("\\.")[1];
+
+        //Generates random filename
+        String s3Key = UUID.randomUUID().toString() + "." + fileExtension;
+
+        AWSCredentials awsCredentials = new BasicAWSCredentials("AKIAJPIRN6STW7CXUEUA", "AA3zP/kR3FxpAmzGQhFXMhdbpl0pPdAESM+xWnnv");
+        AmazonS3 s3Client = new AmazonS3Client(awsCredentials);
+        s3Client.createBucket("atlantpraksa");
+        s3Client.putObject("atlantpraksa", s3Key, file);
+        s3Client.setObjectAcl("atlantpraksa", s3Key, CannedAccessControlList.PublicRead);
+
+        return ok(Json.toJson("https://s3.amazonaws.com/atlantpraksa/" + s3Key));
+    }
+
+    @Transactional
+    public Result uploadRestaurantCover(){
+        MultipartFormData<File> body = request().body().asMultipartFormData();
+        FilePart<File> picture = body.getFile("file");
+        File file = picture.getFile();
+        String fileName = picture.getFilename();
+        String fileExtension = fileName.split("\\.")[1];
+
+        //Generates random filename
+        String s3Key = UUID.randomUUID().toString() + "." + fileExtension;
+
+        AWSCredentials awsCredentials = new BasicAWSCredentials("AKIAJPIRN6STW7CXUEUA", "AA3zP/kR3FxpAmzGQhFXMhdbpl0pPdAESM+xWnnv");
+        AmazonS3 s3Client = new AmazonS3Client(awsCredentials);
+        s3Client.createBucket("atlantpraksa");
+        s3Client.putObject("atlantpraksa", s3Key, file);
+        s3Client.setObjectAcl("atlantpraksa", s3Key, CannedAccessControlList.PublicRead);
+
+        return ok(Json.toJson("https://s3.amazonaws.com/atlantpraksa/" + s3Key));
+    }
+
 }

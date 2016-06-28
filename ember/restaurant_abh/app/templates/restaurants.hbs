@@ -43,7 +43,10 @@
   {{#each model.listRestaurants as |restaurantlist|}}
     {{#restaurant-item restaurantlist=restaurantlist}}{{/restaurant-item}}
   {{else}}
-    Sorry, nobody is here.
+    <div class="alert alert-danger">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      No restaurants found!
+    </div>
   {{/each}}
 </div>
 

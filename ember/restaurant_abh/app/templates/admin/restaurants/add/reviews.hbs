@@ -1,0 +1,38 @@
+<div class="container" style="margin-top:25px;"></div>
+
+{{outlet}}
+
+{{#admin-restaurants-add-tabs displayAdditionalOptions=true idRestaurant=model.idRestaurant}}{{/admin-restaurants-add-tabs}}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table table-bordered table-hover box_shadow">
+        <thead>
+          <tr>
+            <td class="col-md-2"><strong>First and Last name</strong></td>
+            <td class="col-md-2"><strong>Rate</strong></td>
+            <td class="col-md-2"><strong>Date</strong></td>
+            <td class="col-md-7"><strong>Comment</strong></td>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each model.listItems as |item|}}
+            <tr>
+              <td>{{item.name}}</td>
+              <td>{{#restaurant-star max=5 value=item.mark votes=1 filter=true}}{{/restaurant-star}}</td>
+              <td>{{item.insertTime}}</td>
+              <td>{{item.comment}}</td>
+            </tr>
+          {{else}}
+            <tr>
+              <td colspan="4">No reviews!</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{{outlet}}

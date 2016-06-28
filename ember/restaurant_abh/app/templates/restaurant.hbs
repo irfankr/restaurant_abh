@@ -1,14 +1,14 @@
 {{#navigation-bar styleClass='navigation_white'}}{{/navigation-bar}}
 
 <div class="restaurant_header_big">
-  <div class="background" style="background-image:url('assets/images/restaurants/cover/{{model.restaurantDetails.imageFileName}}.jpg');"></div>
+  <div class="background" style="background-image:url('{{model.restaurantDetails.coverFileName}}');"></div>
 </div>
 
 <div class="container restaurant_main_container">
   <div class="row">
     <div class="col-md-3">
       <div class="restaurant_thumb_container box_shadow">
-        <img src="assets/images/restaurants/thumbnails/{{model.restaurantDetails.imageFileName}}.jpg" width="210" />
+        <img src="{{model.restaurantDetails.imageFileName}}" width="210" />
       </div>
 
       <ul class="restaurant_left_menu">
@@ -88,7 +88,7 @@
       <div class="box_shadow restaurant_data_container" id="about">
         <h1 class="title">About {{model.restaurantDetails.restaurantName}}</h1>
          {{#g-map lat=model.restaurantDetails.latitude lng=model.restaurantDetails.longitude zoom=17 as |google_mapa|}}
-            {{g-map-marker google_mapa lat=model.restaurantDetails.latitude lng=model.restaurantDetails.longitude title="model.restaurantName" title="Marker #3"}}
+            {{g-map-marker google_mapa lat=model.restaurantDetails.latitude lng=model.restaurantDetails.longitude title="model.restaurantName"}}
           {{/g-map}}
 
         <h2 class="description_title">Description</h2>

@@ -1,4 +1,4 @@
-<img class="restaurant_thumb" src="assets/images/restaurants/thumbnails/{{restaurantlist.imageFileName}}.jpg" />
+<img class="restaurant_thumb" src="{{restaurantlist.imageFileName}}" />
 {{#link-to 'restaurant' restaurantlist.id class='restaurant_name'}}{{restaurantlist.restaurantName}}{{/link-to}}
 <div class="restaurant_marks">
   {{#restaurant-star max=5 value=restaurantlist.mark votes=restaurantlist.votes voteAllowed=false}}{{/restaurant-star}}

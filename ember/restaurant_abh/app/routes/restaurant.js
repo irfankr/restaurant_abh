@@ -12,6 +12,7 @@ export default Ember.Route.extend({
   restaurantMenu: RestaurantMenu.create(),
   currentReservation: Ember.inject.service(),
   comment: Comment.create(),
+
   setupController: function(controller, model){
     this._super(controller, model);
 

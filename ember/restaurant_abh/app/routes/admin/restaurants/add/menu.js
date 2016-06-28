@@ -17,6 +17,36 @@ export default Ember.Route.extend({
   itemsToEdit: [],
   itemsToDelete: [],
 
+  validateInput: function(){
+    var self = this;
+
+    function isNumeric(n) {
+      return !isNaN(parseFloat(n)) && isFinite(n);
+    }
+
+    //Check name
+    if(this.get('newMenuItem.name') == null || this.get('newMenuItem.name') == ""){
+      //Display notification
+      self.set('notification.visible', true);
+      self.set('notification.classStyle', 'alert-danger');
+      self.set('notification.text', 'Name field is empty!');
+
+      return false;
+    }
+
+    //Check price
+    if(!isNumeric(self.get('newMenuItem.price'))){
+      //Display notification
+      self.set('notification.visible', true);
+      self.set('notification.classStyle', 'alert-danger');
+      self.set('notification.text', 'Price must be number!');
+
+      return false;
+    }
+
+    return true;
+  },
+
   getItems: function(){
     var self = this;
 
@@ -105,9 +135,8 @@ export default Ember.Route.extend({
     addItem: function(){
       var self = this;
 
-      if(self.get('newMenuItem.name') == "" || self.get('newMenuItem.name') == null){
-        return false;
-      }
+      //Call validation function
+      if(!this.validateInput()) return false;
 
       //Set additional data
       var randomnumber = Math.floor(Math.random() * (9999999 - 1111111 + 1)) + 1111111;
@@ -122,6 +151,7 @@ export default Ember.Route.extend({
       self.set('edited', true);
 
       this.set('newMenuItem', Menuitem.create());
+      self.set('notification.visible', false);
 
       this.refresh();
 
@@ -234,7 +264,7 @@ export default Ember.Route.extend({
         //Display notification
         self.set('notification.visible', true);
         self.set('notification.classStyle', 'alert-success');
-        self.set('notification.text', 'Successful edit!');
+        self.set('notification.text', 'Successful update!');
         self.set('edited', false);
       });
 

@@ -66,6 +66,7 @@ public class Restaurant {
     private long votes;
     private long priceRange;
     private String imageFileName;
+    private String coverFileName;
     private long location;
     private String foodType;
 
@@ -142,6 +143,14 @@ public class Restaurant {
 
     public void setImageFileName(String imageFileName) {
         this.imageFileName = imageFileName;
+    }
+
+    public String getCoverFileName() {
+        return coverFileName;
+    }
+
+    public void setCoverFileName(String coverFileName) {
+        this.coverFileName = coverFileName;
     }
 
     public long getLocation() {
@@ -577,6 +586,7 @@ public class Restaurant {
         public long votes = 0;
         public long priceRange;
         public String imageFileName;
+        public String coverFileName;
         public long location;
         public List<Long> categories = new ArrayList<Long>();
 
@@ -650,6 +660,14 @@ public class Restaurant {
 
         public void setImageFileName(String imageFileName) {
             this.imageFileName = imageFileName;
+        }
+
+        public String getCoverFileName() {
+            return coverFileName;
+        }
+
+        public void setCoverFileName(String coverFileName) {
+            this.coverFileName = coverFileName;
         }
 
         public long getLocation() {

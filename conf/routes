@@ -67,6 +67,8 @@ POST    /api/v1/admin/editRestaurant               controllers.RestaurantControl
 POST    /api/v1/admin/deleteRestaurant             controllers.RestaurantController.deleteRestaurant
 POST    /api/v1/admin/getAllRestaurantComments      controllers.RestaurantController.getAllRestaurantComments
 POST    /api/v1/admin/getRestaurantCategories      controllers.RestaurantController.getRestaurantCategories
+POST    /api/v1/admin/uploadRestaurantLogo         controllers.RestaurantController.uploadRestaurantLogo
+POST    /api/v1/admin/uploadRestaurantCover         controllers.RestaurantController.uploadRestaurantCover
 
 # Users (Administration)
 POST    /api/v1/admin/getFilteredUsers      controllers.UserController.getFilteredUsers

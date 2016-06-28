@@ -211,7 +211,7 @@ public class UserController extends Controller {
                 return badRequest("{\"error\": \"First name is not valid!\"}");
             }
 
-            if(!user.getFirstName().matches("[a-zA-z]+([ '-][a-zA-Z]+)*")){ //Last name
+            if(!user.getLastName().matches("[a-zA-z]+([ '-][a-zA-Z]+)*")){ //Last name
                 return badRequest("{\"error\": \"Last name is not valid!\"}");
             }
 
@@ -339,7 +339,7 @@ public class UserController extends Controller {
         //Create object
         User user = new User();
 
-        //Check is there category with this name already
+        //Check is there user with this name already
         if(user.findByEmail(inputForm.get().email) == null){
 
             //Insert values

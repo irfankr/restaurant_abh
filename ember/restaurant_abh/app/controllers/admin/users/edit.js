@@ -64,6 +64,10 @@ export default Ember.Controller.extend({
     editItem: function(){
       var self = this;
 
+      //Define patterns
+      var namesPattern = /^[a-zA-Z\'\s]*$/;
+      var phonePattern = /^[0-9\-\s]*$/;
+
       function isValidEmailAddress(emailAddress) {
           var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
           return pattern.test(emailAddress);
@@ -85,6 +89,21 @@ export default Ember.Controller.extend({
         self.set('notification.visible', true);
         self.set('notification.classStyle', 'alert-danger');
         self.set('notification.text', 'Password and Confirm password don\'t match.');
+      } else if(!namesPattern.test(self.get('user.firstName'))){
+        //Display notification
+        self.set('notification.visible', true);
+        self.set('notification.classStyle', 'alert-danger');
+        self.set('notification.text', 'First name is not valid.');
+      } else if(!namesPattern.test(self.get('user.lastName'))){
+        //Display notification
+        self.set('notification.visible', true);
+        self.set('notification.classStyle', 'alert-danger');
+        self.set('notification.text', 'Last name is not valid.');
+      } else if(!phonePattern.test(self.get('user.phone')) || self.get('user.phone').length < 6){
+        //Display notification
+        self.set('notification.visible', true);
+        self.set('notification.classStyle', 'alert-danger');
+        self.set('notification.text', 'Phone number is not valid.');
       } else {
         //Remove confirmPassword from user
         self.set('user.confirmPassword', null);
@@ -104,7 +123,7 @@ export default Ember.Controller.extend({
           //Display notification
           self.set('notification.visible', true);
           self.set('notification.classStyle', 'alert-success');
-          self.set('notification.text', 'Successful edit!');
+          self.set('notification.text', 'Successful update!');
 
           //Set finished flag
           self.set('finished', true);

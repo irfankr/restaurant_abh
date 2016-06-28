@@ -24,6 +24,7 @@ Router.map(function() {
         this.route('tables', {path: '/tables/:id'});
         this.route('gallery', {path: '/gallery/:id'});
         this.route('info', {path: '/info/:id'});
+        this.route('reviews', {path: '/reviews/:id'});
       });
       this.route('edit', {path: '/edit/:id'});
     });

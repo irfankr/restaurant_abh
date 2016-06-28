@@ -8,7 +8,11 @@ export default Ember.Component.extend({
       this.set('editable', true);
     },
     editItem: function(id){
-      if(this.get('menuitem.name') != ''){
+      function isNumeric(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+      }
+
+      if(isNumeric(this.get('menuitem.price')) && this.get('menuitem.name') != ''){
         this.set('editable', false);
         this.sendAction('editItem', id);
       }

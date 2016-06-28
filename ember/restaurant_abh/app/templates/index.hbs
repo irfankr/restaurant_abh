@@ -20,7 +20,7 @@
               {{ember-selectize
                 content=selectPeople
                 value=reservation.people
-                placeholder="How manu people?"
+                placeholder="How many people?"
                }}
             </div>
             <div class="reservation_column">
@@ -40,6 +40,10 @@
             </div>
             <div class="reservation_column"><button {{action 'findATable' model.restaurantDetails.id}} class="btn button">Find a table</button></div>
           </div>
+        </div>
+
+        <div>
+          {{#admin-notification visible=notification.visible classStyle=notification.classStyle text=notification.text}}{{/admin-notification}}
         </div>
       </div>
     </div>

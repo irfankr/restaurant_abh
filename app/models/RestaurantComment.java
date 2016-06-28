@@ -8,6 +8,7 @@ import play.mvc.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static play.data.Form.*;
@@ -20,6 +21,7 @@ public class RestaurantComment {
     private long idUser;
     private long idRestaurant;
     private String comment;
+    private Date insertTime;
 
     public RestaurantComment() {}
 
@@ -63,6 +65,14 @@ public class RestaurantComment {
         this.comment = comment;
     }
 
+    public Date getInsertTime() {
+        return insertTime;
+    }
+
+    public void setInsertTime(Date insertTime) {
+        this.insertTime = insertTime;
+    }
+
     public void save() { JPA.em().persist(this); }
 
     public static class InputCommentDto {
@@ -93,6 +103,45 @@ public class RestaurantComment {
 
         public void setIdRestaurant(long idRestaurant) {
             this.idRestaurant = idRestaurant;
+        }
+
+        public String getComment() {
+            return comment;
+        }
+
+        public void setComment(String comment) {
+            this.comment = comment;
+        }
+    }
+
+    public static class OutputCommentsDto {
+        public long mark;
+        public String name;
+        public String insertTime;
+        public String comment;
+
+        public long getMark() {
+            return mark;
+        }
+
+        public void setMark(long mark) {
+            this.mark = mark;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getInsertTime() {
+            return insertTime;
+        }
+
+        public void setInsertTime(String insertTime) {
+            this.insertTime = insertTime;
         }
 
         public String getComment() {

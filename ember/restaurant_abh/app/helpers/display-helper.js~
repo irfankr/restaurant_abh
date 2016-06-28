@@ -1,0 +1,2 @@
+import displayHelper from 'your-addon-name/helpers/display-helper";
+export default displayHelper;

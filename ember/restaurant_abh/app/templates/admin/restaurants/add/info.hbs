@@ -1,5 +1,5 @@
-<div class="container">
-  {{#admin-notification visible=model.notification.visible classStyle=model.notification.classStyle text=model.notification.text}}{{/admin-notification}}
+<div class="container" style="margin-top:25px;">
+  {{#admin-notification visible=notification.visible classStyle=notification.classStyle text=notification.text}}{{/admin-notification}}
 </div>
 
 {{outlet}}
@@ -12,6 +12,24 @@
   <div class="box_shadow administration_fields column_same_height">
     <div class="row">
       <div class="col-md-6">
+        <div class="row" style="margin-top:30px;">
+          <div class="col-md-12">
+            <label class="input_title">Logo</label>
+
+            {{#if showImageUploader}}
+              {{drop-zone url='/api/v1/admin/uploadRestaurantLogo' clickable=true maxFiles=1 file=file success=(action "addedFileLogo") dictDefaultMessage="Upload logo"}}
+            {{else}}
+
+              <div class="admin_restaurants_replace_image_container" style="width:115px; height:100px; margin-bottom:30px;">
+                <div class="overlay" {{action 'showImageUploader'}}>
+                  <span class="glyphicon glyphicon-cloud-upload replace_image" aria-hidden="true"></span>
+                </div>
+                <img src="{{restaurant.imageFileName}}" height="100" width="115" />
+              </div>
+            {{/if}}
+          </div>
+        </div>
+
         <div class="form-group">
           <label class="input_title">Name</label>
           {{input type="text" class="form-control input_fields" value=restaurant.restaurantName}}
@@ -28,27 +46,28 @@
                {{#g-map lat=restaurant.latitude lng=restaurant.longitude zoom=17 as |google_mapa|}}
                   {{g-map-marker google_mapa lat=restaurant.latitude lng=restaurant.longitude}}
                {{/g-map}}
-
-               <div class="row">
-                 <div class="col-md-6">
-                   <div class="form-group">
-                      <label class="input_title">Latitude</label>
-                      {{input type="text" class="form-control input_fields" value=restaurant.latitude}}
-                   </div>
-                 </div>
-                 <div class="col-md-6">
-                   <div class="form-group">
-                       <label class="input_title">Longitude</label>
-                      {{input type="text" class="form-control input_fields" value=restaurant.longitude}}
-                   </div>
-                 </div>
-               </div>
             </div>
           </div>
         </div>
 
       </div>
       <div class="col-md-6">
+        <div class="row" style="margin-top:30px;">
+          <div class="col-md-12">
+            <label class="input_title">Cover</label>
+            {{#if showCoverUploader}}
+              {{drop-zone url='/api/v1/admin/uploadRestaurantCover' clickable=true maxFiles=1 file=file success=(action "addedFileCover") dictDefaultMessage="Upload cover"}}
+            {{else}}
+              <div class="admin_restaurants_replace_image_container" style="width:300px; height:100px; margin-bottom:30px;">
+                <div class="overlay" {{action 'showCoverUploader'}}>
+                  <span class="glyphicon glyphicon-cloud-upload replace_image" aria-hidden="true"></span>
+                </div>
+                <img src="{{restaurant.coverFileName}}" width="300" height="100" />
+              </div>
+            {{/if}}
+          </div>
+        </div>
+
         <div class="row">
           <div class="col-md-6">
             <div class="form-group" style="height:54px; overflow:visible;">
@@ -92,7 +111,6 @@
             </div>
           </div>
         </div>
-
         <div class="buttons_container">
           {{#if edit}}
             <button {{action 'editItem'}} class="btn button pull-right">Save info</button>

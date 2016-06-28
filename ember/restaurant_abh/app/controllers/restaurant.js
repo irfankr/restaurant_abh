@@ -54,31 +54,39 @@ export default Ember.Controller.extend({
         //Add restaurant ID to object
         this.set('reservation.idRestaurant', idRestaurant);
 
-        //Send POST request
-        $.ajax({ //No return here
-            url: "/api/v1/checkReservationAvailability",
-            type: "POST",
-            data: JSON.stringify(this.get('reservation')),
-            processData: false,
-            async:false, //Need to wait
-            contentType: "application/json; charset=UTF-8",
-        }).fail(function(data) {
-            console.log(data);
+        //Check for available tables
+        if(this.get('reservation.people') == null || this.get('reservation.date') == null || this.get('reservation.hour') == null){
+          //Display error
+          $(".registerNotifications").show();
+          $(".registerNotifications .alertText").html('All fields are required!');
+        } else {
+          //Send POST request
+          $.ajax({ //No return here
+              url: "/api/v1/checkReservationAvailability",
+              type: "POST",
+              data: JSON.stringify(this.get('reservation')),
+              processData: false,
+              async:false, //Need to wait
+              contentType: "application/json; charset=UTF-8",
+          }).fail(function(data) {
+              console.log(data);
 
-            //Display error
-            $(".registerNotifications").show();
+              //Display error
+              $(".registerNotifications").show();
 
-            self.set('tablesAvailable', null);
-             self.set('bestTime', []);
-        }).then(function(data) {
-            //Display error
-            $(".registerNotifications").hide();
+              self.set('tablesAvailable', null);
+              self.set('bestTime', []);
+          }).then(function(data) {
+              //Display error
+              $(".registerNotifications").hide();
 
-            self.set('tablesAvailable', data.tablesLeft);
-            self.set('bestTime', data.bestTime);
-        });
+              self.set('tablesAvailable', data.tablesLeft);
+              self.set('bestTime', data.bestTime);
+          });
 
-        console.log(JSON.stringify(this.get('reservation')));
+          console.log(JSON.stringify(this.get('reservation')));
+        }
+
      },
      proceedToReservationComplete: function(time, restaurantId, restaurantName, restaurantImageFilename){
       //Set chosen time

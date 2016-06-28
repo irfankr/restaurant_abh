@@ -21,6 +21,11 @@
                 <span {{action 'deleteItem' item.id}} class="glyphicon glyphicon-trash" aria-hidden="true"></span>
               </td>
             </tr>
+          {{else}}
+            <tr>
+              <td>No restaurants found!</td>
+              <td class="options"></td>
+            </tr>
           {{/each}}
         </tbody>
       </table>

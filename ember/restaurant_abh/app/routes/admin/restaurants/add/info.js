@@ -32,6 +32,7 @@ export default Ember.Route.extend({
 
     if (isExiting) {
       controller.send('resetDataOnExit');
+
     }
   },
 
@@ -41,6 +42,7 @@ export default Ember.Route.extend({
     //Check is add or edit
     if(param.id == 0){
       this.set('displayAdditionalOptions', false);
+      this.set('idRestaurant', null);
     } else {
       this.set('idRestaurant', param.id);
       this.set('displayAdditionalOptions', true);

@@ -1,9 +1,10 @@
-<div class="container" style="margin-top:40px;">
+<div class="container" style="margin-top:10px;">
   {{#if displayAdditionalOptions}}
     <ul class="nav nav-tabs admin_restaurants_add_tabls_container">
         <li class="admin_restaurants_add_tabs" role="presentation">{{#link-to 'admin.restaurants.add.info' idRestaurant}}Basic info{{/link-to}}</li>
         <li class="admin_restaurants_add_tabs" role="presentation">{{#link-to 'admin.restaurants.add.menu' idRestaurant}}Menu{{/link-to}}</li>
         <li class="admin_restaurants_add_tabs" role="presentation">{{#link-to 'admin.restaurants.add.tables' idRestaurant}}Tables{{/link-to}}</li>
+        <li class="admin_restaurants_add_tabs" role="presentation">{{#link-to 'admin.restaurants.add.reviews' idRestaurant}}Reviews{{/link-to}}</li>
         <!--<li class="admin_restaurants_add_tabs" role="presentation">{{#link-to 'admin.restaurants.add.gallery' idRestaurant}}Gallery{{/link-to}}</li>-->
     </ul>
   {{/if}}
