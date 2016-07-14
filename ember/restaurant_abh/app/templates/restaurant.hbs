@@ -15,6 +15,7 @@
         <li><a class="restaurant_left_menu_title" {{action 'moveToSegment' 'reservation'}} href="javascript:void(0);">Reservation</a></li>
         <li><a class="restaurant_left_menu_title" {{action 'moveToSegment' 'about'}} href="javascript:void(0);">About</a></li>
         <li><a class="restaurant_left_menu_title" {{action 'moveToSegment' 'menu'}}href="javascript:void(0);">Menu</a></li>
+        <li><a class="restaurant_left_menu_title" {{action 'moveToSegment' 'gallery'}}href="javascript:void(0);">Gallery</a></li>
       </ul>
     </div>
 
@@ -95,22 +96,43 @@
         <div class="description_text">{{model.restaurantDetails.description}}</div>
       </div>
 
-      <div class="box_shadow restaurant_data_container" style="margin-bottom:300px;" id="menu">
-        <h1 class="title restaurant_menu_item_title"><span style="margin-right:25px;">MENU:</span> <a class="menu_title_Breakfast active" href="javascript:void(0);" {{action 'showMenu' 'Breakfast' model.restaurantDetails.id}}>Breakfast</a><a class="menu_title_Lunch" {{action 'showMenu' 'Lunch' model.restaurantDetails.id}} href="javascript:void(0);">Lunch</a><a class="menu_title_Dinner" {{action 'showMenu' 'Dinner' model.restaurantDetails.id}} href="javascript:void(0);">Dinner</a></h1>
+      <div class="box_shadow restaurant_data_container" id="menu">
+        <h1 class="title restaurant_menu_item_title"><span style="margin-right:25px;">Menu:</span> <a class="menu_title_Breakfast active" href="javascript:void(0);" {{action 'showMenu' 'Breakfast' model.restaurantDetails.id}}>Breakfast</a><a class="menu_title_Lunch" {{action 'showMenu' 'Lunch' model.restaurantDetails.id}} href="javascript:void(0);">Lunch</a><a class="menu_title_Dinner" {{action 'showMenu' 'Dinner' model.restaurantDetails.id}} href="javascript:void(0);">Dinner</a></h1>
 
-      {{#each model.restaurantMenu as |restaurantMenuItem|}}
-        <div class="restaurant_menu_item">
-          <div class="restaurant_menu_item_title_price">
-            <span class="name">{{restaurantMenuItem.name}}</span>
-            <span class="price">${{restaurantMenuItem.price}}</span>
+        {{#each model.restaurantMenu as |restaurantMenuItem|}}
+          <div class="restaurant_menu_item">
+            <div class="restaurant_menu_item_title_price">
+              <span class="name">{{restaurantMenuItem.name}}</span>
+              <span class="price">${{restaurantMenuItem.price}}</span>
+            </div>
+            <div class="restaurant_menu_item_description">{{restaurantMenuItem.description}}</div>
           </div>
-          <div class="restaurant_menu_item_description">{{restaurantMenuItem.description}}</div>
-        </div>
-      {{else}}
-        Menu is not available
-      {{/each}}
-
+        {{else}}
+          Menu is not available
+        {{/each}}
       </div>
+
+      {{#if model.galleryFirstImage}}
+        <div class="box_shadow restaurant_data_container" style="padding:10px 0px 0px 11px; overflow:auto;" id="gallery">
+          {{#if model.addSeeAllPhotosFeature}}
+            <a class="see_all_photos" {{action 'seeAllPhotos'}}>See All Photos ({{model.galleryNumberOfImages}})</a>
+          {{/if}}
+
+          <h1 class="title restaurant_menu_item_title" style="width:250px; margin-bottom:10px !important; padding:20px;"><span style="margin-right:25px;">Restaurants Photo:</span> </h1>
+
+          <div class="big_image">
+              {{light-box href=model.galleryFirstImage.imageFileName data-lightbox="cat-1"}}
+          </div>
+
+          {{#each model.galleryImages as |image|}}
+            <div class="small_image">
+                {{light-box href=image.imageFileName data-lightbox="cat-1"}}
+            </div>
+          {{/each}}
+        </div>
+      {{/if}}
+
+      <div style="height:300px;"></div>
     </div>
   </div>
 </div>

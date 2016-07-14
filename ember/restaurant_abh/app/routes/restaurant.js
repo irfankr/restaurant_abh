@@ -13,11 +13,25 @@ export default Ember.Route.extend({
   currentReservation: Ember.inject.service(),
   comment: Comment.create(),
 
+  galleryNumberOfImages: null,
+  galleryImages: [],
+  showImages: 7,
+  addSeeAllPhotosFeature: false,
+  galleryFirstImage: null,
+
   setupController: function(controller, model){
     this._super(controller, model);
 
     controller.set('tablesAvailable', null);
+
+    //Animate to top of the page
+    //$("html, body").animate({ scrollTop: 0 }, 500);
   },
+
+  exit: function(){
+    this.set('showImages', 7);
+  },
+
   actions: {
     vote: function(mark, comment){
       //Insert data in comment object
@@ -43,6 +57,10 @@ export default Ember.Route.extend({
       //Change values in restaurantDetails
       this.set('restaurantDetails.mark', this.get('restaurantDetails.mark') + mark);
       this.set('restaurantDetails.votes', this.get('restaurantDetails.votes') + 1);
+    },
+    seeAllPhotos: function(){
+      this.set('showImages', 200);
+      this.refresh();
     }
   },
   model: function(param){
@@ -87,10 +105,35 @@ export default Ember.Route.extend({
         console.log(data);
       }).then(function(data) {
         self.set('restaurantMenu', data);
-      });
 
-      //Animate to top of the page
-      $("html, body").animate({ scrollTop: 0 }, 500);
+        //Get gallery images for restaurant
+        $.ajax({ //No return here
+          url: "/api/v1/getRestaurantGalleryImages",
+          type: "POST",
+          data: '{"idRestaurant":'+self.get('restaurantId')+', "limitImages": '+self.get('showImages')+'}',
+          processData: false,
+          async:false, //Need to wait
+          contentType: "application/json; charset=UTF-8",
+        }).fail(function(data) {
+          console.log(data);
+        }).then(function(data) {
+          self.set('galleryNumberOfImages', data.imagesNumber);
+          self.set('galleryImages', data.galleryImages);
+
+          //Set first image for gallery
+          self.set('galleryFirstImage', data.galleryImages[0]);
+
+          //Remove first image from list
+          data.galleryImages.splice(0, 1);
+
+          //Check to display options for all images
+          if(data.imagesNumber > 7){
+            self.set('addSeeAllPhotosFeature', true);
+          } else {
+            self.set('addSeeAllPhotosFeature', false);
+          }
+        });
+      });
 
     });
     //Return model to template
@@ -98,6 +141,10 @@ export default Ember.Route.extend({
       restaurantDetails: self.get('restaurantDetails'),
       restaurantsStatsStyle: self.get('restaurantsStatsStyle'),
       restaurantMenu: self.get('restaurantMenu'),
+      galleryNumberOfImages: self.get('galleryNumberOfImages'),
+      galleryImages: self.get('galleryImages'),
+      addSeeAllPhotosFeature: self.get('addSeeAllPhotosFeature'),
+      galleryFirstImage: self.get('galleryFirstImage')
     });
 
   }

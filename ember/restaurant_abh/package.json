@@ -41,5 +41,8 @@
     "ember-load-initializers": "^0.5.1",
     "ember-resolver": "^2.0.3",
     "loader.js": "^4.0.1"
+  },
+  "dependencies": {
+    "ember-cli-lightbox": "0.0.3"
   }
 }

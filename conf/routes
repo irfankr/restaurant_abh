@@ -36,6 +36,11 @@ GET     /api/v1/allRestaurantsSortReservationsToday controllers.RestaurantContro
 POST    /api/v1/restaurantVote              controllers.RestaurantController.restaurantVote
 POST    /api/v1/insertComment               controllers.RestaurantController.insertComment
 
+POST    /api/v1/admin/uploadRestaurantGalleryImage    controllers.RestaurantGalleryImageController.uploadRestaurantGalleryImage
+POST    /api/v1/admin/saveGalleryImages    controllers.RestaurantGalleryImageController.saveGalleryImages
+POST    /api/v1/admin/deleteGalleryImages    controllers.RestaurantGalleryImageController.deleteGalleryImages
+POST    /api/v1/getRestaurantGalleryImages    controllers.RestaurantGalleryImageController.getRestaurantGalleryImages
+
 POST    /api/v1/makeReservation             controllers.RestaurantController.makeReservation
 POST    /api/v1/checkReservationAvailability controllers.ReservationController.checkReservationAvailability
 GET     /api/v1/getListOfReservationsForUser    controllers.ReservationController.getListOfReservationsForUser
@@ -44,6 +49,7 @@ POST    /api/v1/getFreeTables                   controllers.ReservationControlle
 POST    /api/v1/createResetPasswordToken    controllers.UserController.createResetPasswordToken
 
 GET    /api/v1/admin/getAdministrationCounters      controllers.RestaurantController.getAdministrationCounters
+
 
 # Categories (Administration)
 GET     /api/v1/getAllCategories            controllers.RestaurantCategoriesController.getAllCategories

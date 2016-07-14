@@ -22,7 +22,10 @@ Router.map(function() {
       this.route('add', function() {
         this.route('menu', {path: '/menu/:id'});
         this.route('tables', {path: '/tables/:id'});
-        this.route('gallery', {path: '/gallery/:id'});
+        this.route('gallery', function() {
+          this.route('list', {path: '/list/:id'});
+          this.route('add', {path: '/add/:id'});
+        });
         this.route('info', {path: '/info/:id'});
         this.route('reviews', {path: '/reviews/:id'});
       });

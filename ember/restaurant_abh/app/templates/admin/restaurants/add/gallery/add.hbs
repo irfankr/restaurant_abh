@@ -1,0 +1,31 @@
+{{outlet}}
+
+{{#admin-restaurants-add-tabs displayAdditionalOptions=true idRestaurant=model.idRestaurant}}{{/admin-restaurants-add-tabs}}
+
+<div class="container">
+
+  <div class="box_shadow administration_fields">
+    <div class="row" style="margin-bottom:10px;">
+      <div class="col-md-12">
+        <span style="font-weight:600; font-size:16px;">Add photos</span>
+      </div>
+    </div>
+
+    <div class="row administration_gallery" style="margin-bottom:20px;">
+      <div class="col-md-12">
+        {{drop-zone url='/api/v1/admin/uploadRestaurantGalleryImage' clickable=true maxFiles=20 file=file success=(action "addedImages") dictDefaultMessage="Drag and drop photos here" headers=requestHeader success=(action "addedImage") }}
+      </div>
+    </div>
+
+    {{#if added}}
+      <div class="row">
+        <button {{action 'saveChanges'}} class="btn button pull-right" style="margin-right:15px;">Save</button>
+        {{#link-to 'admin.restaurants.add.gallery.list' model.idRestaurant class="btn cancel_button pull-right"}}Cancel{{/link-to}}
+      </div>
+    {{else}}
+      <div class="row">
+        {{#link-to 'admin.restaurants.add.gallery.list' model.idRestaurant class="btn cancel_button pull-right"}}Back{{/link-to}}
+      </div>
+    {{/if}}
+  </div>
+</div>

@@ -149,6 +149,13 @@ CREATE TABLE restaurantcomments(
     PRIMARY KEY (id)
 );
 
+CREATE TABLE restaurantgalleryimages(
+    id bigint,
+    idRestaurant bigint NOT NULL,
+    imageFileName varchar(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
 INSERT INTO restaurantlocations (id, name) VALUES (3001, 'New York');
 INSERT INTO restaurantlocations (id, name) VALUES (3002, 'Chicago');
 INSERT INTO restaurantlocations (id, name) VALUES (3003, 'Boston');
@@ -176,6 +183,40 @@ INSERT INTO restaurantcomments (id, mark, idUser, idRestaurant, comment, insertT
 INSERT INTO restaurantcomments (id, mark, idUser, idRestaurant, comment, insertTime) VALUES (3003, 4, 3000, 3003, 'Really nice place', now());
 INSERT INTO restaurantcomments (id, mark, idUser, idRestaurant, comment, insertTime) VALUES (3004, 1, 3000, 3004, 'I dont like it', now());
 INSERT INTO restaurantcomments (id, mark, idUser, idRestaurant, comment, insertTime) VALUES (3005, 5, 3000, 3005, 'Amazing restaurant', now());
+
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (3000, 3001, 'https://s3.amazonaws.com/atlantpraksa/gallery/2b48bb20-b07f-4d79-8a0c-939757fde7de.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (3001, 3001, 'https://s3.amazonaws.com/atlantpraksa/gallery/89734ed4-05c9-45b4-9686-ca3766d86b15.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (3002, 3001, 'https://s3.amazonaws.com/atlantpraksa/gallery/17b700a7-90ca-47a5-b9e9-dd9147cbb5a5.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (3003, 3001, 'https://s3.amazonaws.com/atlantpraksa/gallery/806e9fdc-ad0c-49ed-9ea0-3bbd04d70979.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (3004, 3001, 'https://s3.amazonaws.com/atlantpraksa/gallery/9c8f0bbb-5d6c-4a0f-b09d-a464185280e0.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (3005, 3001, 'https://s3.amazonaws.com/atlantpraksa/gallery/924eff73-b9b2-4cb6-b8c3-4a9d657dba6c.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (3006, 3001, 'https://s3.amazonaws.com/atlantpraksa/gallery/706a8017-3b51-402a-909c-45beb397bb2c.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (3007, 3001, 'https://s3.amazonaws.com/atlantpraksa/gallery/647e2c5f-998a-4b30-8d52-554569ac7499.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (3008, 3001, 'https://s3.amazonaws.com/atlantpraksa/gallery/7303570a-fee2-4162-9482-64ba79f9984e.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (3009, 3002, 'https://s3.amazonaws.com/atlantpraksa/gallery/394509d4-b93e-4c2b-a8f9-6d4ed86b2bc5.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (4000, 3002, 'https://s3.amazonaws.com/atlantpraksa/gallery/d393823b-156a-4a7b-9a90-f9bf56d02645.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (4001, 3002, 'https://s3.amazonaws.com/atlantpraksa/gallery/b662be90-f321-4855-adc6-1e8a07760e76.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (4002, 3002, 'https://s3.amazonaws.com/atlantpraksa/gallery/804298c7-e916-4217-a415-2199011eac8e.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (4003, 3004, 'https://s3.amazonaws.com/atlantpraksa/gallery/bac46911-5133-4236-84ff-38c5e5863587.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (4004, 3004, 'https://s3.amazonaws.com/atlantpraksa/gallery/0e960e13-a648-4ddf-aac1-6077e25d4a93.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (4005, 3004, 'https://s3.amazonaws.com/atlantpraksa/gallery/cb4fef8f-178e-4dce-9993-4bacf805c349.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (4006, 3004, 'https://s3.amazonaws.com/atlantpraksa/gallery/41c5cad8-4ee8-4be6-b6ad-5e6457f0b32d.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (4007, 3004, 'https://s3.amazonaws.com/atlantpraksa/gallery/ed857120-aeec-4610-a5e2-c166fa032057.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (4008, 3004, 'https://s3.amazonaws.com/atlantpraksa/gallery/df5c1584-3bf4-4c44-a525-9af11fe646a4.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (4009, 3004, 'https://s3.amazonaws.com/atlantpraksa/gallery/c588b987-cc80-40a5-aec5-d1fa4fdac340.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (5000, 3006, 'https://s3.amazonaws.com/atlantpraksa/gallery/985de7a8-9aeb-40f3-992e-aa4c2c9ff145.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (5001, 3006, 'https://s3.amazonaws.com/atlantpraksa/gallery/8182cf99-a26c-406e-baa0-e241a71012ca.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (5002, 3006, 'https://s3.amazonaws.com/atlantpraksa/gallery/7b61cde5-93a9-41a4-963a-268db71f2caf.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (5003, 3006, 'https://s3.amazonaws.com/atlantpraksa/gallery/d7bf60b2-7ac6-44f6-8c91-983db1b34a73.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (5004, 3006, 'https://s3.amazonaws.com/atlantpraksa/gallery/c304767b-3022-43e7-8de5-fa168be4c4af.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (5005, 3006, 'https://s3.amazonaws.com/atlantpraksa/gallery/84f78da6-6c16-4a36-b18e-ad2753d52e5f.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (5006, 3006, 'https://s3.amazonaws.com/atlantpraksa/gallery/a7f2013e-73f6-47f0-8e87-a06e459ac36a.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (5007, 3006, 'https://s3.amazonaws.com/atlantpraksa/gallery/d2d35a72-2e74-49b3-b307-18aaa4fb92e0.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (5008, 3006, 'https://s3.amazonaws.com/atlantpraksa/gallery/bdbdc421-75b0-401a-ae1e-2c9007070033.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (5009, 3006, 'https://s3.amazonaws.com/atlantpraksa/gallery/fdfbc890-f10e-4afb-bd9f-203dcf2e096d.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (6000, 3006, 'https://s3.amazonaws.com/atlantpraksa/gallery/dbb2e76c-8a65-4526-a670-626cb2dae1b9.jpg');
+INSERT INTO restaurantgalleryimages (id, idrestaurant, imagefilename) VALUES (6001, 3006, 'https://s3.amazonaws.com/atlantpraksa/gallery/28104fce-1057-45de-8bfa-42b6d03e5d07.jpg');
+
 
 CREATE TABLE restaurantmenuitem(
     id bigint,
@@ -276,5 +317,6 @@ DROP TABLE restaurantcategories;
 DROP TABLE restaurantstocategories;
 DROP TABLE restaurantlocations;
 DROP TABLE restaurantcomments;
+DROP TABLE restaurantgalleryimages;
 
 DROP SEQUENCE IF EXISTS hibernate_sequence;

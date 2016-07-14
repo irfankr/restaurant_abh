@@ -1,19 +1,3 @@
 {{outlet}}
 
-{{#admin-restaurants-add-tabs}}{{/admin-restaurants-add-tabs}}
-
-<div class="container">
-  {{#admin-notification visible=model.notification.visible classStyle=model.notification.classStyle text=model.notification.text}}{{/admin-notification}}
-
-  <div class="box_shadow administration_fields">
-    <div class="row">
-      <div class="col-md-6">
-        dodavanje galerije
-      </div>
-      <div class="col-md-6" style="padding-top:25px;">
-        <button {{action 'addItem'}} class="btn button pull-right">Add location</button>
-        <button {{action 'cancel'}} class="btn cancel_button pull-right">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
+{{#admin-restaurants-add-tabs displayAdditionalOptions=model.displayAdditionalOptions idRestaurant=model.idRestaurant}}{{/admin-restaurants-add-tabs}}

@@ -56,7 +56,7 @@
           <div class="col-md-12">
             <label class="input_title">Cover</label>
             {{#if showCoverUploader}}
-              {{drop-zone url='/api/v1/admin/uploadRestaurantCover' clickable=true maxFiles=1 file=file success=(action "addedFileCover") dictDefaultMessage="Upload cover"}}
+              {{drop-zone url='/api/v1/admin/uploadRestaurantCover' clickable=true addRemoveLinks=true thumbnailHeight=100 maxFiles=1 file=file success=(action "addedFileCover") dictDefaultMessage="Upload cover"}}
             {{else}}
               <div class="admin_restaurants_replace_image_container" style="width:300px; height:100px; margin-bottom:30px;">
                 <div class="overlay" {{action 'showCoverUploader'}}>

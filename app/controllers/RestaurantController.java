@@ -224,6 +224,9 @@ public class RestaurantController extends Controller {
 
             //Mark
             if(restaurantForm.get().mark != 0) {
+                //First restrict items with no votes
+                predicates.add(qb.greaterThan(query.get("votes"), 0));
+
                 Expression<Integer> mark = query.get("mark");
                 Expression<Integer> votes = query.get("votes");
                 Expression<Number> quot1 = qb.quot(mark, votes);
@@ -702,6 +705,10 @@ public class RestaurantController extends Controller {
         s3Client.createBucket("atlantpraksa");
         s3Client.putObject("atlantpraksa", s3Key, file);
         s3Client.setObjectAcl("atlantpraksa", s3Key, CannedAccessControlList.PublicRead);
+
+        //Da uploadamo u subfolder
+        //s3Client.putObject("atlantpraksa", "gallery/" + s3Key, file);
+        //s3Client.setObjectAcl("atlantpraksa", "gallery/" + s3Key, CannedAccessControlList.PublicRead);
 
         return ok(Json.toJson("https://s3.amazonaws.com/atlantpraksa/" + s3Key));
     }
