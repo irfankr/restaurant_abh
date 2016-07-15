@@ -96,6 +96,8 @@ POST      /api/v1/admin/adminTableItems          controllers.RestaurantTablesCon
 # POST    /api/v1/admin/deleteMenuItem             controllers.RestaurantMenuItemController.deleteMenuItem
 POST      /api/v1/admin/adminMenuItems          controllers.RestaurantMenuItemController.adminMenuItems
 
+POST        /api/v1/admin/getLocationCoordinates    controllers.RestaurantLocationController.getLocationCoordinates
+
 
 
 GET     /                                   controllers.HomeController.index(slug = "")

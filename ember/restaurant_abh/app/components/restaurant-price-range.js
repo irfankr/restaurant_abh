@@ -28,7 +28,7 @@ export default Ember.Component.extend({
     },
     removeDolar: function(){
       this.set('priceActive', false);
-      this.sendAction('removeDolar');
+      this.sendAction('clickDolar');
       this.set('value', null);
     }
   }

@@ -32,6 +32,16 @@
                </div>
             </div>
           </div>
+          <div class="row" style="margin-top:25px;">
+            <div class="col-md-12">
+              <h4>LOCATION</h4>
+               <div class="cousines">
+                  {{#each model.listRestaurantsLocations as |restaurantsLocation|}}
+                    {{#restaurant-filter-location clickLocation='clickLocation' activeLocation=model.filter.location restaurantsLocation=restaurantsLocation }}{{/restaurant-filter-location}}
+                  {{/each}}
+               </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="reservation_column_button"><button {{action 'search'}} class="btn button">Search</button></div>

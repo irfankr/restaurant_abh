@@ -158,14 +158,12 @@ export default Ember.Route.extend({
         this.set('filter.priceRange', value);
       }
 
+      //Show filtered restaurants
+      this.getRestaurants();
+      this.refresh();
+
       console.log(this.get('filter'));
     },
-      removeDolar: function(){
-        //Check is activation or deactivation (if is clicked on same value then deactivate)
-        this.set('filter.priceRange', null);
-
-        console.log(this.get('filter'));
-      },
 
     clickStar: function(value){
       //Check is activation or deactivation (if is clicked on same value then deactivate)
@@ -175,14 +173,13 @@ export default Ember.Route.extend({
         this.set('filter.mark', value);
       }
 
+      //Show filtered restaurants
+      this.getRestaurants();
+      this.refresh();
+
       console.log(this.get('filter'));
     },
-      removeStar: function(){
-        //Check is activation or deactivation (if is clicked on same value then deactivate)
-        this.set('filter.mark', null);
 
-        console.log(this.get('filter'));
-      },
 
     clickCategory: function(categoryId){
       function isValueInArray(array, value){
@@ -207,6 +204,10 @@ export default Ember.Route.extend({
 
       //Force template to change active category color
       this.set("filter.categories", this.get('filter.categories').sort().slice());
+
+      //Show filtered restaurants
+      this.getRestaurants();
+      this.refresh();
 
       //Test log
       console.log(this.get('filter'));

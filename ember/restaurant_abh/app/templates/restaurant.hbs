@@ -41,22 +41,17 @@
             {{ember-selectize
               content=selectPeople
               value=reservation.people
-              placeholder="2 people"
+              placeholder="How many?"
              }}
           </div>
           <div class="reservation_column">
-            {{ember-selectize
-              content=selectDate
-              value=reservation.date
-              placeholder="Pick a date"
-              select-item=(action 'changeDate')
-             }}
+            {{bootstrap-datepicker value=tempReservationDate changeDate="changeDate" class="date_picker" todayHighlight=true format="M d, yyyy" startDate=tempTodayDate autoclose=true}}
           </div>
           <div class="reservation_column">
             {{ember-selectize
               content=selectHour
               value=reservation.hour
-              placeholder="7:00 PM"
+              placeholder="Pick hour"
              }}
           </div>
           <div class="reservation_column"><button {{action 'findATable' model.restaurantDetails.id}} class="btn button">Find a table</button></div>

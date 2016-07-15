@@ -33,7 +33,7 @@ export default Ember.Component.extend({
     removeStar: function(){
       if(this.get('filter') == true){
         this.set('voted', false);
-        this.sendAction('removeStar');
+        this.sendAction('clickStar');
         this.set('value', null);
         this.set('votes', null);
       }

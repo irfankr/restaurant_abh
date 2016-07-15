@@ -16,8 +16,8 @@ libraryDependencies ++= Seq(
   "org.hibernate" % "hibernate-entitymanager" % "5.1.0.Final",
   evolutions,
   "com.typesafe.play" %% "play-mailer" % "5.0.0-M1",
-  "com.amazonaws" % "aws-java-sdk" % "1.3.11"
-
+  "com.amazonaws" % "aws-java-sdk" % "1.3.11",
+  javaWs
 )
 
 

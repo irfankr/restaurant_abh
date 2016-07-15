@@ -94,6 +94,19 @@ export default Ember.Controller.extend({
           self.set('selectedCategories', data);
 
           self.set('edit', true);
+
+                  console.log("-----------------------------------------------------------");
+                  //TEST
+                  $.ajax({ //No return here
+                    url: "https://maps.googleapis.com/maps/api/geocode/json?address=Sarajevo&key=AIzaSyDOBtNUVb3u39Vnu2xcEhxlS8pyozc4Gvs",
+                    type: "GET",
+                    processData: false,
+                    async:false, //Need to wait
+                  }).fail(function(data) {
+                    console.log(data);
+                  }).then(function(data) {
+                    console.log(data);
+                  });
         });
       });
     }

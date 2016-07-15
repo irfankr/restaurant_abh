@@ -24,12 +24,7 @@
                }}
             </div>
             <div class="reservation_column">
-              {{ember-selectize
-                content=selectDate
-                value=reservation.date
-                placeholder="Pick a date"
-                select-item=(action 'changeDate')
-               }}
+              {{bootstrap-datepicker value=tempReservationDate changeDate="changeDate" class="date_picker" todayHighlight=true format="M d, yyyy" startDate=tempTodayDate autoclose=true}}
             </div>
             <div class="reservation_column">
               {{ember-selectize
