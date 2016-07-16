@@ -43,7 +43,7 @@
           <div class="col-md-12">
             <div class="form-group admin_restaurants_add_map_container" style="overflow:auto;">
                <label class="input_title">Location</label>
-               {{#g-map lat=restaurant.latitude lng=restaurant.longitude zoom=17 as |google_mapa|}}
+               {{#g-map lat=restaurant.latitude lng=restaurant.longitude zoom=15 as |google_mapa|}}
                   {{g-map-marker google_mapa lat=restaurant.latitude lng=restaurant.longitude}}
                {{/g-map}}
             </div>
@@ -87,9 +87,10 @@
                 {{ember-selectize
                   content=locations
                   optionValuePath="content.id"
-                  optionLabelPath="content.location"
+                  optionLabelPath="content.name"
                   value=restaurant.location
                   placeholder="Select location"
+                  select-item=(action 'changeLocation')
                  }}
             </div>
           </div>

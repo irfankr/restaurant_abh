@@ -23,7 +23,8 @@ export default Ember.Route.extend({
     },
     cancel: function(){
       this.transitionTo('admin.restaurants');
-    }
+    },
+
   },
 
   resetController: function(controller, isExiting, transition) {

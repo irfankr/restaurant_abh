@@ -17,14 +17,94 @@ export default Ember.Controller.extend({
   showImageUploader: true,
   showCoverUploader: true,
 
+  locationBoundaryTop: null,
+  locationBoundaryDown: null,
+  locationBoundaryLeft: null,
+  locationBoundaryRight: null,
+
+  setLocationCoordinates: function(setCoordinates){
+    var self = this;
+    var locationName = null;
+
+    //Set coordinates of location when location is changed
+    var locationId = this.get('restaurant.location');
+
+    for(var i=0; i < self.get('locations').length; i++){
+      if(self.get('locations')[i].id == locationId){
+        locationName = self.get('locations')[i].name;
+        break;
+      }
+    }
+    console.log('IME LOKACIJE: ' + locationName + ", ID: " + locationId);
+    //Get coordinates for that location
+    $.ajax({ //No return here
+      url: "https://maps.googleapis.com/maps/api/geocode/json?address=" + locationName + "&key=AIzaSyDOBtNUVb3u39Vnu2xcEhxlS8pyozc4Gvs",
+      type: "GET",
+      processData: false,
+      async:false, //Need to wait
+    }).fail(function(data) {
+      console.log(data);
+    }).then(function(data) {
+      console.log(data);
+
+      //Set location boundaries
+      self.set('locationBoundaryTop', data.results[0].geometry.bounds.northeast.lat);
+      self.set('locationBoundaryRight', data.results[0].geometry.bounds.northeast.lng);
+      self.set('locationBoundaryBottom', data.results[0].geometry.bounds.southwest.lat);
+      self.set('locationBoundaryLeft', data.results[0].geometry.bounds.southwest.lng);
+
+      if(setCoordinates){
+        //Set current coorinates to location coordinates
+        self.set('restaurant.longitude', data.results[0].geometry.location.lng);
+        self.set('restaurant.latitude', data.results[0].geometry.location.lat);
+      }
+    });
+  },
+
+  markerPositionChanged: function(){
+    var self = this;
+
+    var lng = this.get('restaurant.longitude');
+    var lat = this.get('restaurant.latitude');
+
+    var boundTop = this.get('locationBoundaryTop');
+    var boundLeft = this.get('locationBoundaryLeft');
+    var boundBottom = this.get('locationBoundaryBottom');
+    var boundRight = this.get('locationBoundaryRight');
+
+    if(lng != 0 && lat != 0){
+        //Check is marker out of bounds
+        if(lat > boundTop || lat < boundBottom || lng <  boundLeft || lng > boundRight){
+          //Display notification
+          self.set('notification.visible', true);
+          self.set('notification.classStyle', 'alert-danger');
+          self.set('notification.text', 'Marker position is not in selected location');
+
+          //Reset location select
+          self.set('restaurant.location', null);
+
+          //Reset boundares
+          self.set('locationBoundaryTop', null);
+          self.set('locationBoundaryDown', null);
+          self.set('locationBoundaryLeft', null);
+          self.set('locationBoundaryRight', null);
+
+        } else {
+          //Hide notification
+          self.set('notification.visible', false);
+        }
+    }
+
+  },
+
   whenIdRestaurantIsLoaded: function(){
     var self = this;
 
     if(this.get('model.idRestaurant') == null){
       this.set('notification.visible', false);
       this.set('restaurant', Restaurant.create());
-      this.set('restaurant.longitude', -80.21);
-      this.set('restaurant.latitude', 25.77);
+      this.set('restaurant.longitude', 0);
+      this.set('restaurant.latitude', 0);
       this.set('selectedCategories', []);
       this.set('edit', false);
       this.set('showImageUploader', true);
@@ -51,15 +131,16 @@ export default Ember.Controller.extend({
 
       //Get all locations for restaurants
       $.ajax({ //No return here
-        url: "/api/v1/getRestaurantsLocations",
-        type: "GET",
+        url: "/api/v1/admin/getFilteredLocations",
+        type: "POST",
+        data: '{"itemsPerPage":1000, "pageNumber":1}',
         processData: false,
         async:false, //Need to wait
         contentType: "application/json; charset=UTF-8",
       }).fail(function(data) {
         console.log(data);
       }).then(function(data) {
-        self.set('locations', data);
+        self.set('locations', data.locations);
       });
 
     });
@@ -79,6 +160,12 @@ export default Ember.Controller.extend({
         //Set fetched items
         self.set('restaurant', data);
 
+        //Set coordinates
+        self.setLocationCoordinates(false);
+
+        //Dinamicaly add observer
+        self.addObserver('restaurant.latitude', self, "markerPositionChanged");
+
         //Get selected Categories for this restaurant
         $.ajax({ //No return here
           url: "/api/v1/admin/getRestaurantCategories",
@@ -94,22 +181,13 @@ export default Ember.Controller.extend({
           self.set('selectedCategories', data);
 
           self.set('edit', true);
-
-                  console.log("-----------------------------------------------------------");
-                  //TEST
-                  $.ajax({ //No return here
-                    url: "https://maps.googleapis.com/maps/api/geocode/json?address=Sarajevo&key=AIzaSyDOBtNUVb3u39Vnu2xcEhxlS8pyozc4Gvs",
-                    type: "GET",
-                    processData: false,
-                    async:false, //Need to wait
-                  }).fail(function(data) {
-                    console.log(data);
-                  }).then(function(data) {
-                    console.log(data);
-                  });
         });
       });
+    } else {
+      //Dinamicaly add observer
+      self.addObserver('restaurant.latitude', self, "markerPositionChanged");
     }
+
   }.observes("model.idRestaurant"),
 
   validateInput: function(){
@@ -159,9 +237,11 @@ export default Ember.Controller.extend({
   },
 
   actions: {
+
     showImageUploader: function(){
       this.set('showImageUploader', true);
     },
+
     showCoverUploader: function(){
        this.set('showCoverUploader', true);
     },
@@ -178,8 +258,18 @@ export default Ember.Controller.extend({
 
     resetDataOnExit: function(){
       this.set('notification.visible', false);
+
+      //Remove observer
+      this.removeObserver('restaurant.latitude', self, "markerPositionChanged");
+
       //Empty restaurants var
       this.set('restaurant', Restaurant.create());
+
+      //Reset boundares
+      this.set('locationBoundaryTop', null);
+      this.set('locationBoundaryDown', null);
+      this.set('locationBoundaryLeft', null);
+      this.set('locationBoundaryRight', null);
     },
 
     addItem: function(){
@@ -281,6 +371,10 @@ export default Ember.Controller.extend({
           self.get('selectedCategories').removeObject(self.get('selectedCategories')[i]);
         }
       }
+    },
+
+    changeLocation: function(){
+      this.setLocationCoordinates(true);
     }
   }
 });

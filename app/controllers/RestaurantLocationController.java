@@ -138,55 +138,6 @@ public class RestaurantLocationController extends Controller {
     }
 
     public Result getLocationCoordinates(){
-        //WSRequest request = ws.url("https://maps.googleapis.com/maps/api/geocode/json?address=Sarajevo&key=AIzaSyDOBtNUVb3u39Vnu2xcEhxlS8pyozc4Gvs");
-
-        //CompletionStage<JsonNode> jsonPromise = ws.url("https://maps.googleapis.com/maps/api/geocode/json?address=Sarajevo&key=AIzaSyDOBtNUVb3u39Vnu2xcEhxlS8pyozc4Gvs").get().thenApply(WSResponse::asJson);
-
-
-        //ObjectMapper mapper = new ObjectMapper();
-
-        //String content = jsonPromise.get("data").textValue();
-
-        //System.out.println(jsonPromise);
-
-        /*return WS.url("https://maps.googleapis.com/maps/api/geocode/json?address=Sarajevo&key=AIzaSyDOBtNUVb3u39Vnu2xcEhxlS8pyozc4Gvs").get().map((response) -> {
-            return ok(response.asJson());
-        });*/
-
-        //return ok(jsonPromise.toString());
-
-        /*WSRequest request = ws.url("https://maps.googleapis.com/maps/api/geocode/json?address=Sarajevo&key=AIzaSyDOBtNUVb3u39Vnu2xcEhxlS8pyozc4Gvs");
-
-        CompletionStage<Result> responsePromise = request.get()
-                .thenApply(response -> ok("RESULT " + response));
-
-        System.out.println(responsePromise.toString());
-
-        try {
-            Thread.sleep(2000);
-        } catch(InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }
-
-        System.out.println(responsePromise.toString());*/
-
-        /*WSRequest request = ws.url("https://maps.googleapis.com/maps/api/geocode/json?address=Sarajevo&key=AIzaSyDOBtNUVb3u39Vnu2xcEhxlS8pyozc4Gvs");
-        WSRequest complexRequest = request.setRequestTimeout(3000);
-        CompletionStage<WSResponse> responsePromise = complexRequest.get();
-        Thread.sleep(2000);
-        System.out.println();*/
-
         return ok("IRFAN");
     }
-
-    /*public static CompletionStage<JsonNode> getPromise() {
-        Promise<JsonNode> promise = ws.url("https://maps.googleapis.com/maps/api/geocode/json?address=Sarajevo&key=AIzaSyDOBtNUVb3u39Vnu2xcEhxlS8pyozc4Gvs").get().map((r) -> {
-            if (r.getStatus() == 200) {
-                return ok(r.asJson());
-            } else {
-                return badRequest("Bad request");
-            }
-        });
-        return promise;
-    }*/
 }
