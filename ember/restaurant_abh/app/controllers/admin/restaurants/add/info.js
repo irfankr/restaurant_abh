@@ -22,9 +22,14 @@ export default Ember.Controller.extend({
   locationBoundaryLeft: null,
   locationBoundaryRight: null,
 
+  markerPositionError: false,
+
   setLocationCoordinates: function(setCoordinates){
     var self = this;
     var locationName = null;
+
+    //Remove marker position error
+    this.set('markerPositionError', false);
 
     //Set coordinates of location when location is changed
     var locationId = this.get('restaurant.location');
@@ -76,12 +81,10 @@ export default Ember.Controller.extend({
         //Check is marker out of bounds
         if(lat > boundTop || lat < boundBottom || lng <  boundLeft || lng > boundRight){
           //Display notification
-          self.set('notification.visible', true);
-          self.set('notification.classStyle', 'alert-danger');
-          self.set('notification.text', 'Marker position is not in selected location');
+          self.set('markerPositionError', true);
 
           //Reset location select
-          self.set('restaurant.location', null);
+          //self.set('restaurant.location', null);
 
           //Reset boundares
           self.set('locationBoundaryTop', null);
@@ -109,10 +112,12 @@ export default Ember.Controller.extend({
       this.set('edit', false);
       this.set('showImageUploader', true);
       this.set('showCoverUploader', true);
+      this.set('markerPositionError', false);
     } else {
       this.set('edit', true);
       this.set('showImageUploader', false);
       this.set('showCoverUploader', false);
+      this.set('markerPositionError', false);
     }
 
     //Get all categories of restaurant
@@ -157,6 +162,7 @@ export default Ember.Controller.extend({
       }).fail(function(data) {
         console.log(data);
       }).then(function(data) {
+        console.log(data);
         //Set fetched items
         self.set('restaurant', data);
 
@@ -307,23 +313,25 @@ export default Ember.Controller.extend({
         return false;
       }
 
-      $.ajax({ //No return here
-        url: "/api/v1/admin/addRestaurant",
-        type: "POST",
-        data: JSON.stringify(self.get('restaurant')),
-        processData: false,
-        async:false, //Need to wait
-        contentType: "application/json; charset=UTF-8",
-      }).fail(function(data) {
-        console.log(data);
-      }).then(function(data) {
-        //Display notification
-        self.set('notification.visible', true);
-        self.set('notification.classStyle', 'alert-success');
-        self.set('notification.text', 'Successful insert!');
+      if(!self.get('markerPositionError')){
+        $.ajax({ //No return here
+          url: "/api/v1/admin/addRestaurant",
+          type: "POST",
+          data: JSON.stringify(self.get('restaurant')),
+          processData: false,
+          async:false, //Need to wait
+          contentType: "application/json; charset=UTF-8",
+        }).fail(function(data) {
+          console.log(data);
+        }).then(function(data) {
+          //Display notification
+          self.set('notification.visible', true);
+          self.set('notification.classStyle', 'alert-success');
+          self.set('notification.text', 'Successful insert!');
 
-        self.send('setIdRestaurant', data.id);
-      });
+          self.send('setIdRestaurant', data.id);
+        });
+      }
 
     },
     editItem: function(){
@@ -345,21 +353,23 @@ export default Ember.Controller.extend({
       //Call validation function
       if(!this.validateInput()) return false;
 
-      $.ajax({ //No return here
-        url: "/api/v1/admin/editRestaurant",
-        type: "POST",
-        data: JSON.stringify(self.get('restaurant')),
-        processData: false,
-        async:false, //Need to wait
-        contentType: "application/json; charset=UTF-8",
-      }).fail(function(data) {
-        console.log(data);
-      }).then(function(data) {
-        //Display notification
-        self.set('notification.visible', true);
-        self.set('notification.classStyle', 'alert-success');
-        self.set('notification.text', 'Successful update!');
-      });
+      if(!self.get('markerPositionError')){
+        $.ajax({ //No return here
+          url: "/api/v1/admin/editRestaurant",
+          type: "POST",
+          data: JSON.stringify(self.get('restaurant')),
+          processData: false,
+          async:false, //Need to wait
+          contentType: "application/json; charset=UTF-8",
+        }).fail(function(data) {
+          console.log(data);
+        }).then(function(data) {
+          //Display notification
+          self.set('notification.visible', true);
+          self.set('notification.classStyle', 'alert-success');
+          self.set('notification.text', 'Successful update!');
+        });
+      }
     },
 
     removedItemInCategoriesDropDown: function(category){

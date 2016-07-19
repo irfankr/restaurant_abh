@@ -1,6 +1,8 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
+  titleToken: 'Gallery / Restaurants / Administration',
+
   idRestaurant: null,
 
   exit: function(){

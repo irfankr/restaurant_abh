@@ -1,6 +1,8 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
+  titleToken: 'Edit / Users / Administration',
+
   idUser: null,
 
   model: function(param){

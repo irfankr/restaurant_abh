@@ -27,6 +27,7 @@ public class RestaurantGalleryImage {
 
     private String imageFileName;
 
+
     public RestaurantGalleryImage() {}
 
     public void save() { JPA.em().persist(this); }

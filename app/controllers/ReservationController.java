@@ -1,9 +1,6 @@
 package controllers;
 
-import models.Reservation;
-import models.Restaurant;
-import models.RestaurantMenuItem;
-import models.RestaurantTables;
+import models.*;
 import controllers.ReservationController;
 import play.*;
 import play.data.Form;
@@ -60,7 +57,7 @@ public class ReservationController extends Controller {
         //Set User ID from session
         if(session("idUser") != null){
             long userId = Long.parseLong(session("idUser"));
-            reservation.setIdUser(userId);
+            reservation.setReservationuser(User.findById(userId));
         }
 
         //Time stamp

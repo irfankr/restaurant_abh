@@ -1,6 +1,8 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
+  titleToken: 'Administration',
+
   counters: null,
   model: function(){
     var self = this;

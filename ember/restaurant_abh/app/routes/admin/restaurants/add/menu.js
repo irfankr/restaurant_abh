@@ -5,6 +5,8 @@ import Adminrestauranteditqueue from '../../../../models/adminrestauranteditqueu
 import Notification from '../../../../models/notification';
 
 export default Ember.Route.extend({
+  titleToken: 'Menu / Restaurants / Administration',
+
   menuitems: Menuitem.create(),
   newMenuItem: Menuitem.create(),
   filter: Filter.create(),
@@ -141,7 +143,6 @@ export default Ember.Route.extend({
       //Set additional data
       var randomnumber = Math.floor(Math.random() * (9999999 - 1111111 + 1)) + 1111111;
       this.set('newMenuItem.type', this.get('filter.type'));
-      this.set('newMenuItem.idRestaurant', this.get('idRestaurant'));
       this.set('newMenuItem.id', randomnumber);
 
       //Add new menu idem to lists for send to play route
@@ -247,6 +248,7 @@ export default Ember.Route.extend({
       this.set('adminRestaurantEditQueue.addQueue', this.get('itemsToAdd'));
       this.set('adminRestaurantEditQueue.editQueue', this.get('itemsToEdit'));
       this.set('adminRestaurantEditQueue.deleteQueue', this.get('itemsToDelete'));
+      this.set('adminRestaurantEditQueue.idRestaurant', this.get('idRestaurant'));
 
       var data = JSON.stringify(self.get('adminRestaurantEditQueue'));
       console.log(data);

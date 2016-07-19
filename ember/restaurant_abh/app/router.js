@@ -2,7 +2,16 @@ import Ember from 'ember';
 import config from './config/environment';
 
 const Router = Ember.Router.extend({
-  location: config.locationType
+  location: config.locationType,
+  headData: Ember.inject.service(),
+
+  setTitle(title) {
+    this.get('headData').set('title', title);
+    return ga('send', 'pageview', {
+      'page': this.get('url'),
+      'title': title
+    });
+  }
 });
 
 Router.map(function() {

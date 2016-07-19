@@ -43,7 +43,7 @@ public class RestaurantLocationController extends Controller {
 
             if(locationForm.get().searchText != null && locationForm.get().searchText != "") {
                 //Search text
-                predicates.add(qb.like(query.<String>get("name"), "%"+locationForm.get().searchText+"%"));
+                predicates.add(qb.like(qb.upper(query.<String>get("name")), "%"+locationForm.get().searchText.toUpperCase()+"%"));
             }
 
         //Execute query
@@ -140,4 +140,9 @@ public class RestaurantLocationController extends Controller {
     public Result getLocationCoordinates(){
         return ok("IRFAN");
     }
+
+    /*@Transactional
+    public Result getRestaurantLocation(){
+        Form<RestaurantLocation.RestaurantLocationDto> locationForm = form(RestaurantLocation.RestaurantLocationDto.class).bindFromRequest();
+    }*/
 }

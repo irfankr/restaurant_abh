@@ -14,12 +14,23 @@ import static play.data.Form.*;
 import java.util.*;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="reservations")
 public class Reservation {
     @Id @GeneratedValue long id;
-    private long idTable;
-    private long idUser;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="idtable")
+    @JsonIgnore
+    private RestaurantTables restauranttables;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="iduser")
+    @JsonIgnore
+    private User reservationuser;
+
     private long persons;
     private Date reservationDateTime;
 
@@ -29,20 +40,20 @@ public class Reservation {
         return id;
     }
 
-    public long getIdTable() {
-        return idTable;
+    public RestaurantTables getRestauranttables() {
+        return restauranttables;
     }
 
-    public void setIdTable(long idTable) {
-        this.idTable = idTable;
+    public void setRestauranttables(RestaurantTables restauranttables) {
+        this.restauranttables = restauranttables;
     }
 
-    public long getIdUser() {
-        return idUser;
+    public User getReservationuser() {
+        return reservationuser;
     }
 
-    public void setIdUser(long idUser) {
-        this.idUser = idUser;
+    public void setReservationuser(User reservationuser) {
+        this.reservationuser = reservationuser;
     }
 
     public long getPersons() {

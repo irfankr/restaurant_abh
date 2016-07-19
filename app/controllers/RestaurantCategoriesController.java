@@ -61,7 +61,7 @@ public class RestaurantCategoriesController extends Controller {
 
             if(categoryForm.get().searchText != null && categoryForm.get().searchText != "") {
                 //Search text
-                predicates.add(qb.like(query.<String>get("name"), "%"+categoryForm.get().searchText+"%"));
+                predicates.add(qb.like(qb.upper(query.<String>get("name")), "%"+categoryForm.get().searchText.toUpperCase()+"%"));
             }
 
         //Execute query

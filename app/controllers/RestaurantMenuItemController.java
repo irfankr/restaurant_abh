@@ -25,11 +25,12 @@ import static play.libs.Json.toJson;
 
 public class RestaurantMenuItemController extends Controller {
 
-    public void addMenuItem(RestaurantMenuItem menuItemInput) {
+    public void addMenuItem(RestaurantMenuItem menuItemInput, long idRestaurant) {
         //Create menuitem object
         RestaurantMenuItem menuItem = new RestaurantMenuItem();
 
-        menuItem.setIdRestaurant(menuItemInput.getIdRestaurant());
+        //menuItem.setIdRestaurant(menuItemInput.getIdRestaurant());
+        menuItem.setRestaurantmenuitems(Restaurant.findById(idRestaurant));
         menuItem.setDescription(menuItemInput.getDescription());
         menuItem.setName(menuItemInput.getName());
         menuItem.setPrice(menuItemInput.getPrice());
@@ -73,7 +74,7 @@ public class RestaurantMenuItemController extends Controller {
         //Add new menu items
         List<RestaurantMenuItem> addQueue = new ArrayList<RestaurantMenuItem>(inputForm.get().addQueue);
         for(int i=0; i<addQueue.size(); i++){
-            addMenuItem(addQueue.get(i));
+            addMenuItem(addQueue.get(i), inputForm.get().idRestaurant);
         }
 
         List<RestaurantMenuItem> editQueue = new ArrayList<RestaurantMenuItem>(inputForm.get().editQueue);

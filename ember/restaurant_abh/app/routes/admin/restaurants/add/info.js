@@ -3,6 +3,8 @@ import Location from '../../../../models/location';
 import Notification from '../../../../models/notification';
 
 export default Ember.Route.extend({
+  titleToken: 'Basic details / Restaurants / Administration',
+
   location: Location.create(),
   notification: Notification.create(),
   idRestaurant: null,

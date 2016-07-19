@@ -4,6 +4,10 @@ import RestaurantMenu from '../models/restaurantmenu';
 import Comment from '../models/comment';
 
 export default Ember.Route.extend({
+  titleToken: function(model) {
+    return this.get('restaurantDetails.restaurantName');
+  },
+
   restaurantId: null,
   restaurant: Restaurant.create(),
   currentUser: Ember.inject.service(),

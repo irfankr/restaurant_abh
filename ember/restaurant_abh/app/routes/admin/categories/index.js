@@ -3,6 +3,8 @@ import Filter from '../../../models/filter';
 import Notification from '../../../models/notification';
 
 export default Ember.Route.extend({
+  titleToken: 'Categories / Administration',
+
   listItems: null,
   itemPages: [],
   currentPageNumber: 1,

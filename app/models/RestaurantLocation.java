@@ -141,4 +141,25 @@ public class RestaurantLocation {
             this.name = name;
         }
     }
+
+    public static class RestaurantLocationDto {
+        public long idRestaurant;
+        public String location;
+
+        public long getIdRestaurant() {
+            return idRestaurant;
+        }
+
+        public void setIdRestaurant(long idRestaurant) {
+            this.idRestaurant = idRestaurant;
+        }
+
+        public String getLocation() {
+            return location;
+        }
+
+        public void setLocation(String location) {
+            this.location = location;
+        }
+    }
 }

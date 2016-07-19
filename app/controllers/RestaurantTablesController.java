@@ -36,12 +36,12 @@ public class RestaurantTablesController extends Controller {
         return ok(Json.toJson(tables));
     }
 
-    public void addTable(RestaurantTables tableItemInput) {
+    public void addTable(RestaurantTables tableItemInput, long idRestaurant) {
         //Create table object
         RestaurantTables table = new RestaurantTables();
 
         table.setSittingPlaces(tableItemInput.getSittingPlaces());
-        table.setIdRestaurant(tableItemInput.getIdRestaurant());
+        table.setRestauranttables(Restaurant.findById(idRestaurant));
 
         //Save to database
         table.save();
@@ -76,7 +76,7 @@ public class RestaurantTablesController extends Controller {
         //Add new table items
         List<RestaurantTables> addQueue = new ArrayList<RestaurantTables>(inputForm.get().addQueue);
         for(int i=0; i<addQueue.size(); i++){
-            addTable(addQueue.get(i));
+            addTable(addQueue.get(i), inputForm.get().idRestaurant);
         }
 
         List<RestaurantTables> editQueue = new ArrayList<RestaurantTables>(inputForm.get().editQueue);

@@ -46,6 +46,13 @@
                {{#g-map lat=restaurant.latitude lng=restaurant.longitude zoom=15 as |google_mapa|}}
                   {{g-map-marker google_mapa lat=restaurant.latitude lng=restaurant.longitude}}
                {{/g-map}}
+
+               {{#if markerPositionError}}
+                 <div class="alert alert-danger" style="margin-top:15px;">
+                   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                   <strong>Error!</strong> Marker position is not in selected location
+                 </div>
+               {{/if}}
             </div>
           </div>
         </div>

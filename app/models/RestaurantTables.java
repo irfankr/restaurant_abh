@@ -14,13 +14,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static play.data.Form.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="restauranttables")
 public class RestaurantTables {
     @Id @GeneratedValue long id;
-    private long idRestaurant;
     private long sittingPlaces;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="idrestaurant")
+    @JsonIgnore
+    private Restaurant restauranttables;
+
+
+
 
     public RestaurantTables() {}
 
@@ -32,12 +40,12 @@ public class RestaurantTables {
         return id;
     }
 
-    public long getIdRestaurant() {
-        return idRestaurant;
+    public Restaurant getRestauranttables() {
+        return restauranttables;
     }
 
-    public void setIdRestaurant(long idRestaurant) {
-        this.idRestaurant = idRestaurant;
+    public void setRestauranttables(Restaurant restauranttables) {
+        this.restauranttables = restauranttables;
     }
 
     public long getSittingPlaces() {
@@ -99,6 +107,7 @@ public class RestaurantTables {
         public List<RestaurantTables> addQueue = new ArrayList<RestaurantTables>();
         public List<RestaurantTables> editQueue = new ArrayList<RestaurantTables>();
         public List<RestaurantTables> deleteQueue = new ArrayList<RestaurantTables>();
+        public long idRestaurant;
 
         public List<RestaurantTables> getAddQueue() {
             return addQueue;
@@ -122,6 +131,14 @@ public class RestaurantTables {
 
         public void setDeleteQueue(List<RestaurantTables> deleteQueue) {
             this.deleteQueue = deleteQueue;
+        }
+
+        public long getIdRestaurant() {
+            return idRestaurant;
+        }
+
+        public void setIdRestaurant(long idRestaurant) {
+            this.idRestaurant = idRestaurant;
         }
     }
 }

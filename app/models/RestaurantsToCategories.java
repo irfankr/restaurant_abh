@@ -16,12 +16,25 @@ import java.util.List;
 import java.util.Collections;
 import static play.data.Form.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="restaurantstocategories")
 public class RestaurantsToCategories {
     @Id @GeneratedValue long id;
-    private long idRestaurant;
-    private long idCategory;
+
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="idrestaurant")
+    @JsonIgnore
+    private Restaurant restaurant;
+
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="idcategory")
+    @JsonIgnore
+    private RestaurantCategories category;
+
+
+
 
     public RestaurantsToCategories() {}
 
@@ -33,20 +46,20 @@ public class RestaurantsToCategories {
         this.id = id;
     }
 
-    public long getIdCategory() {
-        return idCategory;
+    public RestaurantCategories getCategory() {
+        return category;
     }
 
-    public void setIdCategory(long idCategory) {
-        this.idCategory = idCategory;
+    public void setCategory(RestaurantCategories category) {
+        this.category = category;
     }
 
-    public long getIdRestaurant() {
-        return idRestaurant;
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
-    public void setIdRestaurant(long idRestaurant) {
-        this.idRestaurant = idRestaurant;
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     public void save() { JPA.em().persist(this); }
@@ -66,7 +79,7 @@ public class RestaurantsToCategories {
 
             List<Long> idCategories = new ArrayList();
             for (int i = 0; i < categories.size(); i++) {
-                idCategories.add(categories.get(i).getIdCategory());
+                idCategories.add(categories.get(i).getCategory().getId());
             }
 
             return idCategories;
@@ -94,8 +107,8 @@ public class RestaurantsToCategories {
         //Loop through categories to add
         for(int i=0; i<toAdd.size(); i++){
             RestaurantsToCategories newEntry = new RestaurantsToCategories();
-            newEntry.setIdRestaurant(idRestaurant);
-            newEntry.setIdCategory(toAdd.get(i));
+            newEntry.setRestaurant(Restaurant.findById(idRestaurant));
+            newEntry.setCategory(RestaurantCategories.findById(toAdd.get(i)));
             newEntry.save();
         }
 

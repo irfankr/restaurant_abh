@@ -3,6 +3,8 @@ import Location from '../../../models/location';
 import Notification from '../../../models/notification';
 
 export default Ember.Route.extend({
+  titleToken: 'Edit / Locations / Administration',
+
   location: Location.create(),
   notification: Notification.create(),
   finished: false,

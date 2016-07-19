@@ -133,13 +133,25 @@ public class RestaurantController extends Controller {
 
         //Get restaurant
         restaurant = restaurant.findById(restaurantForm.get().id);
-
+        System.out.println(restaurant.getLocation().getName());
 
         if(restaurant != null){
-            //Insert string of foodtype (restaurant categories)
-            restaurant.setFoodType(Restaurant.getStringRestaurantCategories(restaurantForm.get().id));
+            Restaurant.FormRestaurantDto returnRestaurant = new Restaurant.FormRestaurantDto();
 
-            return ok(Json.toJson(restaurant));
+            returnRestaurant.setId(restaurant.getId());
+            returnRestaurant.setImageFileName(restaurant.getImageFileName());
+            returnRestaurant.setCoverFileName(restaurant.getCoverFileName());
+            returnRestaurant.setDescription(restaurant.getDescription());
+            returnRestaurant.setLatitude(restaurant.getLatitude());
+            returnRestaurant.setLongitude(restaurant.getLongitude());
+            returnRestaurant.setMark(restaurant.getMark());
+            returnRestaurant.setLocation(restaurant.getLocation().getId());
+            returnRestaurant.setPriceRange(restaurant.getPriceRange());
+            returnRestaurant.setVotes(restaurant.getVotes());
+            returnRestaurant.setRestaurantName(restaurant.getRestaurantName());
+            returnRestaurant.setFoodType(Restaurant.getStringRestaurantCategories(restaurantForm.get().id));
+
+            return ok(Json.toJson(returnRestaurant));
         } else {
             return badRequest("{\"error\": \"Restaurant doesn't exist!\"}");
         }
@@ -237,7 +249,7 @@ public class RestaurantController extends Controller {
 
             //Search text
             if(restaurantForm.get().searchText != null && restaurantForm.get().searchText != "") {
-                predicates.add(qb.like(query.<String>get("restaurantName"), "%"+restaurantForm.get().searchText+"%"));
+                predicates.add(qb.like(qb.upper(query.<String>get("restaurantName")), "%"+restaurantForm.get().searchText.toUpperCase()+"%"));
             }
 
             //Location
@@ -325,11 +337,11 @@ public class RestaurantController extends Controller {
         Iterator resultListIterator = resultList.iterator();
 
         //Create restaurants locations list object
-        List<Restaurant.RestaurantLocation> restaurantsLocations = new ArrayList();
+        List<Restaurant.RestaurantLocationDto> restaurantsLocations = new ArrayList();
 
         while (resultListIterator.hasNext()) {
             Object col[] = (Object[])resultListIterator.next();
-            Restaurant.RestaurantLocation restaurantLocation = new Restaurant.RestaurantLocation();
+            Restaurant.RestaurantLocationDto restaurantLocation = new Restaurant.RestaurantLocationDto();
             //Set attribute values
             RestaurantLocation location = new RestaurantLocation();
 
@@ -367,7 +379,7 @@ public class RestaurantController extends Controller {
 
             //Set User ID from session
             long userId = Long.parseLong(session("idUser"));
-            reservation.setIdUser(userId);
+            reservation.setReservationuser(User.findById(userId));
 
             //Time stamp
             String reservationDateTimeFromEmber = reservationForm.get().reservationDate + " " + reservationForm.get().reservationHour;
@@ -405,7 +417,8 @@ public class RestaurantController extends Controller {
                 firstFreeTable = freeTables.get(0);
 
                 //Set id of table
-                reservation.setIdTable(firstFreeTable.getId());
+                //reservation.setIdTable(firstFreeTable.getId());
+                reservation.setRestauranttables(RestaurantTables.findById(firstFreeTable.getId()));
 
                 //Save reservation to database
                 reservation.save();
@@ -419,10 +432,13 @@ public class RestaurantController extends Controller {
 
     @Transactional
     public Result getAllRestaurantsSortReservationsToday() {
+        //Form<Restaurant.FormRestaurantDto> inputForm = form(Restaurant.FormRestaurantDto.class).bindFromRequest();
+
         //Declare list
         List<Restaurant> restaurants = new ArrayList<Restaurant>();
         Restaurant restaurant = new Restaurant();
-        restaurants = restaurant.getAllSortByTodayReservations();
+        //restaurants = restaurant.getAllSortByTodayReservations(inputForm.get().latitude, inputForm.get().longitude);
+        restaurants = restaurant.getAllSortByTodayReservations((long) 43.8469652, (long) 18.3742296);
 
         //Insert categories string in restaurant
         for (int i = 0; i < restaurants.size(); i++) {
@@ -441,7 +457,7 @@ public class RestaurantController extends Controller {
         RestaurantComment comment = new RestaurantComment();
 
         //Set values
-        comment.setIdRestaurant(inputForm.get().idRestaurant);
+        comment.setRestaurantComments(Restaurant.findById(inputForm.get().idRestaurant));
         comment.setComment(inputForm.get().comment);
         comment.setIdUser(inputForm.get().idUser);
         comment.setMark(inputForm.get().mark);
@@ -542,7 +558,7 @@ public class RestaurantController extends Controller {
 
         if(inputForm.get().searchText != null && inputForm.get().searchText != "") {
             //Search text
-            predicates.add(qb.like(query.<String>get("restaurantName"), "%"+inputForm.get().searchText+"%"));
+            predicates.add(qb.like(qb.upper(query.<String>get("restaurantName")), "%"+inputForm.get().searchText.toUpperCase()+"%"));
         }
 
         //Execute query
@@ -569,6 +585,8 @@ public class RestaurantController extends Controller {
 
         returnItems.setNumberOfRestaurantPages(numberOfPages);
 
+        System.out.println(Json.toJson(returnItems));
+
         return ok(Json.toJson(returnItems));
     }
 
@@ -587,7 +605,8 @@ public class RestaurantController extends Controller {
         restaurant.setCoverFileName(inputForm.get().coverFileName);
         restaurant.setLatitude(inputForm.get().latitude);
         restaurant.setLongitude(inputForm.get().longitude);
-        restaurant.setLocation(inputForm.get().location);
+        //restaurant.setLocation(inputForm.get().location);
+        restaurant.setLocation(RestaurantLocation.findById(inputForm.get().location));
         restaurant.setPriceRange(inputForm.get().priceRange);
         restaurant.setFoodType("-");
 
@@ -617,7 +636,7 @@ public class RestaurantController extends Controller {
             restaurant.setCoverFileName(inputForm.get().coverFileName);
             restaurant.setLatitude(inputForm.get().latitude);
             restaurant.setLongitude(inputForm.get().longitude);
-            restaurant.setLocation(inputForm.get().location);
+            restaurant.setLocation(RestaurantLocation.findById(inputForm.get().location));
             restaurant.setPriceRange(inputForm.get().priceRange);
             restaurant.setFoodType("NO");
 
@@ -655,12 +674,14 @@ public class RestaurantController extends Controller {
             query.setParameter(1, inputForm.get().id);
             List<RestaurantsToCategories> categories = query.getResultList();
 
-            List<RestaurantCategories> categoriesWithNames = new ArrayList<RestaurantCategories>();
+            List<RestaurantCategories.FormCategoriesDto> categoriesWithNames = new ArrayList<RestaurantCategories.FormCategoriesDto>();
 
             for(int i=0; i<categories.size(); i++){
-                RestaurantCategories tempCategory = new RestaurantCategories();
+                RestaurantCategories.FormCategoriesDto tempCategoryWithName = new RestaurantCategories.FormCategoriesDto();
+                tempCategoryWithName.setId(categories.get(i).getCategory().getId());
+                tempCategoryWithName.setName(categories.get(i).getCategory().getName());
 
-                categoriesWithNames.add(tempCategory.findById(categories.get(i).getIdCategory()));
+                categoriesWithNames.add(tempCategoryWithName);
             }
 
             return ok(Json.toJson(categoriesWithNames));

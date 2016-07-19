@@ -65,6 +65,7 @@ POST    /api/v1/admin/addLocation                controllers.RestaurantLocationC
 POST    /api/v1/admin/editLocation               controllers.RestaurantLocationController.editLocation
 POST    /api/v1/admin/deleteLocation             controllers.RestaurantLocationController.deleteLocation
 POST    /api/v1/admin/getLocationDetails         controllers.RestaurantLocationController.getLocationDetails
+# POST    /api/v1/admin/getRestaurantLocation     controllers.RestaurantLocationController.getRestaurantLocation
 
 # Restaurants (Administration)
 POST    /api/v1/admin/getFilteredRestaurants      controllers.RestaurantController.getFilteredRestaurants

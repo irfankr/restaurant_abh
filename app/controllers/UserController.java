@@ -59,6 +59,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 
+
 public class UserController extends Controller {
     @Inject MailerClient mailerClient;
 
@@ -298,9 +299,9 @@ public class UserController extends Controller {
             //Search text
             predicates.add(
                     qb.or(
-                            qb.like(query.<String>get("email"), "%"+inputForm.get().searchText+"%"),
-                            qb.like(query.<String>get("firstname"), "%"+inputForm.get().searchText+"%"),
-                            qb.like(query.<String>get("lastname"), "%"+inputForm.get().searchText+"%")
+                            qb.like(qb.upper(query.<String>get("email")), "%"+inputForm.get().searchText.toUpperCase()+"%"),
+                            qb.like(qb.upper(query.<String>get("firstname")), "%"+inputForm.get().searchText.toUpperCase()+"%"),
+                            qb.like(qb.upper(query.<String>get("lastname")), "%"+inputForm.get().searchText.toUpperCase()+"%")
                     )
             );
         }

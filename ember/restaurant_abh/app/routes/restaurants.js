@@ -2,13 +2,8 @@ import Ember from 'ember';
 import Filter from '../models/filter';
 
 export default Ember.Route.extend({
-  /*
-    Ovim se zabranjivalo da se prikaze ova stranica ako nije ulogovan
-    var self = this;
-    if(this.get('userLoggedIn') == false){
-      self.transitionTo('login');
-    }
-    */
+  titleToken: 'Restaurants',
+
   listRestaurants: null,
   listRestaurantsLocations: null,
   restaurantsPages: [],

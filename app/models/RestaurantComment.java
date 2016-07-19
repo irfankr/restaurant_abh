@@ -13,15 +13,21 @@ import java.util.List;
 
 import static play.data.Form.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="restaurantcomments")
 public class RestaurantComment {
     @Id @GeneratedValue long id;
     private long mark;
     private long idUser;
-    private long idRestaurant;
     private String comment;
     private Date insertTime;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="idrestaurant")
+    @JsonIgnore
+    private Restaurant restaurantComments;
 
     public RestaurantComment() {}
 
@@ -49,14 +55,6 @@ public class RestaurantComment {
         this.idUser = idUser;
     }
 
-    public long getIdRestaurant() {
-        return idRestaurant;
-    }
-
-    public void setIdRestaurant(long idRestaurant) {
-        this.idRestaurant = idRestaurant;
-    }
-
     public String getComment() {
         return comment;
     }
@@ -71,6 +69,14 @@ public class RestaurantComment {
 
     public void setInsertTime(Date insertTime) {
         this.insertTime = insertTime;
+    }
+
+    public Restaurant getRestaurantComments() {
+        return restaurantComments;
+    }
+
+    public void setRestaurantComments(Restaurant restaurantComments) {
+        this.restaurantComments = restaurantComments;
     }
 
     public void save() { JPA.em().persist(this); }

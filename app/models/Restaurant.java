@@ -67,12 +67,29 @@ public class Restaurant {
     private long priceRange;
     private String imageFileName;
     private String coverFileName;
-    private long location;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="location")
+    @JsonIgnore
+    private RestaurantLocation location;
+
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(
+            name="restaurantstocategories",
+            joinColumns=@JoinColumn(name="idrestaurant", referencedColumnName="id"),
+            inverseJoinColumns=@JoinColumn(name="idcategory", referencedColumnName="id"))
+    private List<RestaurantCategories> categories;
+
     private String foodType;
 
     //Images from gallery
-    @OneToMany(mappedBy="galleryimages")
-    private List<RestaurantGalleryImage> galleryImages;
+    //@OneToMany(mappedBy="galleryimages")
+    //private List<RestaurantGalleryImage> galleryImages;
+
+    //Comments
+    //@OneToMany(mappedBy="restaurantcomments")
+    //private List<RestaurantComment> restaurantComments;
 
     //@ElementCollection
     //@Column(name="comments")
@@ -157,11 +174,11 @@ public class Restaurant {
         this.coverFileName = coverFileName;
     }
 
-    public long getLocation() {
+    public RestaurantLocation getLocation() {
         return location;
     }
 
-    public void setLocation(long location) {
+    public void setLocation(RestaurantLocation location) {
         this.location = location;
     }
 
@@ -173,19 +190,13 @@ public class Restaurant {
         this.foodType = foodType;
     }
 
-    /*
-    public List<String> getComments() {
-        return comments;
+    public List<RestaurantCategories> getCategories() {
+        return categories;
     }
 
-    public void setComments(List<String> comments) {
-        this.comments = comments;
+    public void setCategories(List<RestaurantCategories> categories) {
+        this.categories = categories;
     }
-
-    public void addComment(String comment){
-        this.comments.add(comment);
-    }
-    */
 
     public long save() {
             JPA.em().persist(this);
@@ -216,7 +227,7 @@ public class Restaurant {
     public static List<Restaurant> getAllWithTextFilter(String text) {
         if(text != null) {
             text = "%" + text + "%";
-            return JPA.em().createQuery("SELECT r FROM Restaurant r WHERE restaurantName LIKE ? OR description LIKE ? ORDER BY id ASC", Restaurant.class).setParameter(1, text).setParameter(2, text).getResultList();
+            return JPA.em().createQuery("SELECT r FROM Restaurant r WHERE upper(restaurantName) LIKE ? OR upper(description) LIKE ? ORDER BY id ASC", Restaurant.class).setParameter(1, text.toUpperCase()).setParameter(2, text.toUpperCase()).getResultList();
         } else {
             return JPA.em().createQuery("SELECT r FROM Restaurant r ORDER BY id ASC", Restaurant.class).getResultList();
         }
@@ -249,8 +260,12 @@ public class Restaurant {
     }
 
     @Transactional
-    public static List<Restaurant> getAllSortByTodayReservations() {
+    public static List<Restaurant> getAllSortByTodayReservations(long latitude, long longitude) {
         List<Restaurant> restaurants = JPA.em().createNativeQuery("SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6", Restaurant.class).getResultList();
+
+        //POSTGIS
+        //List<Restaurant> restaurants = JPA.em().createNativeQuery("SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber, st_distance_sphere(st_makepoint(?, ?), st_makepoint(43.8469652, 18.3742296)) AS distance FROM restaurants ORDER BY distance ASC, sortingnumber DESC nulls last LIMIT 6", Restaurant.class).setParameter(1, latitude).setParameter(2, longitude).getResultList();
+
         return restaurants;
     }
 
@@ -319,7 +334,8 @@ public class Restaurant {
                 restaurantTable.setId(temp1.longValue());
 
                 BigInteger temp2 = (BigInteger)col[1];
-                restaurantTable.setIdRestaurant(temp2.longValue());
+                //restaurantTable.setIdRestaurant(temp2.longValue());
+                restaurantTable.setRestauranttables(Restaurant.findById(temp2.longValue()));
 
                 BigInteger temp3 = (BigInteger)col[2];
                 restaurantTable.setSittingPlaces(temp3.longValue());
@@ -488,12 +504,12 @@ public class Restaurant {
         }
     }
 
-    public static class RestaurantLocation {
+    public static class RestaurantLocationDto {
         public long id;
         public String location;
         public long number;
 
-        public RestaurantLocation() {};
+        public RestaurantLocationDto() {};
 
         public long getId() {
             return id;
@@ -592,6 +608,7 @@ public class Restaurant {
         public String imageFileName;
         public String coverFileName;
         public long location;
+        private String foodType;
         public List<Long> categories = new ArrayList<Long>();
 
         public long getId() {
@@ -680,6 +697,14 @@ public class Restaurant {
 
         public void setLocation(long location) {
             this.location = location;
+        }
+
+        public String getFoodType() {
+            return foodType;
+        }
+
+        public void setFoodType(String foodType) {
+            this.foodType = foodType;
         }
 
         public List<Long> getCategories() {

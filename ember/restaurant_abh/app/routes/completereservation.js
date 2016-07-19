@@ -1,6 +1,8 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
+  titleToken: 'Complete reservation',
+
   currentReservation: Ember.inject.service(),
   setupController: function(controller, model){
     this._super(controller, model);

@@ -44,11 +44,18 @@ import static play.data.Form.*;
 @Table(name="restaurantmenuitem")
 public class RestaurantMenuItem {
     @Id @GeneratedValue long id;
-    private long idRestaurant;
     private String type;
     private String name;
     private float price;
     private String description;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="idrestaurant")
+    @JsonIgnore
+    private Restaurant restaurantmenuitems;
+
+
+
 
     public RestaurantMenuItem() {}
 
@@ -59,12 +66,13 @@ public class RestaurantMenuItem {
     public void setId(long id) {
         this.id = id;
     }
-    public long getIdRestaurant() {
-        return idRestaurant;
+
+    public Restaurant getRestaurantmenuitems() {
+        return restaurantmenuitems;
     }
 
-    public void setIdRestaurant(long idRestaurant) {
-        this.idRestaurant = idRestaurant;
+    public void setRestaurantmenuitems(Restaurant restaurantmenuitems) {
+        this.restaurantmenuitems = restaurantmenuitems;
     }
 
     public String getType() {
@@ -177,6 +185,7 @@ public class RestaurantMenuItem {
         public List<RestaurantMenuItem> addQueue = new ArrayList<RestaurantMenuItem>();
         public List<RestaurantMenuItem> editQueue = new ArrayList<RestaurantMenuItem>();
         public List<RestaurantMenuItem> deleteQueue = new ArrayList<RestaurantMenuItem>();
+        public long idRestaurant;
 
         public List<RestaurantMenuItem> getAddQueue() {
             return addQueue;
@@ -200,6 +209,14 @@ public class RestaurantMenuItem {
 
         public void setDeleteQueue(List<RestaurantMenuItem> deleteQueue) {
             this.deleteQueue = deleteQueue;
+        }
+
+        public long getIdRestaurant() {
+            return idRestaurant;
+        }
+
+        public void setIdRestaurant(long idRestaurant) {
+            this.idRestaurant = idRestaurant;
         }
     }
 }

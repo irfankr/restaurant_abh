@@ -4,8 +4,22 @@ export default Ember.Route.extend({
   listRestaurants: null,
   listRestaurantsLocations: null,
 
+  geolocation: Ember.inject.service(),
+
+  getUserLocation: function() {
+    var self = this;
+    this.get('geolocation').getLocation().then(function(geoObject) {
+      var currentLocation = self.get('geolocation').get('currentLocation');
+      console.log(currentLocation);
+      return currentLocation;
+    });
+  },
+
   model: function(){
     var self = this;
+
+    //Get current user location
+    this.getUserLocation();
 
     //Get list of all restaurants from database
     $.ajax({ //No return here

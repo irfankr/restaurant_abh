@@ -1,6 +1,8 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
+  titleToken: 'Reservations',
+
   listReservations: null,
   currentUser: Ember.inject.service(),
   model: function(){

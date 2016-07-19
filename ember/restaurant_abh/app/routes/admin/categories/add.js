@@ -3,6 +3,8 @@ import Category from '../../../models/category';
 import Notification from '../../../models/notification';
 
 export default Ember.Route.extend({
+  titleToken: 'Add / Categories / Administration',
+
   category: Category.create(),
   notification: Notification.create(),
   finished: false,
