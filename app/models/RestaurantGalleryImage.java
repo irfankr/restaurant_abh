@@ -13,11 +13,18 @@ import java.util.List;
 
 import static play.data.Form.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="restaurantgalleryimages")
 public class RestaurantGalleryImage {
     @Id @GeneratedValue long id;
-    private long idRestaurant;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="idrestaurant")
+    @JsonIgnore
+    private Restaurant galleryimages;
+
     private String imageFileName;
 
     public RestaurantGalleryImage() {}
@@ -38,12 +45,12 @@ public class RestaurantGalleryImage {
         this.id = id;
     }
 
-    public long getIdRestaurant() {
-        return idRestaurant;
+    public Restaurant getGalleryimages() {
+        return galleryimages;
     }
 
-    public void setIdRestaurant(long idRestaurant) {
-        this.idRestaurant = idRestaurant;
+    public void setGalleryimages(Restaurant galleryimages) {
+        this.galleryimages = galleryimages;
     }
 
     public String getImageFileName() {

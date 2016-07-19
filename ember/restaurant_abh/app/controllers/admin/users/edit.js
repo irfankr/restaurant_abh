@@ -35,6 +35,10 @@ export default Ember.Controller.extend({
         } else if(self.get('user.country') == "Croatia"){
           self.set('cities', ['Zagreb', 'Split', 'Zadar']);
         }
+
+        //Set username password and confirm password fields empty
+        self.set('user.password', "");
+        self.set('user.confirmPassword', "");
       });
     }
   }.observes("model.idUser"),
@@ -84,7 +88,7 @@ export default Ember.Controller.extend({
         self.set('notification.visible', true);
         self.set('notification.classStyle', 'alert-danger');
         self.set('notification.text', 'Email is not valid');
-      } else if((self.get('user.password') != null || self.get('user.password') != "" || self.get('user.confirmPassword') != null || self.get('user.confirmPassword') != "") && (self.get('user.password') != self.get('user.confirmPassword'))){
+      } else if((self.get('user.password') != "" || self.get('user.confirmPassword') != "") && (self.get('user.password') != self.get('user.confirmPassword'))){
         //Display notification
         self.set('notification.visible', true);
         self.set('notification.classStyle', 'alert-danger');

@@ -70,6 +70,10 @@ public class Restaurant {
     private long location;
     private String foodType;
 
+    //Images from gallery
+    @OneToMany(mappedBy="galleryimages")
+    private List<RestaurantGalleryImage> galleryImages;
+
     //@ElementCollection
     //@Column(name="comments")
     //private List<String> comments;

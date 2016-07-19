@@ -17,6 +17,8 @@ export default Ember.Route.extend({
   filter: Filter.create(),
   categories: [],
 
+  geolocation: Ember.inject.service(),
+
   getRestaurants: function(){
     var self = this;
 
@@ -82,6 +84,15 @@ export default Ember.Route.extend({
     });
   },
 
+  getUserLocation: function() {
+    var self = this;
+    this.get('geolocation').getLocation().then(function(geoObject) {
+      var currentLocation = self.get('geolocation').get('currentLocation');
+      console.log(currentLocation);
+      //this.controllerFor('restaurants').set('userLocation', currentLocation);
+    });
+  },
+
   model: function(param){
     var self = this;
 
@@ -97,6 +108,9 @@ export default Ember.Route.extend({
 
     //Get all restaurants
     this.getRestaurants();
+
+    //Get current user location
+    this.getUserLocation();
 
     //Scroll to top
     $("html, body").animate({ scrollTop: 0 }, 500);
