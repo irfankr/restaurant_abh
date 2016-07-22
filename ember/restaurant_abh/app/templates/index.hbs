@@ -45,7 +45,19 @@
   </div>
 </div>
 
-<h1 class="homepage_title">Nearest Popular Restaurants for Lunch Today</h1>
+{{#if model.showNearestRestaurants}}
+  <h1 class="homepage_title">Nearest Restaurants</h1>
+
+  <div class="container" style="overflow:auto;">
+    {{#each model.listNearestRestaurants as |restaurantlist|}}
+      {{#restaurant-item restaurantlist=restaurantlist}}{{/restaurant-item}}
+    {{else}}
+      Sorry, nobody is here.
+    {{/each}}
+  </div>
+{{/if}}
+
+<h1 class="homepage_title">Popular Restaurants for Lunch Today</h1>
 
 <div class="container" style="overflow:auto;">
   {{#each model.listRestaurants as |restaurantlist|}}

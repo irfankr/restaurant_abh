@@ -432,13 +432,25 @@ public class RestaurantController extends Controller {
 
     @Transactional
     public Result getAllRestaurantsSortReservationsToday() {
-        //Form<Restaurant.FormRestaurantDto> inputForm = form(Restaurant.FormRestaurantDto.class).bindFromRequest();
-
         //Declare list
         List<Restaurant> restaurants = new ArrayList<Restaurant>();
         Restaurant restaurant = new Restaurant();
-        //restaurants = restaurant.getAllSortByTodayReservations(inputForm.get().latitude, inputForm.get().longitude);
-        restaurants = restaurant.getAllSortByTodayReservations((long) 43.8469652, (long) 18.3742296);
+        restaurants = restaurant.getAllSortByTodayReservations();
+
+        //Insert categories string in restaurant
+        for (int i = 0; i < restaurants.size(); i++) {
+            restaurants.get(i).setFoodType(Restaurant.getStringRestaurantCategories(Long.valueOf(restaurants.get(i).getId())));
+        }
+
+        //Return JSON of all restaurants
+        return ok(Json.toJson(restaurants));
+    }
+
+    @Transactional
+    public Result getAllNearestRestaurants() {
+        Form<Restaurant.FormRestaurantDto> inputForm = form(Restaurant.FormRestaurantDto.class).bindFromRequest();
+
+        List<Restaurant> restaurants = JPA.em().createNativeQuery("SELECT *, st_distance_sphere(st_makepoint(?, ?), st_makepoint(latitude, longitude)) AS distance FROM restaurants ORDER BY distance ASC nulls last LIMIT 6", Restaurant.class).setParameter(1, inputForm.get().latitude).setParameter(2, inputForm.get().longitude).getResultList();
 
         //Insert categories string in restaurant
         for (int i = 0; i < restaurants.size(); i++) {

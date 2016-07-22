@@ -33,6 +33,7 @@ POST    /api/v1/getRestaurantDetails        controllers.RestaurantController.get
 POST    /api/v1/getRestaurantMenu           controllers.RestaurantController.getRestaurantMenu
 GET     /api/v1/getRestaurantsLocations     controllers.RestaurantController.getRestaurantsLocations
 GET     /api/v1/allRestaurantsSortReservationsToday controllers.RestaurantController.getAllRestaurantsSortReservationsToday
+POST     /api/v1/getAllNearestRestaurants    controllers.RestaurantController.getAllNearestRestaurants
 POST    /api/v1/restaurantVote              controllers.RestaurantController.restaurantVote
 POST    /api/v1/insertComment               controllers.RestaurantController.insertComment
 
@@ -65,7 +66,6 @@ POST    /api/v1/admin/addLocation                controllers.RestaurantLocationC
 POST    /api/v1/admin/editLocation               controllers.RestaurantLocationController.editLocation
 POST    /api/v1/admin/deleteLocation             controllers.RestaurantLocationController.deleteLocation
 POST    /api/v1/admin/getLocationDetails         controllers.RestaurantLocationController.getLocationDetails
-# POST    /api/v1/admin/getRestaurantLocation     controllers.RestaurantLocationController.getRestaurantLocation
 
 # Restaurants (Administration)
 POST    /api/v1/admin/getFilteredRestaurants      controllers.RestaurantController.getFilteredRestaurants

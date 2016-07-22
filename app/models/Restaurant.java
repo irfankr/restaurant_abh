@@ -260,12 +260,8 @@ public class Restaurant {
     }
 
     @Transactional
-    public static List<Restaurant> getAllSortByTodayReservations(long latitude, long longitude) {
+    public static List<Restaurant> getAllSortByTodayReservations() {
         List<Restaurant> restaurants = JPA.em().createNativeQuery("SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6", Restaurant.class).getResultList();
-
-        //POSTGIS
-        //List<Restaurant> restaurants = JPA.em().createNativeQuery("SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber, st_distance_sphere(st_makepoint(?, ?), st_makepoint(43.8469652, 18.3742296)) AS distance FROM restaurants ORDER BY distance ASC, sortingnumber DESC nulls last LIMIT 6", Restaurant.class).setParameter(1, latitude).setParameter(2, longitude).getResultList();
-
         return restaurants;
     }
 
