@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class RestaurantComment {
     @Id @GeneratedValue long id;
     private long mark;
-    private long idUser;
+
     private String comment;
     private Date insertTime;
 
@@ -28,6 +28,11 @@ public class RestaurantComment {
     @JoinColumn(name="idrestaurant")
     @JsonIgnore
     private Restaurant restaurantComments;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="iduser")
+    @JsonIgnore
+    private User userComments;
 
     public RestaurantComment() {}
 
@@ -47,12 +52,12 @@ public class RestaurantComment {
         this.mark = mark;
     }
 
-    public long getIdUser() {
-        return idUser;
+    public User getUserComments() {
+        return userComments;
     }
 
-    public void setIdUser(long idUser) {
-        this.idUser = idUser;
+    public void setUserComments(User userComments) {
+        this.userComments = userComments;
     }
 
     public String getComment() {

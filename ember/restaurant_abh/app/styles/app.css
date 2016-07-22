@@ -527,7 +527,16 @@ ul.restaurant_left_menu {
       opacity: 0.4; cursor: pointer; cursor: hand;
     }
 
-
+/* Restaurants breadcrumb */
+.breadcrumb li .inline-dollars span {
+  color:#BDBDBD;
+}
+  .breadcrumb li .inline-dollars span.active {
+    color:#000;
+  }
+.breadcrumb li .inline-stars {
+  margin-left:10px; top:-2px;
+}
 
 /* Restaurants pagination */
 .restaurants_nav_pagination {

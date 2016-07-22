@@ -49,6 +49,8 @@
   </div>
 </div>
 
+{{#restaurants-filter-breadcumb filterMark=model.filter.mark filterPriceRange=model.filter.priceRange filterLocation=model.filter.location filterCategories=model.filter.categories filterSearchText=model.searchTextFilterDisplay allCategories=model.categories}}{{/restaurants-filter-breadcumb}}
+
 <div class="container" style="overflow:auto;">
   {{#each model.listRestaurants as |restaurantlist|}}
     {{#restaurant-item restaurantlist=restaurantlist}}{{/restaurant-item}}

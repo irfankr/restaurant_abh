@@ -1,0 +1,25 @@
+{{#if displayBreadcrumb}}
+  <div class="container" style="overflow:auto; margin-top:-25px; margin-bottom:25px;">
+    <ol class="breadcrumb">
+      {{#if displayRating}}
+        <li><strong>Rating:</strong> {{#restaurant-star max=5 value=filterMark votes=1 voteAllowed=false filter=true}}{{/restaurant-star}}</li>
+      {{/if}}
+
+      {{#if displayPriceRange}}
+        <li><strong>Price Range:</strong> {{#restaurant-price-range max=5 value=filterPriceRange}}{{/restaurant-price-range}}</li>
+      {{/if}}
+
+      {{#if displayCategories}}
+        <li><strong>Cousines:</strong> {{categoriesString}}</li>
+      {{/if}}
+
+      {{#if displayLocation}}
+        <li><strong>Location:</strong> {{filterLocation}}</li>
+      {{/if}}
+
+      {{#if displaySearchText}}
+        <li><strong>Search Text:</strong> {{filterSearchText}}</li>
+      {{/if}}
+    </ol>
+  </div>
+{{/if}}

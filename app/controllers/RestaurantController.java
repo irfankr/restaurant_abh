@@ -459,7 +459,7 @@ public class RestaurantController extends Controller {
         //Set values
         comment.setRestaurantComments(Restaurant.findById(inputForm.get().idRestaurant));
         comment.setComment(inputForm.get().comment);
-        comment.setIdUser(inputForm.get().idUser);
+        comment.setUserComments(User.findById(inputForm.get().idUser));
         comment.setMark(inputForm.get().mark);
 
         //Current date
@@ -497,7 +497,7 @@ public class RestaurantController extends Controller {
 
             //Read user details
             User user = new User();
-            user = user.findById(comments.get(i).getIdUser());
+            user = user.findById(comments.get(i).getUserComments().getId());
 
             //Convert timestamp to date string
             SimpleDateFormat formatToCheckFunction = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
