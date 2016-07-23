@@ -14,6 +14,14 @@
             </div>
             <div class="reservation_column_input" style="width:30%;">
               {{input type="text" class="form-control input_fields" value=reservation.searchText placeholder="Search for a restaurant..."}}
+                <div class="suggestion_box_container">
+                  {{#each searchTextRestaurants as |restaurant|}}
+                    <div {{action 'pickSuggestedRestaurant' restaurant.restaurantName}} class="suggestion_box_container_item">
+                      <div class="title">{{restaurant.restaurantName}} <div class="stars_container">{{#restaurant-star max=5 value=restaurant.mark votes=restaurant.votes voteAllowed=false filter=true}}{{/restaurant-star}}</div></div>
+                      <div><span class="foodType">{{restaurant.foodType}}</span></div>
+                    </div>
+                  {{/each}}
+                </div>
             </div>
 
             <div class="reservation_column" style="width:20%;">
@@ -45,11 +53,11 @@
   </div>
 </div>
 
-{{#if model.showNearestRestaurants}}
+{{#if showNearestRestaurants}}
   <h1 class="homepage_title">Nearest Restaurants</h1>
 
   <div class="container" style="overflow:auto;">
-    {{#each model.listNearestRestaurants as |restaurantlist|}}
+    {{#each listNearestRestaurants as |restaurantlist|}}
       {{#restaurant-item restaurantlist=restaurantlist}}{{/restaurant-item}}
     {{else}}
       Sorry, nobody is here.

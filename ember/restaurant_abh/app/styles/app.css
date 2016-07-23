@@ -861,3 +861,21 @@ ul.restaurant_left_menu {
 .see_all_photos {
   cursor: pointer; cursor: hand;
 }
+
+/* Twitter typeahead */
+.suggestion_box_container {
+  position:absolute; left:0px; top:60px; width:500px; background-color:#FFF; z-index:9999;
+}
+  .suggestion_box_container_item {
+    padding:10px;
+  }
+     .suggestion_box_container_item:hover {
+       padding:10px; cursor: pointer; cursor: hand; background-color:#F9F9F9;
+     }
+  .suggestion_box_container_item .title {
+    font-family:'Source Sans Pro'; font-weight: 600; font-size:16px;
+  }
+  .suggestion_box_container_item .title .stars_container {
+     float:right;
+   }
+

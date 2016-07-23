@@ -450,7 +450,11 @@ public class RestaurantController extends Controller {
     public Result getAllNearestRestaurants() {
         Form<Restaurant.FormRestaurantDto> inputForm = form(Restaurant.FormRestaurantDto.class).bindFromRequest();
 
+        //SORTIRANJE NAJBLIZIH
         List<Restaurant> restaurants = JPA.em().createNativeQuery("SELECT *, st_distance_sphere(st_makepoint(?, ?), st_makepoint(latitude, longitude)) AS distance FROM restaurants ORDER BY distance ASC nulls last LIMIT 6", Restaurant.class).setParameter(1, inputForm.get().latitude).setParameter(2, inputForm.get().longitude).getResultList();
+
+        //PRIVREMENO
+        //List<Restaurant> restaurants = JPA.em().createNativeQuery("SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6", Restaurant.class).getResultList();
 
         //Insert categories string in restaurant
         for (int i = 0; i < restaurants.size(); i++) {
@@ -596,9 +600,7 @@ public class RestaurantController extends Controller {
         int numberOfPages = (int) Math.ceil(itemsSize*1.00 / itemsPerPageInt*1.00);
 
         returnItems.setNumberOfRestaurantPages(numberOfPages);
-
-        System.out.println(Json.toJson(returnItems));
-
+        
         return ok(Json.toJson(returnItems));
     }
 

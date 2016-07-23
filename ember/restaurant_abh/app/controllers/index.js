@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import Reservation from '../models/reservation';
 import Notification from '../models/notification';
+import Filter from '../models/filter';
 
 export default Ember.Controller.extend({
   currentReservation: Ember.inject.service(),
@@ -8,6 +9,12 @@ export default Ember.Controller.extend({
   notification: Notification.create(),
   tempReservationDate:null,
   tempTodayDate:null,
+  filter: Filter.create(),
+  searchTextRestaurants: null,
+
+  listNearestRestaurants: null,
+  showNearestRestaurants: false,
+
 
   selectPeople: ['2 people', '3 people', '4 people', '5 people', '6 people', '7 people', '8 people', '9 people', '10 people', '11 people', '12 people'],
   selectHour: ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM', '01:00 PM', '01:30 PM', '02:00 PM', '02:30 PM', '03:00 PM', '03:30 PM', '04:00 PM', '04:30 PM', '05:00 PM', '05:30 PM', '06:00 PM', '06:30 PM', '07:00 PM', '07:30 PM', '08:00 PM', '08:30 PM', '09:00 PM', '09:30 PM', '10:00 PM'],
@@ -101,7 +108,56 @@ export default Ember.Controller.extend({
     this.set('tempReservationDate', new Date());
     this.set('tempTodayDate', new Date());
     this.setAvailableHours();
+    this.set('searchTextRestaurants', "");
   },
+
+  getRestaurantsByFilter: function(){
+    var self = this;
+
+    if(self.get('reservation.searchText') != "" && self.get('reservation.searchText') != null && self.get('reservation.searchText') != "undefined" && self.get('reservation.searchText').length > 1){
+
+      //Set additional data
+      this.set('filter.itemsPerPage', 5);
+      this.set('filter.pageNumber', 1);
+      this.set('filter.searchText', self.get('reservation.searchText'));
+      var data = JSON.stringify(self.get('filter'));
+
+      //Search for restaurants with this filter
+      $.ajax({ //No return here
+        url: "/api/v1/admin/getFilteredRestaurants",
+        type: "POST",
+        data: data,
+        processData: false,
+        async:false, //Need to wait
+        contentType: "application/json; charset=UTF-8",
+      }).fail(function(data) {
+        console.log(data);
+      }).then(function(data) {
+        console.log(data.restaurants);
+        self.set('searchTextRestaurants', data.restaurants);
+
+        $(".suggestion_box_container").show();
+        $(document).mouseup(function (e){
+            var container = $(".suggestion_box_container");
+
+            if (!container.is(e.target) // if the target of the click isn't the container...
+                && container.has(e.target).length === 0) // ... nor a descendant of the container
+            {
+                container.hide();
+
+                //Empty suggested list
+                self.set('searchTextRestaurants', null);
+
+            }
+        });
+      });
+
+     } else {
+      self.set('searchTextRestaurants', null);
+     }
+
+  }.observes('reservation.searchText'),
+
   actions: {
     clickLocation: function(location){
       this.transitionToRoute('/restaurants/1?location=' + location);
@@ -142,6 +198,39 @@ export default Ember.Controller.extend({
     //When date is changed set check is today do remove previous hours
     changeDate: function(){
        this.setAvailableHours();
+    },
+    pickSuggestedRestaurant: function(string){
+      //Put suggested value in search box
+      this.set('reservation.searchText', string);
+
+      //Empty suggested list
+      this.set('searchTextRestaurants', null);
     }
-  }
+  },
+
+  loadNearestRestaurants: function(){
+    var self = this;
+
+    if(self.get('model.currentLocationCoordinates').length > 0){
+
+      //Return nearest restaurants
+      $.ajax({ //No return here
+        url: "/api/v1/getAllNearestRestaurants",
+        type: "POST",
+        data: '{"latitude":'+self.get('model.currentLocationCoordinates')[0]+', "longitude":'+self.get('model.currentLocationCoordinates')[1]+'}',
+        processData: false,
+        async:false, //Need to wait
+        contentType: "application/json; charset=UTF-8",
+      }).fail(function(data) {
+        console.log(data);
+      }).then(function(data) {
+        self.set('listNearestRestaurants', data);
+        self.set('showNearestRestaurants', true);
+      });
+    } else {
+       self.set('showNearestRestaurants', false);
+    }
+
+  }.observes('model.currentLocationCoordinates')
+
 });

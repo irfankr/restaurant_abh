@@ -12,13 +12,10 @@ export default Ember.Route.extend({
   filter: Filter.create(),
   categories: [],
   searchTextFilterDisplay: null,
-
   geolocation: Ember.inject.service(),
 
   getRestaurants: function(){
     var self = this;
-
-    console.log(this.get('categories'));
 
     //Set additional data
     this.set('filter.itemsPerPage', this.get('itemsPerPage'));
@@ -122,7 +119,8 @@ export default Ember.Route.extend({
       filter: self.get('filter'),
       categories: self.get('categories'),
       activeStarFilter:  self.get('activeStarFilter'),
-      searchTextFilterDisplay: self.get('searchTextFilterDisplay')
+      searchTextFilterDisplay: self.get('searchTextFilterDisplay'),
+      searchTextRestaurants: self.get('searchTextRestaurants')
     });
   },
 
@@ -235,6 +233,10 @@ export default Ember.Route.extend({
       this.refresh();
       console.log("OVO JE PRETRAGA");
       console.log(this.get('filter'));
+    },
+
+    setSuggestedValue(string){
+      this.set('filter.searchText', string);
     }
   }
 });

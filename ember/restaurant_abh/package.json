@@ -44,7 +44,9 @@
     "ember-g-map": "0.0.19",
     "ember-load-initializers": "^0.5.1",
     "ember-resolver": "^2.0.3",
-    "loader.js": "^4.0.1"
+    "loader.js": "^4.0.1",
+    "g": "~2.0.1",
+    "ember": "~1.0.0-pre.2"
   },
   "dependencies": {
     "ember-cli-lightbox": "0.0.3"
