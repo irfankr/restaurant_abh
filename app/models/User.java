@@ -40,6 +40,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 /**
  * Created by irfank on 5/16/16.
  */
@@ -121,7 +125,10 @@ public class User {
         this.city = city;
     }
 
-    public void save() { JPA.em().persist(this); }
+    public long save() {
+        JPA.em().persist(this);
+        return this.getId();
+    }
 
     public void update() { JPA.em().merge(this); }
 
@@ -149,7 +156,7 @@ public class User {
         try {
             TypedQuery<User> query = JPA.em().createQuery("SELECT u FROM User u WHERE email = ? AND password = ?", User.class);
             query.setParameter(1, email);
-            query.setParameter(2, password);
+            query.setParameter(2, md5(password));
             User user = query.getSingleResult();
 
             return user;
@@ -169,6 +176,30 @@ public class User {
         } catch(NoResultException noresult) { //If there is no user with
             return null;
         }
+    }
+
+    public static String md5(String input) {
+
+        String md5 = null;
+
+        if(null == input) return null;
+
+        try {
+
+            //Create MessageDigest object for MD5
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+
+            //Update input string in message digest
+            digest.update(input.getBytes(), 0, input.length());
+
+            //Converts message digest value in base 16 (hex)
+            md5 = new BigInteger(1, digest.digest()).toString(16);
+
+        } catch (NoSuchAlgorithmException e) {
+
+            e.printStackTrace();
+        }
+        return md5;
     }
 
     public static class UserCreateResetPasswordTokenDto {

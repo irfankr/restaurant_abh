@@ -12,7 +12,7 @@ CREATE TABLE users(
 	PRIMARY KEY (id)
 );
 
-INSERT INTO users (id, email, password, firstName, lastname, phone, country, city) VALUES (3000, 'irfankr91@gmail.com', '12345', 'Irfan', 'Krijestorac', '061506652', 'Bosnia and Herzegovina', 'Sarajevo');
+INSERT INTO users (id, email, password, firstName, lastname, phone, country, city) VALUES (3000, 'irfankr91@gmail.com', '827ccb0eea8a706c4c34a16891f84e7b', 'Irfan', 'Krijestorac', '061506652', 'Bosnia and Herzegovina', 'Sarajevo');
 
 CREATE TABLE restaurants(
 	id bigint,

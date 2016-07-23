@@ -271,7 +271,7 @@ public class RestaurantController extends Controller {
 
         List<Restaurant> foodTypeFiltereRestaurants = new ArrayList<Restaurant>();
 
-        //Insert categories string in restaurant
+        //Filter with categories
         for (int i = 0; i < restaurants.size(); i++) {
 
             //Check if restaurant filter is active
@@ -283,9 +283,6 @@ public class RestaurantController extends Controller {
 
                 //Check is restaurant in any of selected categories for filter
                 if(!Collections.disjoint(restaurantForm.get().categories, restaurantCategories)){
-                    //Create final food type string
-                    restaurants.get(i).setFoodType(Restaurant.getStringRestaurantCategories(Long.valueOf(restaurants.get(i).getId())));
-
                     //Add new restaurants element
                     foodTypeFiltereRestaurants.add(restaurants.get(i));
                 }

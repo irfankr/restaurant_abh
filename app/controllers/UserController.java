@@ -59,6 +59,10 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 
 public class UserController extends Controller {
     @Inject MailerClient mailerClient;
@@ -198,11 +202,12 @@ public class UserController extends Controller {
         user.setLastName(RegisterForm.get().lastName);
         user.setEmail(RegisterForm.get().email);
         user.setPhone(RegisterForm.get().phone);
-        user.setPassword(RegisterForm.get().password);
+        user.setPassword(User.md5(RegisterForm.get().password));
         user.setCity(RegisterForm.get().city);
         user.setCountry(RegisterForm.get().country);
 
         User checkUser = new User();
+
 
         //Check is there user with same email
         if(checkUser.findByEmail(user.getEmail()) == null){
@@ -221,17 +226,14 @@ public class UserController extends Controller {
             }
 
             //Store user in database
-            user.save();
-
-            //Get information about created user (this info contains id of created user)
-            User createdUser = User.findByEmailAndPassword(user.getEmail(), user.getPassword());
+            long idCreatedUser = user.save();
 
             //Set value to session that user is logged in
             //Put user id in session
             session().clear();
-            session("idUser", Long.toString(createdUser.getId()));
+            session("idUser", Long.toString(idCreatedUser));
 
-            return ok(Json.toJson(createdUser));
+            return ok(Json.toJson(user));
         } else {
             return badRequest("{\"error\": \"User with entered mail exist!\"}");
         }
@@ -348,7 +350,7 @@ public class UserController extends Controller {
             user.setLastName(inputForm.get().lastName);
             user.setEmail(inputForm.get().email);
             user.setPhone(inputForm.get().phone);
-            user.setPassword(inputForm.get().password);
+            user.setPassword(User.md5(inputForm.get().password));
             user.setCity(inputForm.get().city);
             user.setCountry(inputForm.get().country);
 
@@ -378,8 +380,8 @@ public class UserController extends Controller {
             user.setCity(inputForm.get().city);
             user.setCountry(inputForm.get().country);
 
-            if(inputForm.get().password != null) {
-                user.setPassword(inputForm.get().password);
+            if(inputForm.get().password != "") {
+                user.setPassword(User.md5(inputForm.get().password));
             }
 
             //Save to database

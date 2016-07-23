@@ -227,7 +227,7 @@ public class Restaurant {
     public static List<Restaurant> getAllWithTextFilter(String text) {
         if(text != null) {
             text = "%" + text + "%";
-            return JPA.em().createQuery("SELECT r FROM Restaurant r WHERE upper(restaurantName) LIKE ? OR upper(description) LIKE ? ORDER BY id ASC", Restaurant.class).setParameter(1, text.toUpperCase()).setParameter(2, text.toUpperCase()).getResultList();
+            return JPA.em().createQuery("SELECT r FROM Restaurant r WHERE upper(restaurantName) LIKE ? ORDER BY id ASC", Restaurant.class).setParameter(1, text.toUpperCase()).getResultList();
         } else {
             return JPA.em().createQuery("SELECT r FROM Restaurant r ORDER BY id ASC", Restaurant.class).getResultList();
         }
