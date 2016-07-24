@@ -5,7 +5,9 @@
 
   <div class="box_shadow restaurant_data_container" style="margin-bottom:65px;">
     <h1 class="title">Reservation details
-      <div class="complete_reservation_remaining_time">You have {{remainingTime}} minutes to complete reservation</div>
+      {{#unless reservationCompleted}}
+        <div class="complete_reservation_remaining_time">You have {{remainingTime}} minutes to complete reservation</div>
+       {{/unless}}
     </h1>
 
     <div class="row">
@@ -102,8 +104,10 @@
       </form>
   {{/unless}}
 
-  <div class="complete_reservation_button_container">
-      <button {{action 'completeReservation'}} class="btn button">Complete reservation</button>
-      <div class="description">By clicking “Complete Reservation” you agree to the {{#link-to 'termsofuse'}}Terms of use{{/link-to}} and {{#link-to 'privacypolicy'}}Privacy Policy{{/link-to}}.</div>
-  </div>
+  {{#unless reservationCompleted}}
+    <div class="complete_reservation_button_container">
+        <button {{action 'completeReservation'}} class="btn button">Complete reservation</button>
+        <div class="description">By clicking “Complete Reservation” you agree to the {{#link-to 'termsofuse'}}Terms of use{{/link-to}} and {{#link-to 'privacypolicy'}}Privacy Policy{{/link-to}}.</div>
+    </div>
+  {{/unless}}
 </div>

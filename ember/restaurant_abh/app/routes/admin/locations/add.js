@@ -25,28 +25,51 @@ export default Ember.Route.extend({
         self.set('notification.text', 'All fields are required!');
         self.refresh();
       } else {
-        var data = JSON.stringify(self.get('location'));
+        var dataInsert = JSON.stringify(self.get('location'));
 
+        //Check does location exist on google map
         $.ajax({ //No return here
-          url: "/api/v1/admin/addLocation",
-          type: "POST",
-          data: data,
+          url: "https://maps.googleapis.com/maps/api/geocode/json?address=" + self.get('location.name') + "&key=AIzaSyDOBtNUVb3u39Vnu2xcEhxlS8pyozc4Gvs",
+          type: "GET",
           processData: false,
           async:false, //Need to wait
-          contentType: "application/json; charset=UTF-8",
         }).fail(function(data) {
           console.log(data);
         }).then(function(data) {
-          //Display notification
-          self.set('notification.visible', true);
-          self.set('notification.classStyle', 'alert-success');
-          self.set('notification.text', 'Successful insert!');
+          console.log(data.status);
 
-          //Set finished flag
-          self.set('finished', true);
+          //If location exist create
+          if(data.status == "OK"){
+            $.ajax({ //No return here
+              url: "/api/v1/admin/addLocation",
+              type: "POST",
+              data: dataInsert,
+              processData: false,
+              async:false, //Need to wait
+              contentType: "application/json; charset=UTF-8",
+            }).fail(function(data) {
+              console.log(data);
+            }).then(function(data) {
+              //Display notification
+              self.set('notification.visible', true);
+              self.set('notification.classStyle', 'alert-success');
+              self.set('notification.text', 'Successful insert!');
 
-          self.refresh();
+              //Set finished flag
+              self.set('finished', true);
+
+              self.refresh();
+            });
+          } else {
+            //Display notification
+            self.set('notification.visible', true);
+            self.set('notification.classStyle', 'alert-danger');
+            self.set('notification.text', 'Location doesn\'t exist!');
+            self.refresh();
+          }
+
         });
+
       }
     },
     cancel: function(){

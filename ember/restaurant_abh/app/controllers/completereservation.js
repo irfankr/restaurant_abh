@@ -9,46 +9,55 @@ export default Ember.Controller.extend({
   countries: ['Bosnia and Herzegovina', 'Serbia', 'Croatia'],
   cities: [],
   remainingTime: '03:00',
-  t:null,
+  t: null,
+  reservationCompleted: null,
 
-  init: function(){
-    var self = this;
-
-    if(this.get('currentReservation.restaurandId') == null){
-      self.transitionToRoute('index');
-    }
-
-    function countdownRemainingTime() {
-        var myTime = self.get('remainingTime');
-        var ss = myTime.split(":");
-        var dt = new Date();
-        dt.setHours(0);
-        dt.setMinutes(ss[0]);
-        dt.setSeconds(ss[1]);
-
-        var dt2 = new Date(dt.valueOf() - 1000);
-        var temp = dt2.toTimeString().split(" ");
-        var ts = temp[0].split(":");
-
-        self.set('remainingTime', ts[1]+":"+ts[2]);
-
-        if(self.get('remainingTime') == "00:00"){
-          clearTimeout(self.get('t'));
-
-          //Erase current reservation
-          self.get('currentReservation').removeReservation();
-          self.set('remainingTime', '03:00');
-
-          history.go(-1);
-        } else {
-          self.set('t', setTimeout(countdownRemainingTime, 1000));
-        }
-
-    }
-
-    countdownRemainingTime();
-  },
   actions: {
+    loadPage: function(){
+      var self = this;
+      console.log("usao na stranicu");
+      if(this.get('currentReservation.restaurandId') == null){
+        self.transitionToRoute('index');
+      }
+
+      function countdownRemainingTime() {
+          var myTime = self.get('remainingTime');
+          var ss = myTime.split(":");
+          var dt = new Date();
+          dt.setHours(0);
+          dt.setMinutes(ss[0]);
+          dt.setSeconds(ss[1]);
+
+          var dt2 = new Date(dt.valueOf() - 1000);
+          var temp = dt2.toTimeString().split(" ");
+          var ts = temp[0].split(":");
+
+          self.set('remainingTime', ts[1]+":"+ts[2]);
+
+          if(self.get('remainingTime') == "00:00"){
+            clearTimeout(self.get('t'));
+
+            //Erase current reservation
+            self.get('currentReservation').removeReservation();
+            self.set('remainingTime', '03:00');
+
+            history.go(-1);
+          } else {
+            self.set('t', setTimeout(countdownRemainingTime, 1000));
+          }
+
+      }
+
+      countdownRemainingTime();
+    },
+
+    resetDataOnExit: function(){
+      this.set('reservationCompleted', null);
+      this.set('remainingTime', '03:00');
+      clearTimeout(this.get('t'));
+      this.set('t', null);
+    },
+
     completeReservation: function(){
       var self = this;
 
@@ -73,6 +82,9 @@ export default Ember.Controller.extend({
           }).then(function(data) {
               //Display notification that reservation is created
               $(".registrationsuccessfull").show();
+
+              //Hide complete reservation button
+              self.set('reservationCompleted', true);
           });
       }
 

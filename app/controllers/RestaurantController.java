@@ -447,8 +447,15 @@ public class RestaurantController extends Controller {
     public Result getAllNearestRestaurants() {
         Form<Restaurant.FormRestaurantDto> inputForm = form(Restaurant.FormRestaurantDto.class).bindFromRequest();
 
+        double latitude = inputForm.get().latitude;
+        double longitude = inputForm.get().longitude;
+
+        //Test echo coordinates
+        System.out.println("Latitude: " + latitude);
+        System.out.println("Longitude: " + longitude);
+
         //SORTIRANJE NAJBLIZIH
-        List<Restaurant> restaurants = JPA.em().createNativeQuery("SELECT *, st_distance_sphere(st_makepoint(?, ?), st_makepoint(latitude, longitude)) AS distance FROM restaurants ORDER BY distance ASC nulls last LIMIT 6", Restaurant.class).setParameter(1, inputForm.get().latitude).setParameter(2, inputForm.get().longitude).getResultList();
+        List<Restaurant> restaurants = JPA.em().createNativeQuery("SELECT *, st_distance_sphere(st_makepoint(?, ?), st_makepoint(rst.latitude, rst.longitude)) AS distance FROM restaurants rst ORDER BY distance ASC nulls last LIMIT 6", Restaurant.class).setParameter(1, latitude).setParameter(2, longitude).getResultList();
 
         //PRIVREMENO
         //List<Restaurant> restaurants = JPA.em().createNativeQuery("SELECT *, (SELECT COUNT(rs.id) FROM reservations rs, restauranttables rt WHERE date_part('day', rs.reservationDateTime) = date_part('day', NOW()) AND rs.idTable = rt.id AND restaurants.id = rt.idRestaurant GROUP BY rt.idRestaurant) AS sortingnumber FROM restaurants ORDER BY sortingnumber DESC nulls last LIMIT 6", Restaurant.class).getResultList();
