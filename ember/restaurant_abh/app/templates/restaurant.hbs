@@ -116,12 +116,16 @@
           <h1 class="title restaurant_menu_item_title" style="width:250px; margin-bottom:10px !important; padding:20px;"><span style="margin-right:25px;">Restaurants Photo:</span> </h1>
 
           <div class="big_image">
-              {{light-box href=model.galleryFirstImage.imageFileName data-lightbox="cat-1"}}
+              {{#light-box href=(concat 'https://s3.amazonaws.com/atlantpraksa/gallery/' model.galleryFirstImage.imageFileName) data-lightbox="cat-1" inlineImage=false}}
+                <img src="https://s3.amazonaws.com/atlantpraksa/gallery/{{model.galleryFirstImage.imageFileName}}" />
+              {{/light-box}}
           </div>
 
           {{#each model.galleryImages as |image|}}
             <div class="small_image">
-                {{light-box href=image.imageFileName data-lightbox="cat-1"}}
+                {{#light-box href=(concat 'https://s3.amazonaws.com/atlantpraksa/gallery/' image.imageFileName) data-lightbox="cat-1" inlineImage=false}}
+                  <img src="https://s3.amazonaws.com/atlantpraksa/gallery/thumb/{{image.imageFileName}}" />
+                {{/light-box}}
             </div>
           {{/each}}
         </div>

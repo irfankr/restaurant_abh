@@ -5,6 +5,8 @@ import play.data.DynamicForm;
 import static play.data.Form.*;
 import play.data.Form;
 import play.mvc.*;
+
+import java.rmi.server.ExportException;
 import java.util.Arrays;
 
 import models.Restaurant;
@@ -86,6 +88,18 @@ import java.util.Collections;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryCollection;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.LineString;
+import com.vividsolutions.jts.geom.LinearRing;
+import com.vividsolutions.jts.geom.MultiLineString;
+import com.vividsolutions.jts.geom.MultiPoint;
+import com.vividsolutions.jts.geom.MultiPolygon;
+import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.Polygon;
 
 public class RestaurantController extends Controller {
     /*
@@ -268,6 +282,24 @@ public class RestaurantController extends Controller {
 
         //Get result from queryCriteriaQuery.
         List<Restaurant> restaurants = em.createQuery(criteria).getResultList();
+
+        //GeometryFactory geometryFactory = new GeometryFactory();
+        //Coordinate coordinate1 = new Coordinate(43.8482446, 18.3712343);
+        //Coordinate coordinate2 = new Coordinate(44.8482446, 19.3712343);
+
+        //double distance = coordinate1.distance(coordinate2);
+        //System.out.println("Distance: " + distance);
+        //double distance = 100;
+        //Expression<Double> distanceExp = query.get("latitude");
+        //ParameterExpression<String> distanceExp = em.getCriteriaBuilder().parameter(String.class);
+        //query.setParameter(distanceExp, "100.00");
+
+
+        //Expression<Double> latitudeExp = query.get("latitude");
+        //Expression<Double> longitudeExp = query.get("longitude");
+        //Expression<Coordinate> coordinates = new Coordinate(latitudeExp, longitudeExp);
+
+        //Expression<Double> distanceExp = latitudeExp.distance(coordinate2);
 
         List<Restaurant> foodTypeFiltereRestaurants = new ArrayList<Restaurant>();
 

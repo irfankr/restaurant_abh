@@ -879,3 +879,6 @@ ul.restaurant_left_menu {
      float:right;
    }
 
+.dz-image img {
+  height:100%; width:100%; object-fit: cover;
+}

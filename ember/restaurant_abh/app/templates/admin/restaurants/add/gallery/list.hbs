@@ -18,7 +18,7 @@
 
     <div class="thumb_container">
       {{#each imagesList as |image|}}
-        <div class="thumb" style="background-image:url('{{image.imageFileName}}');">
+        <div class="thumb" style="background-image:url('https://s3.amazonaws.com/atlantpraksa/gallery/thumb/{{image.imageFileName}}');">
           <div class="hover" {{action 'removeImage' image.id}}><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
         </div>
       {{/each}}

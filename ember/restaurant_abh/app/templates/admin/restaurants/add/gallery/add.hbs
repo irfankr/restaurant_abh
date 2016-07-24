@@ -13,7 +13,7 @@
 
     <div class="row administration_gallery" style="margin-bottom:20px;">
       <div class="col-md-12">
-        {{drop-zone url='/api/v1/admin/uploadRestaurantGalleryImage' clickable=true maxFiles=20 file=file success=(action "addedImages") dictDefaultMessage="Drag and drop photos here" headers=requestHeader success=(action "addedImage") }}
+        {{drop-zone url='/api/v1/admin/uploadRestaurantGalleryImage' clickable=true maxFiles=20 file=file success=(action "addedImages") dictDefaultMessage="Drag and drop photos here" headers=requestHeader success=(action "addedImage") parallelUploads=1}}
       </div>
     </div>
 
