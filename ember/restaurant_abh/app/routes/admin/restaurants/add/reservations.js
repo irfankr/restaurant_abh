@@ -1,34 +1,38 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
-  titleToken: 'Reservations',
+  titleToken: 'Reviews / Restaurants / Administration',
 
-  listReservations: null,
-  currentUser: Ember.inject.service(),
-  model: function(){
+  listItems: [],
+  idRestaurant: null,
+
+  model: function(param){
     var self = this;
 
-    if(this.get('currentUser.userLoggedIn') == false){
-      self.transitionTo('index');
+    if(param.id == null){
+      //Prevent display this page
+    } else {
+      self.set('idRestaurant', param.id);
     }
 
-    //Get list of all restaurants from database
     $.ajax({ //No return here
-      url: "/api/v1/getListOfReservationsForUser",
-      type: "GET",
+      url: "/api/v1/admin/getAllRestaurantReservations",
+      type: "POST",
+      data: '{"idRestaurant": '+param.id+'}',
       processData: false,
-      async:false, //Need to wait then send as model
+      async:false, //Need to wait
       contentType: "application/json; charset=UTF-8",
     }).fail(function(data) {
       console.log(data);
     }).then(function(data) {
-      console.log(data);
-      self.set('listReservations', data);
+      self.set('listItems', data);
+      console.log(self.get('listItems'));
     });
 
     //Return model to template
     return Ember.RSVP.hash({
-      listReservations: self.get('listReservations')
+      listItems: self.get('listItems'),
+      idRestaurant: self.get('idRestaurant')
     });
   },
 
@@ -48,15 +52,6 @@ export default Ember.Route.extend({
         console.log(data);
       }).then(function(data) {
         self.refresh();
-
-        //Show notification
-        $(".loginNotifications").show();
-        //Change alert class
-        $(".alert").addClass('alert-success').removeClass('alert-danger');
-        //Set alert text
-        var json = JSON.parse(data);
-        //Set alert text
-        $(".alertText").html(json["ok"]);
       });
     }
   }

@@ -28,6 +28,9 @@ export default Ember.Route.extend({
   model: function(){
     var self = this;
 
+    //Animate to top of the page
+    $("html, body").stop().animate({ scrollTop: 0 }, 100);
+
     //Get list of popular restaurants for lunch today
     $.ajax({ //No return here
       url: "/api/v1/allRestaurantsSortReservationsToday",

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import controllers.RestaurantController;
+import models.Restaurant;
 import org.junit.*;
 
 import play.mvc.*;
@@ -28,18 +30,53 @@ import static org.junit.Assert.*;
  */
 public class ApplicationTest {
 
-    @Test
-    public void simpleCheck() {
-        int a = 1 + 1;
-        assertEquals(2, a);
-    }
-
+    /*
     @Test
     public void renderTemplate() {
-        Content html = views.html.index.render("Your new application is ready.");
-        assertEquals("text/html", html.contentType());
-        assertTrue(html.body().contains("Your new application is ready."));
+        //Content html = views.html.index.render("Your new application is ready.");
+        //assertEquals("text/html", html.contentType());
+        //assertTrue(html.body().contains("Your new application is ready."));
+    }*/
+
+    @Test
+    public void generateRestaurantsFilterSQLQueryStringNoFilter(){
+
+        Restaurant.RestaurantsFilterDto newRestaurantFilter = new Restaurant.RestaurantsFilterDto();
+        newRestaurantFilter.setPageNumber(1);
+        newRestaurantFilter.setItemsPerPage(6);
+
+        //Call function
+        Restaurant.FilterRestaurantsQueryBuilderDto newRestaurantsFilterQuery = RestaurantController.FilterRestaurantsQueryBuilder(newRestaurantFilter);
+
+        String filterSqlString = newRestaurantsFilterQuery.getSqlString();
+        String filterSqlStringWithLimit = newRestaurantsFilterQuery.getSqlStringWithLimit();
+        ArrayList<Object> filterParameters = newRestaurantsFilterQuery.getFilterParameters();
+
+        //Check
+        String testString = "SELECT *, st_distance_sphere(st_makepoint(?, ?), st_makepoint(rest.latitude, rest.longitude)) AS distance FROM restaurants rest ORDER BY distance ASC LIMIT 6 OFFSET 0";
+        assertEquals(testString, filterSqlStringWithLimit);
     }
 
+    @Test
+    public void generateRestaurantsFilterSQLQueryStringPriceRange(){
 
+        Restaurant.RestaurantsFilterDto newRestaurantFilter = new Restaurant.RestaurantsFilterDto();
+        newRestaurantFilter.setPageNumber(1);
+        newRestaurantFilter.setItemsPerPage(6);
+
+        //Add parameters
+        newRestaurantFilter.setPriceRange(2);
+
+        //Call function
+        Restaurant.FilterRestaurantsQueryBuilderDto newRestaurantsFilterQuery =
+                RestaurantController.FilterRestaurantsQueryBuilder(newRestaurantFilter);
+
+        String filterSqlString = newRestaurantsFilterQuery.getSqlString();
+        String filterSqlStringWithLimit = newRestaurantsFilterQuery.getSqlStringWithLimit();
+        ArrayList<Object> filterParameters = newRestaurantsFilterQuery.getFilterParameters();
+
+        //Check
+        String testString = "SELECT *, st_distance_sphere(st_makepoint(?, ?), st_makepoint(rest.latitude, rest.longitude)) AS distance FROM restaurants rest WHERE rest.priceRange = ? ORDER BY distance ASC LIMIT 6 OFFSET 0";
+        assertEquals(testString, filterSqlStringWithLimit);
+    }
 }

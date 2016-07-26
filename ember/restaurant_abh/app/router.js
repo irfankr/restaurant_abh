@@ -37,6 +37,7 @@ Router.map(function() {
         });
         this.route('info', {path: '/info/:id'});
         this.route('reviews', {path: '/reviews/:id'});
+        this.route('reservations', {path: '/reservations/:id'});
       });
       this.route('edit', {path: '/edit/:id'});
     });

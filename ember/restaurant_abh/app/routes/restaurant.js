@@ -59,8 +59,7 @@ export default Ember.Route.extend({
       });
 
       //Change values in restaurantDetails
-      this.set('restaurantDetails.mark', this.get('restaurantDetails.mark') + mark);
-      this.set('restaurantDetails.votes', this.get('restaurantDetails.votes') + 1);
+      this.refresh();
     },
     seeAllPhotos: function(){
       this.set('showImages', 200);
@@ -69,6 +68,9 @@ export default Ember.Route.extend({
   },
   model: function(param){
     var self = this;
+
+    //Animate to top of the page
+    $("html, body").stop().animate({ scrollTop: 0 }, 100);
 
     //If logged set style that enable hover on stars for vote
     if(this.get('currentUser.userLoggedIn') == true){
@@ -148,7 +150,8 @@ export default Ember.Route.extend({
       galleryNumberOfImages: self.get('galleryNumberOfImages'),
       galleryImages: self.get('galleryImages'),
       addSeeAllPhotosFeature: self.get('addSeeAllPhotosFeature'),
-      galleryFirstImage: self.get('galleryFirstImage')
+      galleryFirstImage: self.get('galleryFirstImage'),
+      currentUser: self.get('currentUser')
     });
 
   }

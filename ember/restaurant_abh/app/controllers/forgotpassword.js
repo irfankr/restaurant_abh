@@ -21,12 +21,19 @@ export default Ember.Controller.extend({
           $(".alert").addClass('alert-danger').removeClass('alert-success');
 
           //Set alert text
-          console.log(data.responseText);
           var json = JSON.parse(data.responseText);
           //Set alert text
           $(".alertText").html(json["error"]);
         }).then(function(data) {
-          console.log(data);
+
+          //Display alert
+          $(".loginNotifications").show();
+          //Change alert class
+          $(".alert").addClass('alert-success').removeClass('alert-danger');
+          //Set alert text
+          var json = JSON.parse(data);
+          //Set alert text
+          $(".alertText").html(json["ok"]);
         });
       }
     }

@@ -202,18 +202,6 @@ public class User {
         return md5;
     }
 
-    public static class UserCreateResetPasswordTokenDto {
-        public String email;
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-    }
-
     public static class UserLoginDto {
         public String email;
         public String password;

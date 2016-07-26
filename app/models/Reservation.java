@@ -80,12 +80,30 @@ public class Reservation {
         JPA.em().remove(this);
     }
 
+    @Transactional
+    public static Reservation findById(long id){
+        try {
+            return JPA.em().find(Reservation.class, id);
+        } catch(NoResultException noresult) { //If there is no reservation
+            return null;
+        }
+    }
+
     public static class UserReservationsDto {
+        public long id;
         public String restaurantName;
         public String imageFileName; //Restaurant Image
         public long guests;
         public String reservationDate;
         public String reservationHour;
+
+        public long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            this.id = id;
+        }
 
         public String getRestaurantName() {
             return restaurantName;
@@ -250,5 +268,74 @@ public class Reservation {
 
     public static class FreeTablesForRestaurants {
         public List<CheckReservationAvalibilityNumberTimes> restaurantsFreeTablesTimes = new ArrayList<CheckReservationAvalibilityNumberTimes>();
+    }
+
+    public static class CancelReservationDto {
+        public long idReservation;
+
+        public long getIdReservation() {
+            return idReservation;
+        }
+
+        public void setIdReservation(long idReservation) {
+            this.idReservation = idReservation;
+        }
+    }
+
+    public static class RestaurantReservationsDto {
+        public long id;
+        public long persons;
+        public String reservationDateTime;
+        public String userName;
+        public long idTable;
+        public boolean expired;
+
+        public long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            this.id = id;
+        }
+
+        public long getPersons() {
+            return persons;
+        }
+
+        public void setPersons(long persons) {
+            this.persons = persons;
+        }
+
+        public String getReservationDateTime() {
+            return reservationDateTime;
+        }
+
+        public void setReservationDateTime(String reservationDateTime) {
+            this.reservationDateTime = reservationDateTime;
+        }
+
+        public String getUserName() {
+            return userName;
+        }
+
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
+
+        public long getIdTable() {
+            return idTable;
+        }
+
+        public void setIdTable(long idTable) {
+            this.idTable = idTable;
+        }
+
+        public boolean isExpired() {
+            return expired;
+        }
+
+        public void setExpired(boolean expired) {
+            this.expired = expired;
+        }
     }
 }

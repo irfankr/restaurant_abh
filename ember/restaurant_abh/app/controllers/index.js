@@ -111,6 +111,11 @@ export default Ember.Controller.extend({
     this.set('searchTextRestaurants', "");
   },
 
+  onFilterTextChange: function() {
+    //Wait 500ms second before applying the filter
+    Ember.run.debounce(this, this.getRestaurantsByFilter, 500);
+  }.observes('reservation.searchText'),
+
   getRestaurantsByFilter: function(){
     var self = this;
 
@@ -156,7 +161,7 @@ export default Ember.Controller.extend({
       self.set('searchTextRestaurants', null);
      }
 
-  }.observes('reservation.searchText'),
+  },
 
   actions: {
     clickLocation: function(location){
@@ -200,8 +205,14 @@ export default Ember.Controller.extend({
        this.setAvailableHours();
     },
     pickSuggestedRestaurant: function(string){
+      //Remove observer
+      this.removeObserver('reservation.searchText', self, "onFilterTextChange");
+
       //Put suggested value in search box
       this.set('reservation.searchText', string);
+
+      //Again return observer
+      this.addObserver('reservation.searchText', self, "onFilterTextChange");
 
       //Empty suggested list
       this.set('searchTextRestaurants', null);
@@ -211,7 +222,7 @@ export default Ember.Controller.extend({
   loadNearestRestaurants: function(){
     var self = this;
 
-    if(self.get('model.currentLocationCoordinates').length > 0){
+    if(self.get('model.currentLocationCoordinates').length > 0 && self.get('model.currentLocationCoordinates') != "undefined"){
 
       //Return nearest restaurants
       $.ajax({ //No return here

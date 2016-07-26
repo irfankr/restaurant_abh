@@ -12,6 +12,8 @@ export default Ember.Route.extend({
   filter: Filter.create(),
   categories: [],
   searchTextFilterDisplay: null,
+
+  currentLocationCoordinates: [],
   geolocation: Ember.inject.service(),
 
   getRestaurants: function(){
@@ -20,6 +22,11 @@ export default Ember.Route.extend({
     //Set additional data
     this.set('filter.itemsPerPage', this.get('itemsPerPage'));
     this.set('filter.pageNumber', this.get('currentPageNumber'));
+
+    //Add coordinates to filter
+    this.set('filter.latitude', self.get('currentLocationCoordinates')[0]);
+    this.set('filter.longitude', self.get('currentLocationCoordinates')[1]);
+
     var data = JSON.stringify(self.get('filter'));
 
     //Get number of pages for display restaurants
@@ -48,6 +55,23 @@ export default Ember.Route.extend({
 
   init(){
     var self = this;
+
+    this.get('geolocation').getLocation().then(function(geoObject) {
+      var currentLocation = self.get('geolocation').get('currentLocation');
+
+      //Set current coodrinates
+      if(currentLocation != "undefined"){
+        self.set('currentLocationCoordinates', currentLocation);
+        console.log(currentLocation);
+        self.refresh();
+      } else { //TEMP IF UNABLE TO DEDERMINE
+        self.set('currentLocationCoordinates', [43.847022, 18.374300]);
+        console.log(currentLocation);
+        self.refresh();
+      }
+
+
+    });
 
     //Get all categories of restaurant
     $.ajax({ //No return here
@@ -79,15 +103,6 @@ export default Ember.Route.extend({
     });
   },
 
-  getUserLocation: function() {
-    var self = this;
-    this.get('geolocation').getLocation().then(function(geoObject) {
-      var currentLocation = self.get('geolocation').get('currentLocation');
-      console.log(currentLocation);
-      //this.controllerFor('restaurants').set('userLocation', currentLocation);
-    });
-  },
-
   model: function(param){
     var self = this;
 
@@ -103,9 +118,6 @@ export default Ember.Route.extend({
 
     //Get all restaurants
     this.getRestaurants();
-
-    //Get current user location
-    this.getUserLocation();
 
     //Scroll to top
     $("html, body").animate({ scrollTop: 0 }, 500);

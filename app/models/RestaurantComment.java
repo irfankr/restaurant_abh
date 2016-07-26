@@ -86,6 +86,21 @@ public class RestaurantComment {
 
     public void save() { JPA.em().persist(this); }
 
+    @Transactional
+    public static RestaurantComment findByUserAndRestaurant(User user, Restaurant restaurant){
+        TypedQuery<RestaurantComment> query = JPA.em().createQuery("SELECT rc FROM RestaurantComment rc WHERE rc.userComments = ? AND rc.restaurantComments = ? ORDER BY rc.id DESC", RestaurantComment.class);
+        query.setParameter(1, user);
+        query.setParameter(2, restaurant);
+        List<RestaurantComment> restaurantComment = query.getResultList();
+
+        if(restaurantComment.size() > 0){
+            return restaurantComment.get(0);
+        } else {
+            return null;
+        }
+
+    }
+
     public static class InputCommentDto {
         public long mark;
         public long idUser;

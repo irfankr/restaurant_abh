@@ -1,10 +1,18 @@
 import Ember from 'ember';
 
+
 export default Ember.Route.extend({
   titleToken: 'Reset password',
+  tokenString: null,
 
-  userCode: null,
   model: function(param){
-    alert(param.userCode);
+    var self = this;
+
+    self.set('tokenString', param.userCode);
+
+    //Return model to template
+    return Ember.RSVP.hash({
+      tokenString: self.get('tokenString')
+    });
   }
 });

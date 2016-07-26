@@ -101,42 +101,9 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 
+import play.Configuration;
+
 public class RestaurantController extends Controller {
-    /*
-    @Transactional
-    public Result getAllRestaurants() {
-        Form<Restaurant.PaginationDto> restaurantForm = form(Restaurant.PaginationDto.class).bindFromRequest();
-
-        //Declare list
-        List<Restaurant> restaurants = new ArrayList<Restaurant>();
-        Restaurant restaurant = new Restaurant();
-        restaurants = restaurant.getAllWithLimitOffset(restaurantForm.get().pageNumber, restaurantForm.get().itemsPerPage);
-
-        //Insert categories string in restaurant
-        for (int i = 0; i < restaurants.size(); i++) {
-            restaurants.get(i).setFoodType(Restaurant.getStringRestaurantCategories(Long.valueOf(restaurants.get(i).getId())));
-        }
-
-        //Return JSON of all restaurants
-        return ok(Json.toJson(restaurants));
-    }
-
-    @Transactional
-    public Result getNumberOfRestaurantPages(){
-        Form<Restaurant.PaginationNumberOfPagesDto> restaurantForm = form(Restaurant.PaginationNumberOfPagesDto.class).bindFromRequest();
-
-        Query query = JPA.em().createNativeQuery("SELECT CEIL(ROUND((COUNT(id) * 1.0) / ?, 2)) FROM restaurants");
-        query.setParameter(1, restaurantForm.get().itemsPerPage);
-        List resultList = query.getResultList();
-        Object queryNumberOfPages = (Object) query.getSingleResult();
-
-        BigDecimal temp = (BigDecimal)queryNumberOfPages;
-        Restaurant.PaginationPagesDto numberOfPages = new Restaurant.PaginationPagesDto();
-        numberOfPages.setNumberOfPages(temp.longValue());
-
-        return ok(Json.toJson(numberOfPages));
-    }
-    */
 
     @Transactional
     public Result getRestaurantDetails() {
@@ -230,131 +197,196 @@ public class RestaurantController extends Controller {
         return ok(Json.toJson(restaurantMenu));
     }
 
+
+
     @Transactional
     public Result getRestaurantsByFilter(){
         Form<Restaurant.RestaurantsFilterDto> restaurantForm = form(Restaurant.RestaurantsFilterDto.class).bindFromRequest();
-        System.out.println(restaurantForm);
 
-        EntityManager em = JPA.em();
-        CriteriaBuilder qb = em.getCriteriaBuilder();
-        CriteriaQuery<Restaurant> criteria = qb.createQuery(Restaurant.class);
-        Root<Restaurant> query = criteria.from(Restaurant.class);
+        //Get values from form
+        Restaurant.RestaurantsFilterDto newRestaurantFilter = new Restaurant.RestaurantsFilterDto();
+            newRestaurantFilter.setLongitude(restaurantForm.get().longitude);
+            newRestaurantFilter.setLatitude(restaurantForm.get().latitude);
+            newRestaurantFilter.setPriceRange(restaurantForm.get().priceRange);
+            newRestaurantFilter.setSearchText(restaurantForm.get().searchText);
+            newRestaurantFilter.setMark(restaurantForm.get().mark);
+            newRestaurantFilter.setCategories(restaurantForm.get().categories);
+            newRestaurantFilter.setLocation(restaurantForm.get().location);
+            newRestaurantFilter.setPageNumber(restaurantForm.get().pageNumber);
+            newRestaurantFilter.setItemsPerPage(restaurantForm.get().itemsPerPage);
 
-        //Create conditions
-        //Constructing list of parameters
-        List<Predicate> predicates = new ArrayList<Predicate>();
-            //Price range
-            if(restaurantForm.get().priceRange != 0){
-                predicates.add(qb.lessThanOrEqualTo(query.get("priceRange"), restaurantForm.get().priceRange));
-            }
+        //Creare query
+        Restaurant.FilterRestaurantsQueryBuilderDto newRestaurantsFilterQuery = FilterRestaurantsQueryBuilder(newRestaurantFilter);
+            String filterSqlString = newRestaurantsFilterQuery.getSqlString();
+            String filterSqlStringWithLimit = newRestaurantsFilterQuery.getSqlStringWithLimit();
+            ArrayList<Object> filterParameters = newRestaurantsFilterQuery.getFilterParameters();
 
-            //Mark
-            if(restaurantForm.get().mark != 0) {
-                //First restrict items with no votes
-                predicates.add(qb.greaterThan(query.get("votes"), 0));
 
-                Expression<Integer> mark = query.get("mark");
-                Expression<Integer> votes = query.get("votes");
-                Expression<Number> quot1 = qb.quot(mark, votes);
-                Expression<Long> roundExpression = qb.function("round", Long.class, quot1);
+        //Create query
+        Query query = JPA.em().createNativeQuery(filterSqlStringWithLimit, Restaurant.class);
 
-                predicates.add(qb.lessThanOrEqualTo(roundExpression, restaurantForm.get().mark));
-            }
-
-            //Search text
-            if(restaurantForm.get().searchText != null && restaurantForm.get().searchText != "") {
-                predicates.add(qb.like(qb.upper(query.<String>get("restaurantName")), "%"+restaurantForm.get().searchText.toUpperCase()+"%"));
-            }
-
-            //Location
-            if(restaurantForm.get().location != null) {
-                RestaurantLocation location = new RestaurantLocation();
-
-                location = location.findByName(restaurantForm.get().location);
-                System.out.println("//////////////////////////////" + location.getId());
-
-                predicates.add(qb.equal(query.get("location"), location.getId()));
-            }
+        //Add parameters to query string
+        for(int i=0; i < filterParameters.size(); i++){
+            query.setParameter(i+1, filterParameters.get(i));
+        }
 
         //Execute query
-        criteria.select(query).where(predicates.toArray(new Predicate[]{}));
-        criteria.orderBy(qb.asc(query.get("id")));
-
-        //Get result from queryCriteriaQuery.
-        List<Restaurant> restaurants = em.createQuery(criteria).getResultList();
-
-        //GeometryFactory geometryFactory = new GeometryFactory();
-        //Coordinate coordinate1 = new Coordinate(43.8482446, 18.3712343);
-        //Coordinate coordinate2 = new Coordinate(44.8482446, 19.3712343);
-
-        //double distance = coordinate1.distance(coordinate2);
-        //System.out.println("Distance: " + distance);
-        //double distance = 100;
-        //Expression<Double> distanceExp = query.get("latitude");
-        //ParameterExpression<String> distanceExp = em.getCriteriaBuilder().parameter(String.class);
-        //query.setParameter(distanceExp, "100.00");
-
-
-        //Expression<Double> latitudeExp = query.get("latitude");
-        //Expression<Double> longitudeExp = query.get("longitude");
-        //Expression<Coordinate> coordinates = new Coordinate(latitudeExp, longitudeExp);
-
-        //Expression<Double> distanceExp = latitudeExp.distance(coordinate2);
-
-        List<Restaurant> foodTypeFiltereRestaurants = new ArrayList<Restaurant>();
-
-        //Filter with categories
-        for (int i = 0; i < restaurants.size(); i++) {
-
-            //Check if restaurant filter is active
-            if(restaurantForm.get().categories.size() > 0){
-
-                //Get all categories for restaurant
-                RestaurantsToCategories restaurantToCategory = new RestaurantsToCategories();
-                List<Long> restaurantCategories = restaurantToCategory.getRestaurantCategoriesIds(restaurants.get(i).getId());
-
-                //Check is restaurant in any of selected categories for filter
-                if(!Collections.disjoint(restaurantForm.get().categories, restaurantCategories)){
-                    //Add new restaurants element
-                    foodTypeFiltereRestaurants.add(restaurants.get(i));
-                }
-
-
-            }
-        }
-
-        //Check is there food type filtered restaurants
-        if(foodTypeFiltereRestaurants.size() > 0){
-            restaurants = new ArrayList<Restaurant>(foodTypeFiltereRestaurants);
-        } else {
-            for (int i = 0; i < restaurants.size(); i++) {
-                restaurants.get(i).setFoodType(Restaurant.getStringRestaurantCategories(Long.valueOf(restaurants.get(i).getId())));
-            }
-        }
-
-        //Get segment of display restaurants for pagination
-        long offsetRestaurants = (restaurantForm.get().pageNumber) * restaurantForm.get().itemsPerPage - restaurantForm.get().itemsPerPage;
-        int offsetRestaurantsInt = (int) offsetRestaurants;
-        int itemsPerPageInt = (int) restaurantForm.get().itemsPerPage;
-        int endIndex = offsetRestaurantsInt + itemsPerPageInt;
-        //Check is end of subpart of array lower than offset end index
-        if(endIndex > restaurants.size()) endIndex = restaurants.size();
-
-        //Get final array of restaurants (part of restaurants for pagination)
-        List<Restaurant> paginatedRestaurants = restaurants.subList(offsetRestaurantsInt, endIndex);
+        System.out.println("---------------------------"); System.out.println(filterSqlString);
+        List<Restaurant> paginatedRestaurants = query.getResultList();
 
         //Create return class
         Restaurant.RestaurantsDto returnRestaurants = new Restaurant.RestaurantsDto();
+
 
         //Insert restaurants
         returnRestaurants.setRestaurants(paginatedRestaurants);
 
         //Insert info about total restaurants number
-        int restaurantsSize = restaurants.size();
-        int numberOfRestaurantPages = (int) Math.ceil(restaurantsSize*1.00 / itemsPerPageInt*1.00);
+        int restaurantsSize = totalFilteredRestaurantsNumber(filterSqlString, filterParameters);
+        int numberOfRestaurantPages = (int) Math.ceil(restaurantsSize*1.00 / newRestaurantFilter.getItemsPerPage()*1.00);
         returnRestaurants.setNumberOfRestaurantPages(numberOfRestaurantPages);
 
         return ok(Json.toJson(returnRestaurants));
+    }
+
+    public int totalFilteredRestaurantsNumber(String sqlString, ArrayList<Object> filterParameters){
+        //Create query
+        Query query = JPA.em().createNativeQuery(sqlString, Restaurant.class);
+
+        //Add parameters to query string
+        for(int i=0; i < filterParameters.size(); i++){
+            query.setParameter(i+1, filterParameters.get(i));
+        }
+
+        List<Restaurant> paginatedRestaurants = query.getResultList();
+
+        return paginatedRestaurants.size();
+    }
+
+    public static Restaurant.FilterRestaurantsQueryBuilderDto FilterRestaurantsQueryBuilder(Restaurant.RestaurantsFilterDto newRestaurantFilter){
+
+        double longitude = newRestaurantFilter.getLongitude();
+        double latitude = newRestaurantFilter.getLatitude();
+
+        System.out.println("FILTRIRANJE RESTORANA");
+        System.out.println("Longitude: " + longitude);
+        System.out.println("Latitude: " + latitude);
+
+        //Test echo coordinates
+        //System.out.println("Latitude: " + latitude);
+        //System.out.println("Longitude: " + longitude);
+
+        //SQL String
+        //PRIVREMENO
+        //String sqlString = "SELECT * FROM restaurants rest ";
+        //int startingParametersCount = 0;
+
+        //LOCIRANJE
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        String sqlString = "SELECT *, st_distance_sphere(st_makepoint(?, ?), st_makepoint(rest.latitude, rest.longitude)) AS distance FROM restaurants rest ";
+        int startingParametersCount = 2;
+
+        //List of parameters
+        ArrayList<Object> filterParameters = new ArrayList();
+
+        //Add location parameters
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        filterParameters.add(latitude);
+        filterParameters.add(longitude);
+
+        //Add filters
+        //Price range
+        if(newRestaurantFilter.getPriceRange() != 0){
+            //Check is this first filter
+            if(filterParameters.size() == startingParametersCount) sqlString += "WHERE "; else sqlString += "AND ";
+
+            //Add string part
+            sqlString += "rest.priceRange = ? ";
+
+            //Add parameter to list
+            filterParameters.add(newRestaurantFilter.getPriceRange());
+        }
+
+        //Search text
+        if(newRestaurantFilter.getSearchText() != null && newRestaurantFilter.getSearchText() != "") {
+            //Check is this first filter
+            if(filterParameters.size() == startingParametersCount) sqlString += "WHERE "; else sqlString += "AND ";
+
+            //Add string part
+            sqlString += "UPPER(rest.restaurantName) LIKE ? ";
+
+            //Add parameter to list
+            filterParameters.add("%" + newRestaurantFilter.getSearchText().toUpperCase() + "%");
+        }
+
+        //Mark
+        if(newRestaurantFilter.getMark() != 0) {
+            //Check is this first filter
+            if(filterParameters.size() == startingParametersCount) sqlString += "WHERE "; else sqlString += "AND ";
+
+            //Add string part
+            sqlString += "ROUND(rest.mark / rest.votes) >= ? ";
+
+            //Add parameter to list
+            filterParameters.add(newRestaurantFilter.getMark());
+        }
+
+        //Categories
+        if(newRestaurantFilter.getCategories().size() > 0){
+            //Check is this first filter
+            if(filterParameters.size() == startingParametersCount) sqlString += "WHERE ("; else sqlString += "AND (";
+
+            for(int i=0; i < newRestaurantFilter.getCategories().size(); i++){
+                //Add string part
+                sqlString += "? IN (SELECT restcateg.idcategory FROM restaurantstocategories restcateg WHERE restcateg.idrestaurant = rest.id) ";
+
+                //If it's not last add OR for more
+                if(i < newRestaurantFilter.getCategories().size()-1){
+                    sqlString += "OR ";
+                } else {
+                    sqlString += ") ";
+                }
+
+                //Add parameter to list
+                filterParameters.add(newRestaurantFilter.getCategories().get(i));
+            }
+        }
+
+        //Location
+        if(newRestaurantFilter.getLocation() != null) {
+            //Check is this first filter
+            if(filterParameters.size() == startingParametersCount) sqlString += "WHERE "; else sqlString += "AND ";
+
+            //Add string part
+            sqlString += "rest.location = ? ";
+
+            //Add parameter to list
+            filterParameters.add(RestaurantLocation.findByName(newRestaurantFilter.getLocation()).getId());
+        }
+
+        //Ordering
+        //PRIVREMENO
+        //sqlString += "ORDER BY rest.id ASC ";
+
+        //Sort by distance
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        sqlString += "ORDER BY distance ASC ";
+
+        //Get segment of display restaurants for pagination
+        long offsetRestaurants = (newRestaurantFilter.getPageNumber()) * newRestaurantFilter.getItemsPerPage() - newRestaurantFilter.getItemsPerPage();
+        int offsetRestaurantsInt = (int) offsetRestaurants;
+        int itemsPerPageInt = (int) newRestaurantFilter.getItemsPerPage();
+
+        //Create LIMIT part
+        String sqlStringLimit = "LIMIT " + itemsPerPageInt + " OFFSET " + offsetRestaurantsInt;
+
+        //Create return
+        Restaurant.FilterRestaurantsQueryBuilderDto newRestaurantsFilterQuery = new Restaurant.FilterRestaurantsQueryBuilderDto();
+            newRestaurantsFilterQuery.setSqlString(sqlString);
+            newRestaurantsFilterQuery.setSqlStringWithLimit(sqlString + sqlStringLimit);
+            newRestaurantsFilterQuery.setFilterParameters(filterParameters);
+
+        return newRestaurantsFilterQuery;
     }
 
     @Transactional
@@ -459,6 +491,8 @@ public class RestaurantController extends Controller {
         }
     }
 
+
+
     @Transactional
     public Result getAllRestaurantsSortReservationsToday() {
         //Declare list
@@ -483,10 +517,13 @@ public class RestaurantController extends Controller {
         double longitude = inputForm.get().longitude;
 
         //Test echo coordinates
-        System.out.println("Latitude: " + latitude);
+
+        System.out.println("NAJBLIZI RESTORANI");
         System.out.println("Longitude: " + longitude);
+        System.out.println("Latitude: " + latitude);
 
         //SORTIRANJE NAJBLIZIH
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         List<Restaurant> restaurants = JPA.em().createNativeQuery("SELECT *, st_distance_sphere(st_makepoint(?, ?), st_makepoint(rst.latitude, rst.longitude)) AS distance FROM restaurants rst ORDER BY distance ASC nulls last LIMIT 6", Restaurant.class).setParameter(1, latitude).setParameter(2, longitude).getResultList();
 
         //PRIVREMENO
@@ -518,15 +555,45 @@ public class RestaurantController extends Controller {
         Date date = new Date();
         comment.setInsertTime(date);
 
-        //Save comment to database
-        comment.save();
 
         //Modify restaurant details
         Restaurant restaurant = new Restaurant();
+        long addMark;
+        int addVotes;
+
+        //Check is this user already voted
+        if(RestaurantComment.findByUserAndRestaurant(User.findById(inputForm.get().idUser), Restaurant.findById(inputForm.get().idRestaurant)) == null){
+            addMark = inputForm.get().mark;
+
+            addVotes = 1;
+        } else {
+            //Get last vote and comment inserted
+            RestaurantComment restaurantComment = RestaurantComment.findByUserAndRestaurant(User.findById(inputForm.get().idUser), Restaurant.findById(inputForm.get().idRestaurant));
+
+            //Old mark
+            long votedMark = restaurantComment.getMark();
+
+            //New mark
+            long newMark = inputForm.get().mark;
+
+            addVotes = 0;
+
+            //Generate mark to add to restaurant
+            addMark = newMark - votedMark;
+        }
+
+
         restaurant = restaurant.findById(inputForm.get().idRestaurant);
-        restaurant.setVotes(restaurant.getVotes() + 1);
-        restaurant.setMark(restaurant.getMark() + inputForm.get().mark);
+
+        restaurant.setMark(restaurant.getMark() + addMark);
+
+        //Increase number of votings
+        restaurant.setVotes(restaurant.getVotes() + addVotes);
+
         restaurant.update();
+
+        //Save comment to database
+        comment.save();
 
         return ok(Json.toJson(comment));
     }
@@ -566,6 +633,64 @@ public class RestaurantController extends Controller {
 
         //Return JSON of all restaurants
         return ok(Json.toJson(outputComments));
+    }
+
+    @Transactional
+    public Result getAllRestaurantReservations() {
+        Form<Reservation.ReservationDto> inputForm = form(Reservation.ReservationDto.class).bindFromRequest();
+
+        //Create list of reservations
+        //List<Reservation> reservations = JPA.em().createNativeQuery("SELECT * FROM reservations rsv, restauranttables rsttbl WHERE rsv.idtable = rsttbl.id AND rsttbl.idrestaurant = ? ORDER BY rsv.id DESC", Reservation.class).setParameter(1, inputForm.get().idRestaurant).getResultList();
+
+        //Execute SQL Query
+        Query query = JPA.em().createNativeQuery("SELECT rsv.id AS id, rsv.idtable AS idtable, rsv.persons AS persons, rsv.reservationDateTime AS reservationDateTime, usr.firstname AS firstname, usr.lastname AS lastname FROM reservations rsv, restauranttables rsttbl, users usr WHERE rsv.idtable = rsttbl.id AND rsttbl.idrestaurant = ? AND usr.id = rsv.iduser ORDER BY rsv.id DESC");
+        query.setParameter(1, inputForm.get().idRestaurant);
+        List resultList = query.getResultList();
+
+        Iterator resultListIterator = resultList.iterator();
+
+        //Create restaurants locations list object
+        List<Reservation.RestaurantReservationsDto> restaurantReservations = new ArrayList();
+
+        while (resultListIterator.hasNext()) {
+            Object col[] = (Object[])resultListIterator.next();
+            Reservation.RestaurantReservationsDto restaurantReservation = new Reservation.RestaurantReservationsDto();
+
+            //Id
+            BigInteger temp1 = (BigInteger)col[0];
+            restaurantReservation.setId(temp1.longValue());
+
+            //Id table
+            BigInteger temp2 = (BigInteger)col[1];
+            restaurantReservation.setIdTable(temp2.longValue());
+
+            //Persons
+            BigInteger temp3 = (BigInteger)col[2];
+            restaurantReservation.setPersons(temp3.longValue());
+
+            //Date and time
+            Date reservationDateTime = (Date)col[3];
+            SimpleDateFormat formatDateForEmber = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            restaurantReservation.setReservationDateTime(formatDateForEmber.format(reservationDateTime));
+
+            //User first name and last name
+            restaurantReservation.setUserName((String)col[4] + " " + (String)col[5]);
+
+            //Expired
+            Date now = new Date();
+
+            if(now.compareTo(reservationDateTime) == 1) {
+                restaurantReservation.setExpired(true);
+            } else {
+                restaurantReservation.setExpired(false);
+            }
+
+
+            restaurantReservations.add(restaurantReservation);
+        }
+
+        //Return JSON of all restaurants
+        return ok(Json.toJson(restaurantReservations));
     }
 
     /* Admin */
@@ -751,11 +876,11 @@ public class RestaurantController extends Controller {
         //Generates random filename
         String s3Key = UUID.randomUUID().toString() + "." + fileExtension;
 
-        AWSCredentials awsCredentials = new BasicAWSCredentials("AKIAJPIRN6STW7CXUEUA", "AA3zP/kR3FxpAmzGQhFXMhdbpl0pPdAESM+xWnnv");
+        AWSCredentials awsCredentials = new BasicAWSCredentials(Configuration.root().getString("awsAccessKeyId"), Configuration.root().getString("awsSecretAccessKey"));
         AmazonS3 s3Client = new AmazonS3Client(awsCredentials);
-        s3Client.createBucket("atlantpraksa");
-        s3Client.putObject("atlantpraksa", s3Key, file);
-        s3Client.setObjectAcl("atlantpraksa", s3Key, CannedAccessControlList.PublicRead);
+        s3Client.createBucket(Configuration.root().getString("s3BucketName"));
+        s3Client.putObject(Configuration.root().getString("s3BucketName"), s3Key, file);
+        s3Client.setObjectAcl(Configuration.root().getString("s3BucketName"), s3Key, CannedAccessControlList.PublicRead);
 
         return ok(Json.toJson("https://s3.amazonaws.com/atlantpraksa/" + s3Key));
     }
@@ -771,11 +896,11 @@ public class RestaurantController extends Controller {
         //Generates random filename
         String s3Key = UUID.randomUUID().toString() + "." + fileExtension;
 
-        AWSCredentials awsCredentials = new BasicAWSCredentials("AKIAJPIRN6STW7CXUEUA", "AA3zP/kR3FxpAmzGQhFXMhdbpl0pPdAESM+xWnnv");
+        AWSCredentials awsCredentials = new BasicAWSCredentials(Configuration.root().getString("awsAccessKeyId"), Configuration.root().getString("awsSecretAccessKey"));
         AmazonS3 s3Client = new AmazonS3Client(awsCredentials);
-        s3Client.createBucket("atlantpraksa");
-        s3Client.putObject("atlantpraksa", s3Key, file);
-        s3Client.setObjectAcl("atlantpraksa", s3Key, CannedAccessControlList.PublicRead);
+        s3Client.createBucket(Configuration.root().getString("s3BucketName"));
+        s3Client.putObject(Configuration.root().getString("s3BucketName"), s3Key, file);
+        s3Client.setObjectAcl(Configuration.root().getString("s3BucketName"), s3Key, CannedAccessControlList.PublicRead);
 
         //Da uploadamo u subfolder
         //s3Client.putObject("atlantpraksa", "gallery/" + s3Key, file);
