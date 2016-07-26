@@ -18,7 +18,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-mailer" % "5.0.0-M1",
   "com.amazonaws" % "aws-java-sdk" % "1.3.11",
   javaWs,
-  "com.vividsolutions" % "jts" % "1.13"
+  "com.vividsolutions" % "jts" % "1.13",
+  "com.sendgrid" % "sendgrid-java" % "3.0.5"
 )
 
 

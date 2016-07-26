@@ -200,7 +200,7 @@ public class ReservationController extends Controller {
     @Transactional
     public Result getListOfReservationsForUser() {
         //Execute SQL Query
-        Query query = JPA.em().createNativeQuery("SELECT rst.restaurantname AS restaurantName,  rst.imagefilename AS imageFileName, res.persons AS guests, res.reservationdatetime AS reservationDateTime FROM reservations res, restaurants rst, restauranttables rtt  WHERE res.idUser = ? AND res.idTable = rtt.id AND rtt.idRestaurant = rst.id ORDER BY res.id DESC");
+        Query query = JPA.em().createNativeQuery("SELECT rst.restaurantname AS restaurantName,  rst.imagefilename AS imageFileName, res.persons AS guests, res.reservationdatetime AS reservationDateTime, res.id reservationId FROM reservations res, restaurants rst, restauranttables rtt  WHERE res.idUser = ? AND res.idTable = rtt.id AND rtt.idRestaurant = rst.id ORDER BY res.id DESC");
 
         long userId = Long.parseLong(session("idUser"));
         query.setParameter(1, userId);
@@ -226,6 +226,10 @@ public class ReservationController extends Controller {
             //Convert date to format for display on Ember
             Date dateTemp = (Date)col[3];
 
+            //Set id
+            BigInteger tempIdReservation = (BigInteger)col[4];
+            userReservation.setId(tempIdReservation.longValue());
+
             String reservationDateEmber = "";
             String reservationHourEmber = "";
             SimpleDateFormat formatDateForEmber = new SimpleDateFormat("MMM d, yyyy");
@@ -243,5 +247,38 @@ public class ReservationController extends Controller {
         }
 
         return ok(Json.toJson(userReservations));
+    }
+
+    @Transactional
+    public Result cancelReservation() {
+        Form<Reservation.CancelReservationDto> reservationForm = form(Reservation.CancelReservationDto.class).bindFromRequest();
+
+        //Get user id from session
+        if(session("idUser") == null){
+            return null;
+        } else {
+
+            //Get user id
+            long userId = Long.parseLong(session("idUser"));
+
+            //Cancel reservation
+            Reservation cancelReservation = Reservation.findById(reservationForm.get().idReservation);
+
+            //Get reservation with specified id
+            if(cancelReservation == null){
+                return badRequest("{\"error\": \"Reservation doesn't exist!\"}");
+            }
+
+            //Check is reservation from session user
+            if(cancelReservation.getReservationuser().getId() != User.findById(userId).getId()){
+                return badRequest("{\"error\": \"You have no right to cancel this reservation!\"}");
+            }
+
+            //Cancel reservation
+            cancelReservation.delete();
+
+            return ok("{\"ok\": \"Reservation canceled!\"}");
+
+        }
     }
 }

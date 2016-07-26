@@ -241,36 +241,6 @@ public class UserController extends Controller {
     }
 
     @Transactional
-    public Result createResetPasswordToken() {
-        //Create loginForm
-        Form<User.UserCreateResetPasswordTokenDto> RegisterForm = form(User.UserCreateResetPasswordTokenDto.class).bindFromRequest();
-
-        //Create user object fron input data
-        User user = new User();
-        user.setEmail(RegisterForm.get().email);
-
-        //Check user exist
-        User checkUser = new User();
-
-        if(checkUser.findByEmail(user.getEmail()) == null){
-            return badRequest("{\"error\": \"User doesn't exist!\"}");
-        } else {
-            //Send Email to user address
-            String cid = "1234";
-            Email email = new Email()
-            .setSubject("Resetovana sifra")
-            .setFrom("RestaurantABH <no-reply@restaurantbh.com>")
-            .addTo("Irfan Krijestorac <irfankr91@gmail.com>")
-                    // sends text, HTML or both...
-            .setBodyHtml("<html><body><p>An <b>html</b> Podnijeli ste zahtjev za slanje emaila</p></body></html>");
-            mailerClient.send(email);
-
-            //Create token for reset password for 30min
-            return ok("Saljemo");
-        }
-    }
-
-    @Transactional
     public Result getAllUsers() {
         //Create loginForm
         Form<User.AdminUsersListDto> UsersForm = form(User.AdminUsersListDto.class).bindFromRequest();

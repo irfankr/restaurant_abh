@@ -303,7 +303,13 @@ INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description
 INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (3061, 3008, 'Dinner', 'Samurai Naruto Roll', 9, 'Black pepper tuna, avocado and scallion');
 INSERT INTO restaurantmenuitem (id, idRestaurant, type, name, price, description) VALUES (3062, 3008, 'Dinner', 'Rainbow Naruto Roll', 12, 'Tuna, salmon, white fish, kani, avocado and tobiko');
 
-
+CREATE TABLE userpasswordresettokens(
+    id bigint,
+    idUser bigint NOT NULL,
+    expirationTime timestamp NOT NULL,
+    tokenString varchar(255) NOT NULL,
+    PRIMARY KEY (id)
+);
 
 
 CREATE SEQUENCE hibernate_sequence;
@@ -319,5 +325,6 @@ DROP TABLE restaurantstocategories;
 DROP TABLE restaurantlocations;
 DROP TABLE restaurantcomments;
 DROP TABLE restaurantgalleryimages;
+DROP TABLE userpasswordresettokens;
 
 DROP SEQUENCE IF EXISTS hibernate_sequence;

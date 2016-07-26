@@ -647,6 +647,11 @@ ul.restaurant_left_menu {
     font-size:14px; color:#878787; margin-top:40px;
   }
 
+.cancel_reservation {
+  float:right; background-color:#FD6F60; color:#FFF; width:170px; margin-top:0px; height:35px; line-height:35px; font-size:18px; font-weight: 600; padding:0px; border:0px; border-radius: 3px;
+}
+
+
 /* Administration */
 .wider_search_text_column_style {
   width:200px !important;
@@ -756,7 +761,7 @@ ul.restaurant_left_menu {
 
 
 .admin_restaurants_add_tabls_container {
-  background-color:#FFF; border-top-style:solid; border-left-style:solid; border-right-style:solid; border-top-color:#D8D8D8; border-left-color:#D8D8D8; border-right-color:#D8D8D8; border-top-width:1px; border-left-width:1px; border-right-width:1px; border-bottom-width:0px; width:400px;
+  background-color:#FFF; border-top-style:solid; border-left-style:solid; border-right-style:solid; border-top-color:#D8D8D8; border-left-color:#D8D8D8; border-right-color:#D8D8D8; border-top-width:1px; border-left-width:1px; border-right-width:1px; border-bottom-width:0px; width:520px;
 }
 .admin_restaurants_add_tabs a:link, .admin_restaurants_add_tabs a:visited {
   color: rgba(19, 29, 36, 0.4);
@@ -881,4 +886,7 @@ ul.restaurant_left_menu {
 
 .dz-image img {
   height:100%; width:100%; object-fit: cover;
+}
+.datepicker-days {
+  padding: 10px; margin-bottom: 15px;
 }

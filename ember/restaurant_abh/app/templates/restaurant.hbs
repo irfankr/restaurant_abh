@@ -29,8 +29,9 @@
             {{#restaurant-price-range max=5 value=model.restaurantDetails.priceRange}}{{/restaurant-price-range}}
           </span>
           <span class="restaurant_food">{{model.restaurantDetails.foodType}}</span>
-
-          <button type="button" class="btn btn-default restaurant_rate_this_place"  data-toggle="modal" data-target="#votePopup">Rate this place</button>
+          {{#if model.currentUser.userLoggedIn}}
+            <button type="button" class="btn btn-default restaurant_rate_this_place"  data-toggle="modal" data-target="#votePopup">Rate this place</button>
+          {{/if}}
         </div>
       </div>
 

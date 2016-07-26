@@ -17,6 +17,9 @@ GET     /api/v1/message                     controllers.AsyncController.message
 # Map static resources from the /public folder to the /assets URL path
 # GET     /assets/*file                     controllers.Assets.versioned(path="/public", file: Asset)
 
+# Get visitor coordinates
+POST        /api/v1/admin/getLocationCoordinates    controllers.RestaurantLocationController.getLocationCoordinates
+
 # Users
 POST    /api/v1/login                       controllers.UserController.login
 GET     /api/v1/currentUser                 controllers.UserController.currentUser
@@ -43,14 +46,24 @@ POST    /api/v1/admin/deleteGalleryImages    controllers.RestaurantGalleryImageC
 POST    /api/v1/getRestaurantGalleryImages    controllers.RestaurantGalleryImageController.getRestaurantGalleryImages
 
 POST    /api/v1/makeReservation             controllers.RestaurantController.makeReservation
+POST    /api/v1/cancelReservation             controllers.ReservationController.cancelReservation
+
 POST    /api/v1/checkReservationAvailability controllers.ReservationController.checkReservationAvailability
 GET     /api/v1/getListOfReservationsForUser    controllers.ReservationController.getListOfReservationsForUser
 POST    /api/v1/getFreeTables                   controllers.ReservationController.getFreeTables
 
-POST    /api/v1/createResetPasswordToken    controllers.UserController.createResetPasswordToken
+# User reset password
+POST    /api/v1/createResetPasswordToken        controllers.UserPasswordResetTokenController.createResetPasswordToken
+POST    /api/v1/checkIsTokenValid               controllers.UserPasswordResetTokenController.checkIsTokenValid
+POST    /api/v1/resetUserPassword               controllers.UserPasswordResetTokenController.resetUserPassword
+
+
+
+
+
+
 
 GET    /api/v1/admin/getAdministrationCounters      controllers.RestaurantController.getAdministrationCounters
-
 
 # Categories (Administration)
 GET     /api/v1/getAllCategories            controllers.RestaurantCategoriesController.getAllCategories
@@ -73,6 +86,7 @@ POST    /api/v1/admin/addRestaurant                controllers.RestaurantControl
 POST    /api/v1/admin/editRestaurant               controllers.RestaurantController.editRestaurant
 POST    /api/v1/admin/deleteRestaurant             controllers.RestaurantController.deleteRestaurant
 POST    /api/v1/admin/getAllRestaurantComments      controllers.RestaurantController.getAllRestaurantComments
+POST    /api/v1/admin/getAllRestaurantReservations      controllers.RestaurantController.getAllRestaurantReservations
 POST    /api/v1/admin/getRestaurantCategories      controllers.RestaurantController.getRestaurantCategories
 POST    /api/v1/admin/uploadRestaurantLogo         controllers.RestaurantController.uploadRestaurantLogo
 POST    /api/v1/admin/uploadRestaurantCover         controllers.RestaurantController.uploadRestaurantCover
@@ -96,8 +110,6 @@ POST      /api/v1/admin/adminTableItems          controllers.RestaurantTablesCon
 # POST    /api/v1/admin/editMenuItem               controllers.RestaurantMenuItemController.editMenuItem
 # POST    /api/v1/admin/deleteMenuItem             controllers.RestaurantMenuItemController.deleteMenuItem
 POST      /api/v1/admin/adminMenuItems          controllers.RestaurantMenuItemController.adminMenuItems
-
-POST        /api/v1/admin/getLocationCoordinates    controllers.RestaurantLocationController.getLocationCoordinates
 
 
 

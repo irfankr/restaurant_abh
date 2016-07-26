@@ -183,7 +183,7 @@ public class Restaurant {
     }
 
     public String getFoodType() {
-        return foodType;
+        return getStringRestaurantCategories(this.getId());
     }
 
     public void setFoodType(String foodType) {
@@ -305,7 +305,7 @@ public class Restaurant {
             System.out.println(reservationDateTime2HRS);
 
 
-            Query query = JPA.em().createNativeQuery("SELECT * FROM restauranttables rtt WHERE sittingPlaces >= ? AND (SELECT COUNT(rsv.id) FROM reservations rsv WHERE ((to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS') >= rsv.reservationDateTime AND to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS') <= (rsv.reservationDateTime + INTERVAL '2 hour')) OR (to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS') >= rsv.reservationDateTime AND to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS') <= (rsv.reservationDateTime + INTERVAL '2 hour')))AND rsv.idtable = rtt.id) = 0 AND rtt.idRestaurant = ?");
+            Query query = JPA.em().createNativeQuery("SELECT * FROM restauranttables rtt WHERE sittingPlaces >= ? AND (SELECT COUNT(rsv.id) FROM reservations rsv WHERE ((to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS') >= rsv.reservationDateTime AND to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS') <= (rsv.reservationDateTime + INTERVAL '2 hour')) OR (to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS') >= rsv.reservationDateTime AND to_timestamp(?, 'YYYY-MM-DD HH24:MI:SS') <= (rsv.reservationDateTime + INTERVAL '2 hour')))AND rsv.idtable = rtt.id) = 0 AND rtt.idRestaurant = ? ORDER BY sittingPlaces ASC");
 
             query.setParameter(1, persons);
             query.setParameter(2, reservationDateTime);
@@ -367,6 +367,8 @@ public class Restaurant {
         public long itemsPerPage;
         public long pageNumber;
         public String location;
+        public float latitude;
+        public float longitude;
 
         public long getPriceRange() {
             return priceRange;
@@ -422,6 +424,22 @@ public class Restaurant {
 
         public void setLocation(String location) {
             this.location = location;
+        }
+
+        public float getLatitude() {
+            return latitude;
+        }
+
+        public void setLatitude(float latitude) {
+            this.latitude = latitude;
+        }
+
+        public float getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(float longitude) {
+            this.longitude = longitude;
         }
     }
 
@@ -739,6 +757,36 @@ public class Restaurant {
 
         public void setUsersNumber(long usersNumber) {
             this.usersNumber = usersNumber;
+        }
+    }
+
+    public static class FilterRestaurantsQueryBuilderDto {
+        public String sqlString;
+        public String sqlStringWithLimit;
+        ArrayList<Object> filterParameters = new ArrayList();
+
+        public String getSqlString() {
+            return sqlString;
+        }
+
+        public void setSqlString(String sqlString) {
+            this.sqlString = sqlString;
+        }
+
+        public String getSqlStringWithLimit() {
+            return sqlStringWithLimit;
+        }
+
+        public void setSqlStringWithLimit(String sqlStringWithLimit) {
+            this.sqlStringWithLimit = sqlStringWithLimit;
+        }
+
+        public ArrayList<Object> getFilterParameters() {
+            return filterParameters;
+        }
+
+        public void setFilterParameters(ArrayList<Object> filterParameters) {
+            this.filterParameters = filterParameters;
         }
     }
 }

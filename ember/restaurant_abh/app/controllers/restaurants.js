@@ -7,6 +7,10 @@ export default Ember.Controller.extend({
   searchTextRestaurants: null, //List of suggested restaurants
   lastStringValue:null,
 
+  onFilterTextChange: function() {
+    //Wait 500ms second before applying the filter
+    Ember.run.debounce(this, this.getRestaurantsByFilter, 500);
+  }.observes('model.filter.searchText'),
 
   getRestaurantsByFilter: function(){
     var self = this;
@@ -55,7 +59,7 @@ export default Ember.Controller.extend({
       self.set('searchTextRestaurants', null);
      }
 
-  }.observes('model.filter.searchText'),
+  },
 
   actions: {
     pickSuggestedRestaurant: function(string){
